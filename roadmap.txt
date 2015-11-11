@@ -1,0 +1,15 @@
+Roadmap for Open GL Experiments
+-------------------------------
+
+o  Remove magig numbers
+o  Get shaders from assets
+o  Convert to using uniqued vertices list with sequence list
+o  Dependency inject data for > 1 co-planar triangle
+o  Use a static camera transform
+o  Have the camera transform change with time
+o  Have different bits of the model use different location transforms
+o  Have some color variation
+o  Add some lighting
+o  Have prim adding library to build model
+o  Deploy more than one program to render scene
+o  Investigate performance limits for frame rate and busting memory
