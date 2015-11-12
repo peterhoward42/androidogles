@@ -1,0 +1,68 @@
+Android GL Play Around
+----------------------
+
+Get tutorial to work
+    *  Create directory
+    *  computing_projects/virtual-reality/android-studio/MyOwnOpenGLProject
+    *  Make empty app structure
+    *  Add in content from HelloOpenGLES20 bottom up, getting to compile
+        *  Java
+            *  Triangle
+            *  Square
+            *  Custom Renderer
+            *  Custom gl view
+            *  Activity java
+        *  Manifest
+        *  XML views
+    *  Get to compile
+    *  Study in detail - mix in own comments
+    *  Get to work
+
+Start afresh with copy to mess with keeping old as reference
+    *  Think about places and names
+    *  Marshall and name what already got in computingproj/virtualreality
+    *  Add in context for studio projects
+    *  copy studio projects across
+    *  refresh shortcuts
+
+*  Timeout - get back to version that works!!!
+    *  Create official starter apps folder
+    *  Put download somewhere clean with readme that says no work studio
+    *  Make viable blank app and make sure works
+    *  Alter names of activity, view and folder to match incoming copies (+vv)
+    *  Copy in
+        *  manifest updates
+        *  java
+        *  views
+        *  get to work
+
+o  Timeout for a second pass of studies
+    *  Survey the book again (Munshi et al)
+    *  Make notes from open gl learning website
+    *  Check out Chris Jackson's book
+    *  Make notes from
+        http://www.adriancourreges.com/blog/2015/11/02/gta-v-graphics-study/
+        (defer)
+    *  See what standard reference shaders are now available = none :-(
+    *  Check out Chris Jackson's book (defer)
+
+*  Get into github to avoid this fiasco
+*  Study and note git from first principles to be confident with branch usage
+*  Tag the current commit as the official baseline
+*  Make roadmap of ideas
+
+o  shaders from assets, retest, and commit
+    *  revise how to make assets
+    *  revise how to retrieve text therefrom
+    *  make asset containing vertex and fragment shader code
+    *  get src from assets alongside current
+        *  Utility to slurp from inputstream to string
+        *  Surface view takes a context already so can access assetmgr
+        *  Renderer needs a constructor that can take and store assetmgr
+        *  Square constructor expect to be given asset mgr handle
+        *  Renderer passes asset mgr to Square constructor
+    *  does vertex shader work if just use it as read?
+    *  does frag shader work if just use it as read?
+    *  if works, ditch hard coded and should be no compile warnings
+    o  commit and push
+    o  tag and push
