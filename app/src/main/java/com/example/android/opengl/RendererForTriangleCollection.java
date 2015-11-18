@@ -15,67 +15,43 @@
  */
 package com.example.android.opengl;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Collection;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
-import android.util.Log;
 
 /**
- * A two-dimensional square for use as a drawn object in OpenGL ES 2.0.
+ * Capable of rendering into OpenGL-ES, a given (immutable) collection of triangle primitives,
+ * using OpenGL's drawElements() function call. I.e. the method that requires the data to be
+ * packed as a vertex pool, with a drawing-order list alongside.
  */
-public class Square {
+public class RendererForTriangleCollection {
 
-    private static final String TAG = "Square";
+    private static final String TAG = "RenderableTriangles";
 
-    private final FloatBuffer vertexBuffer;
-    private final ShortBuffer drawListBuffer;
     private final int mProgram;
     private int mPositionHandle;
     private int mColorHandle;
     private int mMVPMatrixHandle;
-
-    // number of coordinates per vertex in this array
-    static final int COORDS_PER_VERTEX = 3;
-    static float squareCoords[] = {
-            -0.5f,  0.5f, 0.0f,   // top left
-            -0.5f, -0.5f, 0.0f,   // bottom left
-             0.5f, -0.5f, 0.0f,   // bottom right
-             0.5f,  0.5f, 0.0f }; // top right
-
-    private final short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
-
-    private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
-
-    float color[] = { 0.2f, 0.709803922f, 0.898039216f, 1.0f };
+    private BuffersForShading mShaderBuffers;
+    private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
+    private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
 
     /**
-     * Sets up the drawing object data for use in an OpenGL ES context.
+     * Constructor.
+     * @Param assetManager Used to dependency-inject the shader source code to be used.
+     * @Param sceneTriangles The set of triangles you wish to be rendered.
      */
-    public Square(AssetManager assetManager) {
-        // initialize vertex byte buffer for shape coordinates
-        ByteBuffer bb = ByteBuffer.allocateDirect(
-        // (# of coordinate values * 4 bytes per float)
-                squareCoords.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(squareCoords);
-        vertexBuffer.position(0);
-
-        // initialize byte buffer for the draw list
-        ByteBuffer dlb = ByteBuffer.allocateDirect(
-                // (# of coordinate values * 2 bytes per short)
-                drawOrder.length * 2);
-        dlb.order(ByteOrder.nativeOrder());
-        drawListBuffer = dlb.asShortBuffer();
-        drawListBuffer.put(drawOrder);
-        drawListBuffer.position(0);
+    public RendererForTriangleCollection(AssetManager assetManager,
+                                         Collection<TriangleWorldModel> sceneTriangles) {
+        DrawList dataSource = new DrawListFactory().buildFrom(sceneTriangles);
+        mShaderBuffers = new BuffersForShading(dataSource);
 
         String vertexShaderSource = getShaderFromAsset(assetManager, "vertex-shader.txt");
         String fragmentShaderSource = getShaderFromAsset(assetManager, "frag-shader.txt");
@@ -98,7 +74,7 @@ public class Square {
      * Encapsulates the OpenGL ES instructions for drawing this shape.
      *
      * @param mvpMatrix - The Model View Project matrix in which to draw
-     * this shape.
+     *                  this shape.
      */
     public void draw(float[] mvpMatrix) {
         // Add program to OpenGL environment
@@ -112,9 +88,9 @@ public class Square {
 
         // Prepare the triangle coordinate data
         GLES20.glVertexAttribPointer(
-                mPositionHandle, COORDS_PER_VERTEX,
+                mPositionHandle, 3,
                 GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
+                vertexStride, mShaderBuffers.vertexBuffer);
 
         // get handle to fragment shader's vColor member
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
@@ -132,8 +108,8 @@ public class Square {
 
         // Draw the square
         GLES20.glDrawElements(
-                GLES20.GL_TRIANGLES, drawOrder.length,
-                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+                GLES20.GL_TRIANGLES, mShaderBuffers.numberOfVertices,
+                GLES20.GL_UNSIGNED_SHORT, mShaderBuffers.drawListBuffer);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);

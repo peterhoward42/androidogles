@@ -1,10 +1,10 @@
 Roadmap for Open GL Experiments
 -------------------------------
 
-o  Remove magig numbers
-o  Get shaders from assets
-o  Convert to using uniqued vertices list with sequence list
+*  Get shaders from assets
+*  Convert to using uniqued vertices list with sequence list
 o  Dependency inject data for > 1 co-planar triangle
+o  Isolate renderer
 o  Use a static camera transform
 o  Have the camera transform change with time
 o  Have different bits of the model use different location transforms

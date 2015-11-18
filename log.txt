@@ -51,7 +51,7 @@ o  Timeout for a second pass of studies
 *  Tag the current commit as the official baseline
 *  Make roadmap of ideas
 
-o  shaders from assets, retest, and commit
+*  shaders from assets, retest, and commit
     *  revise how to make assets
     *  revise how to retrieve text therefrom
     *  make asset containing vertex and fragment shader code
@@ -64,5 +64,54 @@ o  shaders from assets, retest, and commit
     *  does vertex shader work if just use it as read?
     *  does frag shader work if just use it as read?
     *  if works, ditch hard coded and should be no compile warnings
-    o  commit and push
-    o  tag and push
+    *  commit and push
+    *  tag and push
+
+o  Dependency inject data for > 1 co-planar triangle
+    *  Design?
+    *  Can we find a keep-it working sequence?
+    *  Define world friendly model class and or interface.
+    *  Make a factory that simulates existing use case
+    *  Define class/interface for drawelements topology
+    *  Make factory that goes from triangles to drawelements topo
+    *  Make a shader ds container and a factory to pop it from drawelemtopo
+    *  Ditch 2s and 4s in favour of consts
+    *  Should now plumb in
+    *  Get to work
+    *  Ditch old rendererable triangle redundant code
+    *  Ditch legacy triangle
+    o  Checkin
+
+-----------------------------------------------------------------------------
+What want to be clean and abstract?
+-----------------------------------------------------------------------------
+    o  World friendly model - collection of triangles, with each defined as
+       three independent vertices.
+    o  Factories to make these from higher level ideas like cylinder or block.
+    o  Something to extract alternate topology from this - that gives
+       single column vector of vertex structures, and sister vector of seq2
+       that picks out triangles to draw.
+    o  Something that packs the above in float/short buffers ready for shader
+       consumption.
+    o  Where ensure ccw order? or alternative?
+-----------------------------------------------------------------------------
+Keep it working order
+-----------------------------------------------------------------------------
+    o  Define world friendly model class and or interface.
+    o  Make a factory that simulates existing use case
+    o  Define class/interface for drawelements topology
+    o  Make factory that goes from triangles to drawelements topo
+    o  Make a shader ds container and a factory to pop it from drawelemtopo
+    o  Should now plumb in
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+High level synths will want to pump triangles piecemeal into the collection:
+
+    collection.Add(ITriangle)
+
+ITriangle offers
+    float[3] getVerticesSorted()
+
+
+-----------------------------------------------------------------------------

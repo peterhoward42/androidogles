@@ -36,8 +36,7 @@ import android.util.Log;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private Triangle mTriangle;
-    private Square   mSquare;
+    private RendererForTriangleCollection mRendererForTriangleCollection;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -46,12 +45,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mRotationMatrix = new float[16];
 
     private AssetManager mAssetManager;
+    private ISceneModel mSceneModel;
 
     private float mAngle;
 
-    public MyGLRenderer(AssetManager assetManager) {
+    public MyGLRenderer(AssetManager assetManager, ISceneModel sceneModel) {
         super();
         mAssetManager = assetManager;
+        mSceneModel = sceneModel;
     }
 
     @Override
@@ -60,8 +61,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        mTriangle = new Triangle();
-        mSquare   = new Square(mAssetManager);
+        mRendererForTriangleCollection = new RendererForTriangleCollection(mAssetManager,
+                mSceneModel.getTriangles());
     }
 
     @Override
@@ -77,10 +78,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-        // Draw square
-        mSquare.draw(mMVPMatrix);
+        mRendererForTriangleCollection.draw(mMVPMatrix);
 
-        // Create a rotation for the triangle
+        // Create a rotation for the triangle - leave this in as a convenience reference
+        // for now <todo>
 
         // Use the following code to generate constant rotation.
         // Leave this code out when using TouchEvents.
@@ -95,7 +96,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
 
         // Draw triangle
-        mTriangle.draw(scratch);
     }
 
     @Override
