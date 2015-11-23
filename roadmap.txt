@@ -3,11 +3,13 @@ Roadmap for Open GL Experiments
 
 *  Get shaders from assets
 *  Convert to using uniqued vertices list with sequence list
-o  Dependency inject data for > 1 co-planar triangle
-o  Isolate renderer
+*  Dependency inject data for > 1 co-planar triangle
+*  Isolate renderer
 o  Use a static camera transform
-o  Have the camera transform change with time
+o  Have the camera transform change with time and add triangles out of plane
+o  Upgrade the projection transform to have perspective
 o  Have different bits of the model use different location transforms
+o  Make just some parts of the model move
 o  Have some color variation
 o  Add some lighting
 o  Have prim adding library to build model

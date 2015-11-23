@@ -8,4 +8,6 @@ import java.util.Collection;
 public interface ISceneModel {
 
     public Collection<TriangleWorldModel> getTriangles();
+    public XYZf CentrePoint();
+    public float SphereRadius();
 }
