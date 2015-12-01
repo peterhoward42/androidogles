@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public class DrawListFactory {
 
+    final String TAG = "DrawListFactory";
+
     /**
      * Converts triangle geometry data that is stored in a data model that is convenient for
      * applications in the outside world, into the uniqued and flattened intermediate form that
@@ -24,7 +26,7 @@ public class DrawListFactory {
      * @param triangles The triangles to be converted.
      * @return The transformed data expressed as a {@link DrawList}
      */
-    public DrawList buildFrom(Collection<TriangleWorldModel> triangles) {
+    public DrawList buildFrom(Collection<Triangle> triangles) {
         // We augment a linear array of vertices as each new and unique one is encountered,
         // and maintain a lookup table of their indices used as we go. We ensure that vertices
         // that are numerically equivalent (approximately) are treated as identical, by
@@ -33,7 +35,7 @@ public class DrawListFactory {
         ArrayList<Integer> drawingSequence = new ArrayList<Integer>();
         // The following map is keyed on a vertex's roundingHash()
         Map<Object, Integer> indicesOfVertices = new HashMap<Object, Integer>();
-        for (TriangleWorldModel triangle : triangles) {
+        for (Triangle triangle : triangles) {
             for (XYZf vertex : triangle.vertices()) {
                 Object roundingHash = vertex.roundingHash();
                 int index;

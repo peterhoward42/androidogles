@@ -17,7 +17,6 @@ package com.example.android.opengl;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.view.MotionEvent;
 
 /**
  * A view container where OpenGL ES graphics can be drawn on screen.
@@ -28,14 +27,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
 
-    public MyGLSurfaceView(Context context, ISceneModel sceneModel) {
+    public MyGLSurfaceView(Context context,
+                           SceneObjectSilos sceneObjectSilos, SceneDirector sceneDirector) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(context.getAssets(), sceneModel);
+        mRenderer = new MyGLRenderer(context.getAssets(), sceneObjectSilos, sceneDirector);
         setRenderer(mRenderer);
     }
 }

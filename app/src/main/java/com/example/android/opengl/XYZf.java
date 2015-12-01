@@ -30,4 +30,16 @@ public class XYZf {
         // digits.
         return String.format("%8g", mX) + String.format("%8g", mY) + String.format("%8g", mZ);
     }
+
+    public XYZf plus(XYZf rhs) {
+        return new XYZf(mX + rhs.mX, mY + rhs.mY, mZ + rhs.mZ);
+    }
+
+    public XYZf minus(XYZf rhs) {
+        return new XYZf(mX - rhs.mX, mY - rhs.mY, mZ - rhs.mZ);
+    }
+
+    public float resultantLength() {
+        return (float) Math.sqrt(mX * mX + mY * mY + mZ * mZ);
+    }
 }

@@ -21,8 +21,12 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.Log;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides drawing instructions for a GLSurfaceView object. This class
@@ -36,26 +40,39 @@ import android.util.Log;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private RendererForTriangleCollection mRendererForTriangleCollection;
+    private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
-    private ISceneModel mSceneModel;
+    private SceneObjectSilos mSceneObjectSilos;
+    private SceneDirector mSceneDirector;
     private CameraLookAt mCameraLookAt;
+    private float mScreenAspect;
 
-    public MyGLRenderer(AssetManager assetManager, ISceneModel sceneModel) {
+    public MyGLRenderer(AssetManager assetManager,
+                        SceneObjectSilos sceneObjectSilos, SceneDirector sceneDirector) {
         super();
         mAssetManager = assetManager;
-        mSceneModel = sceneModel;
+        mSceneObjectSilos = sceneObjectSilos;
+        mSceneDirector = sceneDirector;
     }
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
+        final XYZf cameraLookAtPoint = new XYZf(0, 0, 0);
+        mCameraLookAt = new CameraLookAt(cameraLookAtPoint);
+
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        mRendererForTriangleCollection = new RendererForTriangleCollection(mAssetManager,
-                mSceneModel.getTriangles());
+        // We pass the sceneObjectSilos into the constructor for the renderer, because
+        // the coordinate data in these models is immutable, and can be packed into
+        // the right vertex / bytes format for open gl as a one-shot activity.
+
+        // The real-time rendering of frames later on, takes a transform matrix for
+        // each silo, and the application of these transforms to the scene object
+        // coordinates is delegated by the lower level renderer onto the hardware.
+        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mSceneObjectSilos);
     }
 
     @Override
@@ -69,33 +86,60 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // transform to nearly fill the screen. OpenGL has a RH coordinate system, so
         // the Z axis grows from rear to front of the phone.
         XYZf cameraPosition = animatedPosition();
-        float[] renderM = mCameraLookAt.worldToClipTransform(cameraPosition);
-        mRendererForTriangleCollection.draw(renderM);
+
+        // Build the transform lookup table for the triangles renderer
+        // Map<String, float[]> siloRenderingMatrices = buildSiloRenderingMatrices(cameraPosition);
+        Map<String, float[]> renderingMatrices = buildSiloRenderingMatrices(cameraPosition);
+        mTrianglesRenderer.draw(renderingMatrices);
     }
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-        float aspectRatio = (float) width / height;
-        mCameraLookAt = new CameraLookAt(
-                mSceneModel.CentrePoint(), mSceneModel.SphereRadius(), aspectRatio);
+        mScreenAspect = (float) width / height;
     }
 
     private XYZf animatedPosition() {
-        // SHM oscillation for X, with fixed Y and Z
-        final float period = 1;
-        final float amplitude = 500;
-        final float fixedY = 1000;
-        final float fixedZ = 2000;
-        final float oscillationCentre = 2000;
+        // Centred over Greenwich, oscillating with SHM East and West.
+        final float period = 2; // seconds
+        final float amplitude = 35; // degrees
+        final float latitude = 51.4f; // degrees
+        final float orbitHeightFromCentre = 200; // scene linear dimensions
+        float[] equatorAtMeridian = new float[] {0, 0, orbitHeightFromCentre, 1};
 
-        float timeNow = SystemClock.uptimeMillis() / 1000.0f;
-        float freq = 1 / period;
-        float theta = timeNow * freq;
-        float displacement = amplitude * (float)Math.cos(theta);
-        float varyingX = oscillationCentre + displacement;
+        float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
 
-        return new XYZf(varyingX, fixedY, fixedZ);
+        float[] eulerRotationsMatrix = new float[16];
+        Matrix.setRotateEulerM(eulerRotationsMatrix, 0, latitude, longitude, 0);
+        float[] positionVect = new float[4];
+        Matrix.multiplyMV(positionVect, 0, eulerRotationsMatrix, 0, equatorAtMeridian, 0);
+        return new XYZf(positionVect[0], positionVect[1], positionVect[2]);
+    }
+
+    private Map<String, float[]> buildSiloRenderingMatrices(XYZf cameraPosition) {
+        // We combine three transforms: ObjectToWorld, WorldToCamera, and Projection.
+        // Only the first of which differs per silo.
+
+        // World to Camera
+        float[] worldToCameraTransform = mCameraLookAt.worldToCameraTransform(cameraPosition);
+
+        // Projection
+        final float FOV = 90;
+        final float near = 120;
+        final float far = 280;
+        float[] projectionTransform = new float[16];
+        Matrix.perspectiveM(projectionTransform, 0, FOV, mScreenAspect, near, far);
+
+        // Correctly position each silo in the scene, and combine the three transforms into one
+        // for each silo.
+        Map<String, float[]> mapToReturn = new HashMap<String, float[]>();
+        for (String siloName: mSceneDirector.getSiloNames()) {
+            float[] objectToWorldTransform = mSceneDirector.getObjectToWorldTransformForSilo(siloName);
+            MatrixCombiner combiner = new MatrixCombiner(
+                    projectionTransform, worldToCameraTransform, objectToWorldTransform);
+            mapToReturn.put(siloName, combiner.combine());
+        }
+        return mapToReturn;
     }
 
     /**

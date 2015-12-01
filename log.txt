@@ -10,32 +10,39 @@ Android GL Play Around
 *  Make roadmap of ideas
 *  Shaders from assets, retest, and commit
 *  Dependency inject data for > 1 co-planar triangle
-o  Have the camera transform change with time and add triangles out of plane
-    *  Restudy transform use incl viewport
-        *  annotate code with new understanding
-        *  remind from prev generic ogles notes
-    *  Test veracity of variables called top left etc in this context
-    *  Decide how will change with time uxp wise
-    *  Design maths
-    *  Verify maths with debug
-    *  Apply transform
-    *  Why does moving near clip plane make the graphics smaller?
-        *  Because the frustumM transform includes implicit perspective.
-    *  Draw some reassuring diagrams
-    *  Work thru all geom again with static content
-    *  Change to leave scene static and set camera
-    *  Add some triangles out of plane 
-    *  Try oblique cam pos
-    *  Add anim
-    *  Clean up
-    o  Check in
-    o  Tagpush
+*  Have the camera transform change with time and add triangles out of plane
+o  Have different bits of the model use different location transforms
+    *  Design
+    *  Time out to have some primitive builders
+    *  Ensure uniqueing of vertices is working
+    *  Update existing scene interface to do compartmentalise as per
+    *  Time out to clean up contractual coupling between cam posn, cam and
+       clip planes
+    *  Ditch interfaces for now
+    *  Conv scene to properly scene object silos
+    *  Introduce scene director
+    *  Divvy up respon in workflow
+    *  App for now can be in charge of cam
+    *  Shorten triangleworldmodel
+    *  High level renderer responsib for telling tri to draw, but must pass
+       thru transform to convert scene object coll to moved and cammed coords
+    *  Get transforms from silo lookup
+    *  Debug
+    *  Lesson learned make combiner object
+    *  Add second silo that offsets aux cube
+    *  do differential transforming animation to show clearly
+    o  git checkin incl roadmap, tag and push
 
 -----------------------------------------------------------------------------
-Key Geom Decisions
+Introduce compartmentalised scene model with named silos, and have a new scene
+direction object, provide model to world transforms separately for each silo.
+Have the triangles renderer consume this compartmentalised model and apply the
+transforms on a per silo basis in the draw method. Animate these transforms 
+as a function of time.
 -----------------------------------------------------------------------------
-
+Compartmentalise the scene into named silos.
 -----------------------------------------------------------------------------
+compartmentalisedsilos
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

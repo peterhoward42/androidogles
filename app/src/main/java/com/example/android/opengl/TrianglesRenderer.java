@@ -17,41 +17,50 @@ package com.example.android.opengl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
+import android.util.Log;
 
 /**
- * Capable of rendering into OpenGL-ES, a given (immutable) collection of triangle primitives,
- * using OpenGL's drawElements() function call. I.e. the method that requires the data to be
- * packed as a vertex pool, with a drawing-order list alongside.
+ * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
+ * shader program. You provide the triangles in named silos, and these names are used to
+ * access differing transform matrices for each silo. Uses OpenGL's drawElements() function call
+ * under the hood. I.e. the paradigm that consumes a linear array of "uniqued" vertices, and a
+ * drawing-order sequence alongside.
  */
-public class RendererForTriangleCollection {
+public class TrianglesRenderer {
 
-    private static final String TAG = "RenderableTriangles";
+    private static final String TAG = "TrianglesRenderer";
 
     private final int mProgram;
-    private int mPositionHandle;
+    private int mPositionHandle; // Don't know why official examples make this a field but retain just in case?
     private int mColorHandle;
     private int mMVPMatrixHandle;
-    private BuffersForShading mShaderBuffers;
+
+    // This map shares keys (silo names) with the map provided to the constructor.
+    private Map<String, BuffersForShading> mShaderBuffers;
     private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
     private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
 
     /**
      * Constructor.
+     *
      * @Param assetManager Used to dependency-inject the shader source code to be used.
-     * @Param sceneTriangles The set of triangles you wish to be rendered.
+     * @Param sceneTriangles The sets of triangles you wish to be rendered.
      */
-    public RendererForTriangleCollection(AssetManager assetManager,
-                                         Collection<TriangleWorldModel> sceneTriangles) {
-        DrawList dataSource = new DrawListFactory().buildFrom(sceneTriangles);
-        mShaderBuffers = new BuffersForShading(dataSource);
+    public TrianglesRenderer(AssetManager assetManager, SceneObjectSilos sceneObjectSilos) {
+        // Convert the world scene model representation into the efficiently packed form
+        // this required later for the draw() method.
+        mShaderBuffers = new HashMap<String, BuffersForShading>();
+        for (String siloName : sceneObjectSilos.getSiloNames()) {
+            Collection<Triangle> triangles = sceneObjectSilos.getSilo(siloName);
+            DrawList dataSource = new DrawListFactory().buildFrom(triangles);
+            mShaderBuffers.put(siloName, new BuffersForShading(dataSource));
+        }
 
         String vertexShaderSource = getShaderFromAsset(assetManager, "vertex-shader.txt");
         String fragmentShaderSource = getShaderFromAsset(assetManager, "frag-shader.txt");
@@ -70,48 +79,29 @@ public class RendererForTriangleCollection {
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
     }
 
-    /**
-     * Encapsulates the OpenGL ES instructions for drawing this shape.
-     *
-     * @param mvpMatrix - The Model View Project matrix in which to draw
-     *                  this shape.
-     */
-    public void draw(float[] mvpMatrix) {
-        // Add program to OpenGL environment
+    public void draw(Map<String, float[]> mvpMatrices) {
         GLES20.glUseProgram(mProgram);
 
-        // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-
-        // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-        // Prepare the triangle coordinate data
-        GLES20.glVertexAttribPointer(
-                mPositionHandle, 3,
-                GLES20.GL_FLOAT, false,
-                vertexStride, mShaderBuffers.vertexBuffer);
-
-        // get handle to fragment shader's vColor member
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-
-        // Set color for drawing the triangle
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-
-        // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         MyGLRenderer.checkGlError("glGetUniformLocation");
 
-        // Apply the projection and view transformation
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
-        MyGLRenderer.checkGlError("glUniformMatrix4fv");
-
-        // Draw the square
-        GLES20.glDrawElements(
-                GLES20.GL_TRIANGLES, mShaderBuffers.numberOfVertices,
-                GLES20.GL_UNSIGNED_SHORT, mShaderBuffers.drawListBuffer);
-
-        // Disable vertex array
+        // Iterate to draw each silo of triangles separately - each with its own dedicated
+        // transform.
+        for (String siloName : mShaderBuffers.keySet()) {
+            BuffersForShading bufferForShading = mShaderBuffers.get(siloName);
+            GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false,
+                    vertexStride, bufferForShading.vertexBuffer);
+            float[] mvpMatrix = mvpMatrices.get(siloName);
+            GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
+            MyGLRenderer.checkGlError("glUniformMatrix4fv");
+            GLES20.glDrawElements(
+                    GLES20.GL_TRIANGLES, bufferForShading.numberOfVertices,
+                    GLES20.GL_UNSIGNED_SHORT, bufferForShading.drawListBuffer);
+        }
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 
