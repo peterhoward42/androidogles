@@ -3,7 +3,7 @@ package com.example.android.opengl;
 import java.util.Collection;
 
 /**
- * Created by phoward on 13/11/2015.
+ * Geometry definition of triangle in model space.
  */
 public class Triangle {
 

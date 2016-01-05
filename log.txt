@@ -11,39 +11,22 @@ Android GL Play Around
 *  Shaders from assets, retest, and commit
 *  Dependency inject data for > 1 co-planar triangle
 *  Have the camera transform change with time and add triangles out of plane
-o  Have different bits of the model use different location transforms
-    *  Design
-    *  Time out to have some primitive builders
-    *  Ensure uniqueing of vertices is working
-    *  Update existing scene interface to do compartmentalise as per
-    *  Time out to clean up contractual coupling between cam posn, cam and
-       clip planes
-    *  Ditch interfaces for now
-    *  Conv scene to properly scene object silos
-    *  Introduce scene director
-    *  Divvy up respon in workflow
-    *  App for now can be in charge of cam
-    *  Shorten triangleworldmodel
-    *  High level renderer responsib for telling tri to draw, but must pass
-       thru transform to convert scene object coll to moved and cammed coords
-    *  Get transforms from silo lookup
-    *  Debug
-    *  Lesson learned make combiner object
-    *  Add second silo that offsets aux cube
-    *  do differential transforming animation to show clearly
-    o  git checkin incl roadmap, tag and push
+*  Have different bits of the model use different location transforms
+o  Digress redisgn for lighting
+    *  Decide input data structure for scene model - leave as is
+    o  Convert back to drawArrays() with flat shading
+        o  Check in local, remote and tag as pre mod
+    o  Add in calculated face normals to world data structures
+    o  Do and debug lighting calcs in vertex shader but don't use
+    o  Pass calced light into fragment as varying and use it
+o  Try a cad generated source
 
 -----------------------------------------------------------------------------
-Introduce compartmentalised scene model with named silos, and have a new scene
-direction object, provide model to world transforms separately for each silo.
-Have the triangles renderer consume this compartmentalised model and apply the
-transforms on a per silo basis in the draw method. Animate these transforms 
-as a function of time.
+Scene Model To Suit Triangles with Known Normals
 -----------------------------------------------------------------------------
-Compartmentalise the scene into named silos.
------------------------------------------------------------------------------
-compartmentalisedsilos
------------------------------------------------------------------------------
+o  Just add in face normal - require that be normalised so no need for
+   belt and braces later
+o  Normal should be in model space
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

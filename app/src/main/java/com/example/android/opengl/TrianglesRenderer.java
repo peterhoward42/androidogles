@@ -41,7 +41,7 @@ public class TrianglesRenderer {
     private int mColorHandle;
     private int mMVPMatrixHandle;
 
-    // This map shares keys (silo names) with the map provided to the constructor.
+    // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
     private Map<String, BuffersForShading> mShaderBuffers;
     private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
     private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
@@ -50,7 +50,8 @@ public class TrianglesRenderer {
      * Constructor.
      *
      * @Param assetManager Used to dependency-inject the shader source code to be used.
-     * @Param sceneTriangles The sets of triangles you wish to be rendered.
+     * @Param sceneTriangles The sets of triangles you wish to be repeatedly transformed then
+     * rendered.
      */
     public TrianglesRenderer(AssetManager assetManager, SceneObjectSilos sceneObjectSilos) {
         // Convert the world scene model representation into the efficiently packed form

@@ -37,6 +37,10 @@ public class SceneDirector {
         Matrix.setIdentityM(m, 0);
         return m;
     }
+
+    /** The auxilliary silo has an orbital motion over time in the world.
+     *
+     */
     private float[] auxSiloWorldTrans() {
         float period = 5;
         float xRotnAngle = (360 * SystemClock.uptimeMillis() / (period * 1000)) % 360;
