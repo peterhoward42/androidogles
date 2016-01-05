@@ -17,6 +17,9 @@ package com.example.android.opengl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +45,8 @@ public class TrianglesRenderer {
     private int mMVPMatrixHandle;
 
     // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
-    private Map<String, BuffersForShading> mShaderBuffers;
+    private Map<String, FloatBuffer> mVertexBuffers; // todo improve name like below
+    private Map<String, Integer> mNumberOfTrianglesInSilo;
     private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
     private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
 
@@ -54,13 +58,16 @@ public class TrianglesRenderer {
      * rendered.
      */
     public TrianglesRenderer(AssetManager assetManager, SceneObjectSilos sceneObjectSilos) {
-        // Convert the world scene model representation into the efficiently packed form
-        // this required later for the draw() method.
-        mShaderBuffers = new HashMap<String, BuffersForShading>();
+        // Convert the world scene model representation into the packed form required later for
+        // the draw() method.
+        mVertexBuffers = new HashMap<String, FloatBuffer>();
+        mNumberOfTrianglesInSilo = new HashMap<String, Integer>();
         for (String siloName : sceneObjectSilos.getSiloNames()) {
+            mNumberOfTrianglesInSilo.put(siloName,
+                    sceneObjectSilos.getNumberOfTrianglesInSilo(siloName));
             Collection<Triangle> triangles = sceneObjectSilos.getSilo(siloName);
-            DrawList dataSource = new DrawListFactory().buildFrom(triangles);
-            mShaderBuffers.put(siloName, new BuffersForShading(dataSource));
+            mVertexBuffers.put(siloName,
+                    makeVertexBufferForSilo(sceneObjectSilos.getSilo(siloName)));
         }
 
         String vertexShaderSource = getShaderFromAsset(assetManager, "vertex-shader.txt");
@@ -92,18 +99,33 @@ public class TrianglesRenderer {
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
         // transform.
-        for (String siloName : mShaderBuffers.keySet()) {
-            BuffersForShading bufferForShading = mShaderBuffers.get(siloName);
+        for (String siloName : mVertexBuffers.keySet()) {
+            FloatBuffer vertexBuffer = mVertexBuffers.get(siloName);
             GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false,
-                    vertexStride, bufferForShading.vertexBuffer);
+                    vertexStride, vertexBuffer);
             float[] mvpMatrix = mvpMatrices.get(siloName);
             GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
             MyGLRenderer.checkGlError("glUniformMatrix4fv");
-            GLES20.glDrawElements(
-                    GLES20.GL_TRIANGLES, bufferForShading.numberOfVertices,
-                    GLES20.GL_UNSIGNED_SHORT, bufferForShading.drawListBuffer);
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfTrianglesInSilo.get(siloName));
+            /*
+                    GLES20.glDrawElements(
+                            GLES20.GL_TRIANGLES, bufferForShading.numberOfVertices,
+                            GLES20.GL_UNSIGNED_SHORT, bufferForShading.drawListBuffer);
+                            */
         }
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+    }
+
+    private FloatBuffer makeVertexBufferForSilo(Collection<Triangle> triangles) {
+        int numberOfVertices = 3 * triangles.size();
+        int numberOfFloats = 3 * numberOfVertices;
+        int numberOfBytesRequired = numberOfFloats * SystemConstants.BYTES_IN_FLOAT;
+        ByteBuffer vertexBytes = ByteBuffer.allocateDirect(numberOfBytesRequired);
+        vertexBytes.order(ByteOrder.nativeOrder());
+        FloatBuffer vertexBuffer = vertexBytes.asFloatBuffer();
+        vertexBuffer.put(new TriangleSerializer(triangles).serializeToContiguousFloats());
+        vertexBuffer.position(0);
+        return vertexBuffer;
     }
 
     private String getShaderFromAsset(AssetManager assetManager, String assetFileName) {

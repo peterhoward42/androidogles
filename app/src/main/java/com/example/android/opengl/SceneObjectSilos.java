@@ -34,4 +34,6 @@ public class SceneObjectSilos {
     public Set<String> getSiloNames() {
         return mSilos.keySet();
     }
+
+    public int getNumberOfTrianglesInSilo(String siloName) { return mSilos.get(siloName).size(); }
 }
