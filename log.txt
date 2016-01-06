@@ -15,46 +15,17 @@ Android GL Play Around
 o  Digress redisgn for lighting
     *  Decide input data structure for scene model - leave as is
     *  Convert back to drawArrays() with flat shading
-        *  Check in local, remote and tag as pre mod
-        *  Psuedo code what done now to build datastructures
-        *  Decide what will be
-        *  Do it
-        *  Does it work? - it does enough
-        *  Ditch redundant code
-    o  Do security check in
-    o  Fix bug where not all faces shown
-    o  Add in calculated face normals to world data structures
+    *  Do security check in
+    *  Fix bug where not all faces shown
+    *  Add in calculated face normals to triangle objects
     o  Do and debug lighting calcs in vertex shader but don't use
     o  Pass calced light into fragment as varying and use it
 o  Try a cad generated source
 
 -----------------------------------------------------------------------------
-Scene Model To Suit Triangles with Known Normals
 -----------------------------------------------------------------------------
-o  Just add in face normal - require that be normalised so no need for
-   belt and braces later
-o  Normal should be in model space
-
 -----------------------------------------------------------------------------
-Current data packing
 -----------------------------------------------------------------------------
-renderer constructor
-
-    has map of silo to bufferforshading and builds it in constructor
-
-    bufferforshading allocates and populates floatbuffer for vertices floats
-
-    using services of drawlistfactory to unique vertices and pack 
-    drawing order ds
-
-renderer draw method
-    
-    no input data change required - just different draw call that doesn't use
-    the draw list function argument
-
 -----------------------------------------------------------------------------
 Decide what will be
 -----------------------------------------------------------------------------
-            o  deprecate bufferforshading and build floatbuf in utility method
-               directly from renderer
-            o  deprecate drawlist and drawlist factory

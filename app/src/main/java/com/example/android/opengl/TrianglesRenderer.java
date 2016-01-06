@@ -26,7 +26,6 @@ import java.util.Map;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
-import android.util.Log;
 
 /**
  * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
@@ -46,7 +45,7 @@ public class TrianglesRenderer {
 
     // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers; // todo improve name like below
-    private Map<String, Integer> mNumberOfTrianglesInSilo;
+    private Map<String, Integer> mNumberOfVerticesInSilo;
     private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
     private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
 
@@ -61,10 +60,10 @@ public class TrianglesRenderer {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();
-        mNumberOfTrianglesInSilo = new HashMap<String, Integer>();
+        mNumberOfVerticesInSilo = new HashMap<String, Integer>();
         for (String siloName : sceneObjectSilos.getSiloNames()) {
-            mNumberOfTrianglesInSilo.put(siloName,
-                    sceneObjectSilos.getNumberOfTrianglesInSilo(siloName));
+            mNumberOfVerticesInSilo.put(siloName,
+                    3 * sceneObjectSilos.getNumberOfTrianglesInSilo(siloName));
             Collection<Triangle> triangles = sceneObjectSilos.getSilo(siloName);
             mVertexBuffers.put(siloName,
                     makeVertexBufferForSilo(sceneObjectSilos.getSilo(siloName)));
@@ -106,12 +105,7 @@ public class TrianglesRenderer {
             float[] mvpMatrix = mvpMatrices.get(siloName);
             GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
             MyGLRenderer.checkGlError("glUniformMatrix4fv");
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfTrianglesInSilo.get(siloName));
-            /*
-                    GLES20.glDrawElements(
-                            GLES20.GL_TRIANGLES, bufferForShading.numberOfVertices,
-                            GLES20.GL_UNSIGNED_SHORT, bufferForShading.drawListBuffer);
-                            */
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }
         GLES20.glDisableVertexAttribArray(mPositionHandle);
     }

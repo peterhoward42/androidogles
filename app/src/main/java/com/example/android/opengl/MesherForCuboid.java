@@ -43,15 +43,15 @@ public class MesherForCuboid {
 
     private void addTrianglesForFace(Collection<Triangle> container,
             XYZf faceCentre, XYZf firstLeg, XYZf secondLeg) {
-        // Comments describe making two triangles to fit a "front" face, facing +Z, but math
-        // is generalised.
+        // Comments describe making two triangles to fit a "front" face, facing to the rear,
+        // i.e. +Z, where first leg is in Y and second is in X.
 
         XYZf rightTop = faceCentre.plus(firstLeg).plus(secondLeg);
         XYZf leftTop = faceCentre.plus(firstLeg).minus(secondLeg);
         XYZf rightBottom = faceCentre.minus(firstLeg).plus(secondLeg);
         XYZf leftBottom = faceCentre.minus(firstLeg).minus(secondLeg);
 
-        container.add(new Triangle(rightTop, leftTop, rightBottom));
-        container.add(new Triangle(leftTop, leftBottom, rightBottom));
+        container.add(new Triangle(rightBottom, leftTop, rightTop));
+        container.add(new Triangle(leftTop, rightBottom, leftBottom));
     }
 }
