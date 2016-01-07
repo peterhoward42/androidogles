@@ -33,6 +33,8 @@ public class Triangle {
         return mVertices;
     }
 
+    public XYZf getNormal() { return mNormal; }
+
     private XYZf calculateNormal() {
         XYZf edgeOne = mVertices[0].minus(mVertices[1]);
         XYZf edgeTwo = mVertices[2].minus(mVertices[1]);

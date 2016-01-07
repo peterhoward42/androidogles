@@ -18,6 +18,21 @@ o  Digress redisgn for lighting
     *  Do security check in
     *  Fix bug where not all faces shown
     *  Add in calculated face normals to triangle objects
+        o  Convey face normals into vertex shader
+            *  First stop posn handle from being field and check
+            *  Re-read book on xtra vertex attribs and impact on
+               call to drawarrays and impact on vertex shader
+            *  Pack normal as part of vertex
+            o  Attempt to get normals passed into vertex shader
+                *  Code and compile
+                o  Regression run
+                    o  Crashes
+                        o  Cannot get slot for vNormal
+                            o  Add errors to load shader code
+                                o  doesn't seem to be firing?
+                            o  Add error to link phase
+                            o  Try putting handles back as fields
+                o  How assess if arrived?
     o  Do and debug lighting calcs in vertex shader but don't use
     o  Pass calced light into fragment as varying and use it
 o  Try a cad generated source

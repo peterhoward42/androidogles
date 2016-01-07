@@ -37,16 +37,20 @@ import android.opengl.GLES20;
 public class TrianglesRenderer {
 
     private static final String TAG = "TrianglesRenderer";
+    private static final int POSITION_COMPONENT_COUNT = 3;
+    private static final int NORMAL_COMPONENT_COUNT = 3;
+
+    private static final int COMPONENTS_PER_VERTEX =
+            POSITION_COMPONENT_COUNT + NORMAL_COMPONENT_COUNT;
+
+    private final static int VERTEX_ARRAY_STRIDE_IN_BYTES =
+            SystemConstants.BYTES_IN_FLOAT * COMPONENTS_PER_VERTEX;
 
     private final int mProgram;
-    private int mPositionHandle; // Don't know why official examples make this a field but retain just in case?
-    private int mColorHandle;
-    private int mMVPMatrixHandle;
 
     // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
-    private Map<String, FloatBuffer> mVertexBuffers; // todo improve name like below
+    private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
-    private final int vertexStride = 3 * SystemConstants.BYTES_IN_FLOAT;
     private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
 
     /**
@@ -89,31 +93,50 @@ public class TrianglesRenderer {
     public void draw(Map<String, float[]> mvpMatrices) {
         GLES20.glUseProgram(mProgram);
 
-        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-        mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-        MyGLRenderer.checkGlError("glGetUniformLocation");
+        int positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        GLES20.glEnableVertexAttribArray(positionHandle);
+        MyGLRenderer.checkGlError("draw a");
+        int normalHandle = GLES20.glGetAttribLocation(mProgram, "vNormal");
+        GLES20.glEnableVertexAttribArray(normalHandle);
+        MyGLRenderer.checkGlError("draw b");
+
+        int colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+        GLES20.glUniform4fv(colorHandle, 1, color, 0);
+        MyGLRenderer.checkGlError("draw c");
+        int MVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
         // transform.
         for (String siloName : mVertexBuffers.keySet()) {
             FloatBuffer vertexBuffer = mVertexBuffers.get(siloName);
-            GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false,
-                    vertexStride, vertexBuffer);
+
+            // Tell GLES20 how to read position attributes from vertex array
+            vertexBuffer.position(0);
+            GLES20.glVertexAttribPointer(positionHandle, POSITION_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
+                    VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
+
+            // Tell GLES20 how to read normal attributes from vertex array.
+            // Note the starting position is offset to be just beyond the position data, and
+            // thus at the start of the normal data.
+            vertexBuffer.position(POSITION_COMPONENT_COUNT);
+            GLES20.glVertexAttribPointer(normalHandle, NORMAL_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
+                    VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
+
             float[] mvpMatrix = mvpMatrices.get(siloName);
-            GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
+            GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
             MyGLRenderer.checkGlError("glUniformMatrix4fv");
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
+
+            // break out of loop to rule out problems from failure to reinit properly
+            break;
         }
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
     }
 
     private FloatBuffer makeVertexBufferForSilo(Collection<Triangle> triangles) {
         int numberOfVertices = 3 * triangles.size();
-        int numberOfFloats = 3 * numberOfVertices;
-        int numberOfBytesRequired = numberOfFloats * SystemConstants.BYTES_IN_FLOAT;
+        int numberOfBytesRequired = VERTEX_ARRAY_STRIDE_IN_BYTES * numberOfVertices;
         ByteBuffer vertexBytes = ByteBuffer.allocateDirect(numberOfBytesRequired);
         vertexBytes.order(ByteOrder.nativeOrder());
         FloatBuffer vertexBuffer = vertexBytes.asFloatBuffer();

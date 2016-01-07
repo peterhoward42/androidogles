@@ -157,10 +157,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
         int shader = GLES20.glCreateShader(type);
+        MyGLRenderer.checkGlError("load shader a");
 
         // add the source code to the shader and compile it
         GLES20.glShaderSource(shader, shaderCode);
+        MyGLRenderer.checkGlError("load shader b");
         GLES20.glCompileShader(shader);
+        MyGLRenderer.checkGlError("load shader c");
 
         return shader;
     }
@@ -177,11 +180,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
      *
      * @param glOperation - Name of the OpenGL call to check.
      */
-    public static void checkGlError(String glOperation) {
+    public static void checkGlError(String contextProvidedByCaller) {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e(TAG, glOperation + ": glError " + error);
-            throw new RuntimeException(glOperation + ": glError " + error);
+            Log.e(TAG, contextProvidedByCaller + ": glError " + error);
+            throw new RuntimeException(contextProvidedByCaller + ": glError " + error);
         }
     }
 }
