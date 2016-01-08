@@ -159,12 +159,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int shader = GLES20.glCreateShader(type);
         MyGLRenderer.checkGlError("load shader a");
 
-        // add the source code to the shader and compile it
+        // add the source code to the shader
         GLES20.glShaderSource(shader, shaderCode);
         MyGLRenderer.checkGlError("load shader b");
-        GLES20.glCompileShader(shader);
-        MyGLRenderer.checkGlError("load shader c");
 
+        // compile it - noting differing error discovery - what a pain!
+        GLES20.glCompileShader(shader);
+        // Found this error discovery trick using get-internal-value on StackOverflow
+        int[] compiled = new int[1];
+        GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+        if (compiled[0] == 0) {
+            GLES20.glDeleteShader(shader);
+            String msg = "load shader c" + ": " + GLES20.glGetShaderInfoLog(shader);
+            Log.e(TAG, msg);
+            throw new RuntimeException("Could not compile program: " + msg);
+        }
         return shader;
     }
 

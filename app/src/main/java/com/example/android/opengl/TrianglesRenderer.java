@@ -85,18 +85,26 @@ public class TrianglesRenderer {
                 fragmentShaderSource);
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
+        MyGLRenderer.checkGlError("tri rend construct a");
+
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
+        MyGLRenderer.checkGlError("tri rend construct c");
+
         GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
+        MyGLRenderer.checkGlError("tri rend construct c");
+
         GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
+
+        MyGLRenderer.checkGlError("tri rend construct d");
     }
 
     public void draw(Map<String, float[]> mvpMatrices) {
         GLES20.glUseProgram(mProgram);
 
-        int positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        int positionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glEnableVertexAttribArray(positionHandle);
         MyGLRenderer.checkGlError("draw a");
-        int normalHandle = GLES20.glGetAttribLocation(mProgram, "vNormal");
+        int normalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
         GLES20.glEnableVertexAttribArray(normalHandle);
         MyGLRenderer.checkGlError("draw b");
 
@@ -126,9 +134,6 @@ public class TrianglesRenderer {
             GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
             MyGLRenderer.checkGlError("glUniformMatrix4fv");
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
-
-            // break out of loop to rule out problems from failure to reinit properly
-            break;
         }
         GLES20.glDisableVertexAttribArray(positionHandle);
         GLES20.glDisableVertexAttribArray(normalHandle);

@@ -25,14 +25,14 @@ o  Digress redisgn for lighting
             *  Pack normal as part of vertex
             o  Attempt to get normals passed into vertex shader
                 *  Code and compile
-                o  Regression run
-                    o  Crashes
-                        o  Cannot get slot for vNormal
-                            o  Add errors to load shader code
-                                o  doesn't seem to be firing?
-                            o  Add error to link phase
-                            o  Try putting handles back as fields
+                *  Regression run
+                    *  Crashes
+                        *  Was because attribute was not used by shader
+                           so compiler removed it and then java prog could
+                           not get its handle.
+
                 o  How assess if arrived?
+                    o  Look into shader log retreival
     o  Do and debug lighting calcs in vertex shader but don't use
     o  Pass calced light into fragment as varying and use it
 o  Try a cad generated source
