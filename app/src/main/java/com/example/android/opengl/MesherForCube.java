@@ -27,40 +27,21 @@ public class MesherForCube {
 
         Collection<Triangle> trianglesToReturn = new ArrayList<Triangle>();
 
-        trianglesToReturn.addAll(makeTransformedCopies(rotationY(0), refTriangles));
-        trianglesToReturn.addAll(makeTransformedCopies(rotationY(90), refTriangles));
-        trianglesToReturn.addAll(makeTransformedCopies(rotationY(180), refTriangles));
-        trianglesToReturn.addAll(makeTransformedCopies(rotationY(270), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeYAxisRotationMatrix(0), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeYAxisRotationMatrix(90), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeYAxisRotationMatrix(180), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeYAxisRotationMatrix(270), refTriangles));
 
-        trianglesToReturn.addAll(makeTransformedCopies(rotationZ(90), refTriangles));
-        trianglesToReturn.addAll(makeTransformedCopies(rotationZ(270), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeZAxisRotationMatrix(90), refTriangles));
+        trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
+                MatrixHelper.makeZAxisRotationMatrix(270), refTriangles));
 
         return trianglesToReturn;
-    }
-
-    private Collection<Triangle> makeTransformedCopies(
-            float[] transform, Collection<Triangle> trianglesToTransform) {
-        Collection<Triangle> twoTriangles = new ArrayList<Triangle>();
-        for (Triangle triangle : trianglesToTransform) {
-            twoTriangles.add(makeTransformedTriangle(transform, triangle));
-        }
-        return twoTriangles;
-    }
-
-    private Triangle makeTransformedTriangle(
-            float[] transform, Triangle triangleToTransform) {
-        return new Triangle(
-                transformVertex(transform, triangleToTransform.firstVertex()),
-                transformVertex(transform, triangleToTransform.secondVertex()),
-                transformVertex(transform, triangleToTransform.thirdVertex())
-        );
-    }
-
-    private XYZf transformVertex(float[] transform, XYZf vertex) {
-        float[] result = new float[4];
-        Matrix.multiplyMV(
-                result, 0, transform, 0, new float[]{vertex.X(), vertex.Y(), vertex.Z(), 0}, 0);
-        return new XYZf(result[0], result[1], result[2]);
     }
 
     private Collection<Triangle> makeReferenceTriangles() {
@@ -78,18 +59,4 @@ public class MesherForCube {
 
         return twoTriangles;
     }
-
-    private float[] rotationY(float angleDeg) {
-        float[] m = new float[16];
-        Matrix.setRotateM(m, 0, angleDeg, 0, 1, 0);
-        return m;
-    }
-
-    private float[] rotationZ(float angleDeg) {
-        float[] m = new float[16];
-        Matrix.setRotateM(m, 0, angleDeg, 0, 0, 1);
-        return m;
-    }
-
-
 }

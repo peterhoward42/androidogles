@@ -24,10 +24,9 @@ o  Digress redisgn for lighting
         o  If we reverse normals (or some) should all disappear
     o  Do and debug lighting calcs in vertex shader but don't use
         *  Timeout to get face culling working
-        o  Timeout to make satellite rotate about Y axis as well as orbiting
-        o  If has worked, ditch old factory
-        o  Shift new matrix stuff in mesher for cuboid into sensible places
-        o  Do lighting calcs on paper
+        *  Shift new matrix stuff in mesher for cuboid into sensible places
+        *  Timeout to make satellite rotate about Y axis as well as orbiting
+        *  Do lighting calcs on paper
         o  Find out what good max and min colors are that are visible
         o  Feed global towards-light state into app
         o  Get this through to shader as a uniform

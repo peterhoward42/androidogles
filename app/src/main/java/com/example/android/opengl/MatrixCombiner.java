@@ -7,21 +7,14 @@ import android.opengl.Matrix;
  */
 public class MatrixCombiner {
 
-    private float[] mApplyFirst;
-    private float[] mApplySecond;
-    private float[] mApplyThird;
-
-    public MatrixCombiner(float[] applyThird, float[] applySecond, float[] applyFirst) {
-        mApplyFirst = applyFirst;
-        mApplySecond = applySecond;
-        mApplyThird = applyThird;
+    public static float[] combineTwo(float[] applySecond, float[] applyFirst) {
+        float[] toReturn = new float[16];
+        Matrix.multiplyMM(toReturn, 0, applySecond, 0, applyFirst, 0);
+        return toReturn;
     }
 
-    public float[] combine() {
-        float[] tmp = new float[16];
-        Matrix.multiplyMM(tmp, 0, mApplySecond, 0, mApplyFirst, 0);
-        float[] toReturn = new float[16];
-        Matrix.multiplyMM(toReturn, 0, mApplyThird, 0, tmp, 0);
-        return toReturn;
+    public static float[] combineThree(float[] applyThird, float[] applySecond, float[] applyFirst) {
+        float[] tmp = combineTwo(applySecond, applyFirst);
+        return combineTwo(applyThird, tmp);
     }
 }

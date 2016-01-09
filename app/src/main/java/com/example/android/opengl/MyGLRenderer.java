@@ -22,7 +22,6 @@ import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -134,10 +133,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // for each silo.
         Map<String, float[]> mapToReturn = new HashMap<String, float[]>();
         for (String siloName: mSceneDirector.getSiloNames()) {
-            float[] objectToWorldTransform = mSceneDirector.getObjectToWorldTransformForSilo(siloName);
-            MatrixCombiner combiner = new MatrixCombiner(
-                    projectionTransform, worldToCameraTransform, objectToWorldTransform);
-            mapToReturn.put(siloName, combiner.combine());
+            float[] objectToWorldTransform = mSceneDirector.getCurrentObjectToWorldTransform(siloName);
+            mapToReturn.put(siloName, MatrixCombiner.combineThree(
+                    projectionTransform, worldToCameraTransform, objectToWorldTransform));
         }
         return mapToReturn;
     }
