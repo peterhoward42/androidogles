@@ -18,23 +18,32 @@ o  Digress redisgn for lighting
     *  Do security check in
     *  Fix bug where not all faces shown
     *  Add in calculated face normals to triangle objects
-        o  Convey face normals into vertex shader
-            *  First stop posn handle from being field and check
-            *  Re-read book on xtra vertex attribs and impact on
-               call to drawarrays and impact on vertex shader
-            *  Pack normal as part of vertex
-            o  Attempt to get normals passed into vertex shader
-                *  Code and compile
-                *  Regression run
-                    *  Crashes
-                        *  Was because attribute was not used by shader
-                           so compiler removed it and then java prog could
-                           not get its handle.
-
-                o  How assess if arrived?
-                    o  Look into shader log retreival
+    *  Convey face normals into vertex shader
+    o  Digress to enable and check face culling
+        o  When enabled should still render faces now
+        o  If we reverse normals (or some) should all disappear
     o  Do and debug lighting calcs in vertex shader but don't use
+        *  Timeout to get face culling working
+        o  Timeout to make satellite rotate about Y axis as well as orbiting
+        o  If has worked, ditch old factory
+        o  Shift new matrix stuff in mesher for cuboid into sensible places
+        o  Do lighting calcs on paper
+        o  Find out what good max and min colors are that are visible
+        o  Feed global towards-light state into app
+        o  Get this through to shader as a uniform
+        o  Debug existing normal data by basing color on it to make sure
+           doing what we want
+        o  Find out how to translate face normal into world space theoretically
+        o  Decide how to split vMVP into sufficiently separate components so
+           to do
+        o  Split mMVP as above - with regression test
+        o  Rotate vertex normal into world space in vertex shader
+        o  Get color working just as f vertex normal ignoring light, eg
+           those pointing approx right one color, and rest another to debug
+           rotated normals.
+        o  Now calc dot product and base color on full calc
     o  Pass calced light into fragment as varying and use it
+o  Try differing animation so faces turn away or towards light source
 o  Try a cad generated source
 
 -----------------------------------------------------------------------------
@@ -42,5 +51,14 @@ o  Try a cad generated source
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
-Decide what will be
+Lighting calcs on paper
+    o  Need towards-light direction vector in world space
+    o  Need face normal rotated from model to world space
+    o  Max dot product will be 1.0 when normal aligns with towards-light
+    o  Dot will be zero when normal is perpendicular to towards-light
+    o  Dot will be negative when normal faces to opposite half-sphere to that
+       of light (but shouldn't get these if face culling is working)
+    o  Desire max brightness when dot is 1.0
+    o  Attenuating to ambient when dot is <= 0
+
 -----------------------------------------------------------------------------

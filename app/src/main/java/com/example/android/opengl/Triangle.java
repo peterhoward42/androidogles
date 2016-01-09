@@ -33,6 +33,10 @@ public class Triangle {
         return mVertices;
     }
 
+    public final XYZf firstVertex() { return mVertices[0]; }
+    public final XYZf secondVertex() { return mVertices[1]; }
+    public final XYZf thirdVertex() { return mVertices[2]; }
+
     public XYZf getNormal() { return mNormal; }
 
     private XYZf calculateNormal() {

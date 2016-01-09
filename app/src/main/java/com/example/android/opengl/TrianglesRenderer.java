@@ -100,6 +100,13 @@ public class TrianglesRenderer {
 
     public void draw(Map<String, float[]> mvpMatrices) {
         GLES20.glUseProgram(mProgram);
+        MyGLRenderer.checkGlError("draw p");
+
+        GLES20.glFrontFace(GLES20.GL_CCW);
+        MyGLRenderer.checkGlError("draw q");
+
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        MyGLRenderer.checkGlError("draw r");
 
         int positionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glEnableVertexAttribArray(positionHandle);

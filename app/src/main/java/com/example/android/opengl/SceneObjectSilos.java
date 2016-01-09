@@ -19,11 +19,11 @@ public class SceneObjectSilos {
         mSilos = new HashMap<String, Collection<Triangle>>();
 
         Collection<Triangle> mainSilo = new ArrayList<Triangle>();
-        mainSilo.addAll(new MesherForCuboid(new XYZf(100, 100, 100)).getTriangles());
+        mainSilo.addAll(new MesherForCube(100).getTriangles());
         mSilos.put("mainSilo", mainSilo);
 
         Collection<Triangle> auxSilo = new ArrayList<Triangle>();
-        auxSilo.addAll(new MesherForCuboid(new XYZf(20, 20, 20)).getTriangles());
+        auxSilo.addAll(new MesherForCube(20).getTriangles());
         mSilos.put("auxSilo", auxSilo);
     }
 
