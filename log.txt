@@ -30,8 +30,7 @@ o  Digress redisgn for lighting
         *  Find out what good max and min colors are that are visible .2 to .8
         *  Feed global towards-light state into app
         *  Get this through to shader as a uniform
-        o  Debug existing normal data by basing color on it to make sure
-           doing what we want
+        *  Make color equal to light dirn to see if arriving
         o  Find out how to translate face normal into world space theoretically
         o  Decide how to split vMVP into sufficiently separate components so
            to do

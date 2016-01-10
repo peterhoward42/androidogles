@@ -4,12 +4,13 @@ uniform vec4 lightDirnRev;
 attribute vec4 a_Position;
 
 attribute vec4 a_Normal;
-varying vec4 v_Normal;
+
+varying vec4 vColor;
 
 // nonsense, and is overriden below. but makes attrib used.
 
 void main() {
-    gl_Position = lightDirnRev;
     gl_Position = uMVPMatrix * a_Position;
-    v_Normal = a_Normal;
+    vColor = a_Normal; // keep it alive if even though not used
+    vColor = lightDirnRev;
 }

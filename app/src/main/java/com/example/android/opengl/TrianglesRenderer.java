@@ -50,7 +50,7 @@ public class TrianglesRenderer {
     // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
-    private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    //private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
 
     /**
      * Constructor.
@@ -111,17 +111,19 @@ public class TrianglesRenderer {
         int positionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glEnableVertexAttribArray(positionHandle);
         MyGLRenderer.checkGlError("draw a");
+
         int normalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
         GLES20.glEnableVertexAttribArray(normalHandle);
         MyGLRenderer.checkGlError("draw b");
 
+        /*
         int colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         MyGLRenderer.checkGlError("draw c");
+        */
 
         int MVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         MyGLRenderer.checkGlError("draw d");
-
 
         int lightDirnRevHandle = GLES20.glGetUniformLocation(mProgram, "lightDirnRev");
         MyGLRenderer.checkGlError("draw e");
@@ -133,12 +135,12 @@ public class TrianglesRenderer {
         for (String siloName : mVertexBuffers.keySet()) {
             FloatBuffer vertexBuffer = mVertexBuffers.get(siloName);
 
-            // Tell GLES20 how to read position attributes from vertex array
+            // Point GLES20 at position attribute
             vertexBuffer.position(0);
             GLES20.glVertexAttribPointer(positionHandle, POSITION_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
                     VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
 
-            // Tell GLES20 how to read normal attributes from vertex array.
+            // Point GLES20 at normal attribute
             // Note the starting position is offset to be just beyond the position data, and
             // thus at the start of the normal data.
             vertexBuffer.position(POSITION_COMPONENT_COUNT);
