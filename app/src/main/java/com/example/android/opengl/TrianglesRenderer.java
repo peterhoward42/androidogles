@@ -30,9 +30,8 @@ import android.opengl.GLES20;
 /**
  * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
  * shader program. You provide the triangles in named silos, and these names are used to
- * access differing transform matrices for each silo. Uses OpenGL's drawElements() function call
- * under the hood. I.e. the paradigm that consumes a linear array of "uniqued" vertices, and a
- * drawing-order sequence alongside.
+ * access differing transform matrices for each silo. Uses OpenGL's drawArrays() function call
+ * under the hood.
  */
 public class TrianglesRenderer {
 
@@ -51,7 +50,7 @@ public class TrianglesRenderer {
     // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
-    private float color[] = {0.2f, 0.709803922f, 0.898039216f, 1.0f};
+    private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
 
     /**
      * Constructor.
@@ -98,7 +97,8 @@ public class TrianglesRenderer {
         MyGLRenderer.checkGlError("tri rend construct d");
     }
 
-    public void draw(Map<String, float[]> mvpMatrices) {
+    public void draw(Map<String, float[]> mvpMatrices,
+                     final XYZf lightDirectionReversedAndNormalised) {
         GLES20.glUseProgram(mProgram);
         MyGLRenderer.checkGlError("draw p");
 
@@ -118,7 +118,15 @@ public class TrianglesRenderer {
         int colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         MyGLRenderer.checkGlError("draw c");
+
         int MVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+        MyGLRenderer.checkGlError("draw d");
+
+
+        int lightDirnRevHandle = GLES20.glGetUniformLocation(mProgram, "lightDirnRev");
+        MyGLRenderer.checkGlError("draw e");
+        GLES20.glUniform4fv(lightDirnRevHandle, 1, convertToVec4(lightDirectionReversedAndNormalised), 0);
+        MyGLRenderer.checkGlError("draw f");
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
         // transform.
@@ -139,7 +147,7 @@ public class TrianglesRenderer {
 
             float[] mvpMatrix = mvpMatrices.get(siloName);
             GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
-            MyGLRenderer.checkGlError("glUniformMatrix4fv");
+            MyGLRenderer.checkGlError("draw f");
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }
         GLES20.glDisableVertexAttribArray(positionHandle);
@@ -164,5 +172,14 @@ public class TrianglesRenderer {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private float[] convertToVec4(final XYZf normalisedVector) {
+        float[] toReturn = new float[4];
+        toReturn[0] = normalisedVector.X();
+        toReturn[1] = normalisedVector.Y();
+        toReturn[2] = normalisedVector.Z();
+        toReturn[3] = 1f;
+        return toReturn;
     }
 }

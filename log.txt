@@ -27,9 +27,9 @@ o  Digress redisgn for lighting
         *  Shift new matrix stuff in mesher for cuboid into sensible places
         *  Timeout to make satellite rotate about Y axis as well as orbiting
         *  Do lighting calcs on paper
-        o  Find out what good max and min colors are that are visible
-        o  Feed global towards-light state into app
-        o  Get this through to shader as a uniform
+        *  Find out what good max and min colors are that are visible .2 to .8
+        *  Feed global towards-light state into app
+        *  Get this through to shader as a uniform
         o  Debug existing normal data by basing color on it to make sure
            doing what we want
         o  Find out how to translate face normal into world space theoretically

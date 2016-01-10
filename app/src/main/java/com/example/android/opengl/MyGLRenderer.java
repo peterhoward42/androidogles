@@ -39,6 +39,8 @@ import java.util.Map;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
+    private final XYZf lightDirectionReversedAndNormalised = new XYZf(1f, 1f, 0.5f).normalised();
+
     private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
@@ -89,7 +91,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Build the transform lookup table for the triangles renderer
         // Map<String, float[]> siloRenderingMatrices = buildSiloRenderingMatrices(cameraPosition);
         Map<String, float[]> renderingMatrices = buildSiloRenderingMatrices(cameraPosition);
-        mTrianglesRenderer.draw(renderingMatrices);
+        mTrianglesRenderer.draw(renderingMatrices, lightDirectionReversedAndNormalised);
     }
 
     @Override
