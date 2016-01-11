@@ -98,7 +98,7 @@ public class TrianglesRenderer {
     }
 
     public void draw(Map<String, RenderingTransforms> siloRenderingMatrices,
-                     final XYZf lightDirectionReversedAndNormalised) {
+                     final XYZf towardsLight) {
         GLES20.glUseProgram(mProgram);
         MyGLRenderer.checkGlError("draw p");
 
@@ -108,26 +108,20 @@ public class TrianglesRenderer {
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         MyGLRenderer.checkGlError("draw r");
 
-        int positionHandle = GLES20.glGetAttribLocation(mProgram, "a_Position");
+        int positionHandle = GLES20.glGetAttribLocation(mProgram, "position");
         GLES20.glEnableVertexAttribArray(positionHandle);
         MyGLRenderer.checkGlError("draw a");
 
-        int normalHandle = GLES20.glGetAttribLocation(mProgram, "a_Normal");
+        int normalHandle = GLES20.glGetAttribLocation(mProgram, "normal");
         GLES20.glEnableVertexAttribArray(normalHandle);
         MyGLRenderer.checkGlError("draw b");
 
-        /*
-        int colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-        GLES20.glUniform4fv(colorHandle, 1, color, 0);
-        MyGLRenderer.checkGlError("draw c");
-        */
-
-        int MVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+        int mvpTransformHandle = GLES20.glGetUniformLocation(mProgram, "mvpTransform");
         MyGLRenderer.checkGlError("draw d");
 
-        int lightDirnRevHandle = GLES20.glGetUniformLocation(mProgram, "lightDirnRev");
+        int towardsLightHandle = GLES20.glGetUniformLocation(mProgram, "towardsLight");
         MyGLRenderer.checkGlError("draw e");
-        GLES20.glUniform4fv(lightDirnRevHandle, 1, convertToVec4(lightDirectionReversedAndNormalised), 0);
+        GLES20.glUniform4fv(towardsLightHandle, 1, convertToVec4(towardsLight), 0);
         MyGLRenderer.checkGlError("draw f");
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
@@ -148,7 +142,7 @@ public class TrianglesRenderer {
                     VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
 
             RenderingTransforms renderingTransforms = siloRenderingMatrices.get(siloName);
-            GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, renderingTransforms.getMVP(), 0);
+            GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, renderingTransforms.getMvpForVertices(), 0);
             MyGLRenderer.checkGlError("draw f");
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }

@@ -5,18 +5,18 @@ package com.example.android.opengl;
  */
 public class RenderingTransforms {
 
-    private float[] mvp;
-    private float[] modelToWorldDirectionVector;
-    public RenderingTransforms(final float[] mvp, final float[] modelToWorldDirectionVector) {
-        this.mvp = mvp;
-        this.modelToWorldDirectionVector = modelToWorldDirectionVector;
+    private float[] mvpForVertices;
+    private float[] modelToWorldForDirections;
+    public RenderingTransforms(final float[] mvpForVertices, final float[] modelToWorldForDirections) {
+        this.mvpForVertices = mvpForVertices;
+        this.modelToWorldForDirections = modelToWorldForDirections;
     }
 
-    public float[] getModelToWorldDirectionVector() {
-        return modelToWorldDirectionVector;
+    public float[] getModelToWorldForDirections() {
+        return modelToWorldForDirections;
     }
 
-    public float[] getMVP() {
-        return mvp;
+    public float[] getMvpForVertices() {
+        return mvpForVertices;
     }
 }

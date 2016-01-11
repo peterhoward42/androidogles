@@ -39,7 +39,7 @@ import java.util.Map;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private final XYZf lightDirectionReversedAndNormalised = new XYZf(1f, 1f, 0.5f).normalised();
+    private final XYZf towardsLightInWorldSpace = new XYZf(1f, 1f, 0.5f).normalised();
 
     private TrianglesRenderer mTrianglesRenderer;
 
@@ -92,7 +92,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Map<String, float[]> siloRenderingMatrices = buildSiloRenderingMatrices(cameraPosition);
         Map<String, RenderingTransforms> siloRenderingMatrices =
                 buildSiloRenderingMatrices(cameraPosition);
-        mTrianglesRenderer.draw(siloRenderingMatrices, lightDirectionReversedAndNormalised);
+        mTrianglesRenderer.draw(siloRenderingMatrices, towardsLightInWorldSpace);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         final float amplitude = 35; // degrees
         final float latitude = 51.4f; // degrees
         final float orbitHeightFromCentre = 200; // scene linear dimensions
-        float[] equatorAtMeridian = new float[] {0, 0, orbitHeightFromCentre, 1};
+        float[] equatorAtMeridian = new float[]{0, 0, orbitHeightFromCentre, 1};
 
         float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
 
@@ -119,8 +119,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     private Map<String, RenderingTransforms> buildSiloRenderingMatrices(XYZf cameraPosition) {
-        // We combine three transforms: ObjectToWorld, WorldToCamera, and Projection.
-        // Only the first of which differs per silo.
+        // For each silo we generate a model-view-projection transform by combinging three
+        // transforms: ObjectToWorld, WorldToCamera, and Projection. Only the first of which
+        // differs per silo. The we add an auxilliary transform for transforming direction vectors
+        // from object to world space.
 
         // World to Camera
         float[] worldToCameraTransform = mCameraLookAt.worldToCameraTransform(cameraPosition);
@@ -135,11 +137,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
         Map<String, RenderingTransforms> mapToReturn = new HashMap<String, RenderingTransforms>();
-        for (String siloName: mSceneDirector.getSiloNames()) {
-            float[] objectToWorldTransform = mSceneDirector.getCurrentObjectToWorldTransform(siloName);
+        for (String siloName : mSceneDirector.getSiloNames()) {
+            float[] objectToWorldForVertices =
+                    mSceneDirector.getCurrentObjectToWorldTransform(siloName);
+            float[] objectToWorldForDirections =
+                    TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
             float[] mvp = MatrixCombiner.combineThree(
-                    projectionTransform, worldToCameraTransform, objectToWorldTransform);
-            RenderingTransforms renderingTransforms = new RenderingTransforms(mvp, null);
+                    projectionTransform, worldToCameraTransform, objectToWorldForVertices);
+            RenderingTransforms renderingTransforms =
+                    new RenderingTransforms(mvp, objectToWorldForDirections);
             mapToReturn.put(siloName, renderingTransforms);
         }
         return mapToReturn;

@@ -1,14 +1,14 @@
-uniform mat4 uMVPMatrix;
-uniform vec4 lightDirnRev;
+uniform mat4 mvpTransform;
+uniform vec4 towardsLight;
 
-attribute vec4 a_Position;
+attribute vec4 position;
 
-attribute vec4 a_Normal;
+attribute vec4 normal;
 
-varying vec4 vColor;
+varying vec4 color;
 
 void main() {
-    gl_Position = uMVPMatrix * a_Position;
-    vColor = a_Normal; // keep it alive if even though not used
-    vColor = lightDirnRev;
+    gl_Position = mvpTransform * position;
+    color = normal; // keep it alive if even though not used
+    color = towardsLight;
 }

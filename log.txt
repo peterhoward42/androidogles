@@ -44,10 +44,12 @@ o  Digress redisgn for lighting
                use RenderingTransforms objects as values, which have a property
                mvpTransform, and modelToWorldDirectionVectorTransform.
                *  code
-               o  regression test
-            o  Set the new field using trans factory.
-            o  Use it once model to view trans known to capture normaltrans
+               *  regression test
+            *  Set the new field using trans factory.
+            *  Use it once model to view trans known to capture normaltrans
         o  Rotate vertex normal into world space in vertex shader
+            o  Intervene to renormalise normal dirn after xform
+            o  Provide uniform for model to world direction trans
         o  Get color working just as f vertex normal ignoring light, eg
            those pointing approx right one color, and rest another to debug
            rotated normals.

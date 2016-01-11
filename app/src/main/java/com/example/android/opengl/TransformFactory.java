@@ -47,7 +47,7 @@ public class TransformFactory {
      * @param fullTransform The point transform from space A to space B.
      * @return The transform for direction vectors.
      */
-    public static float[] directionVectorTransformFromFullTransform(float[] fullTransform) {
+    public static float[] directionTransformFromVertexTransform(float[] fullTransform) {
         float[] inverseOfFullTransform = inverted(fullTransform);
         return transposed(inverseOfFullTransform);
     }
