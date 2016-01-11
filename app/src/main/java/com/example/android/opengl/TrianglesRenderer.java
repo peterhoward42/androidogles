@@ -97,7 +97,7 @@ public class TrianglesRenderer {
         MyGLRenderer.checkGlError("tri rend construct d");
     }
 
-    public void draw(Map<String, float[]> mvpMatrices,
+    public void draw(Map<String, RenderingTransforms> siloRenderingMatrices,
                      final XYZf lightDirectionReversedAndNormalised) {
         GLES20.glUseProgram(mProgram);
         MyGLRenderer.checkGlError("draw p");
@@ -147,8 +147,8 @@ public class TrianglesRenderer {
             GLES20.glVertexAttribPointer(normalHandle, NORMAL_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
                     VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
 
-            float[] mvpMatrix = mvpMatrices.get(siloName);
-            GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
+            RenderingTransforms renderingTransforms = siloRenderingMatrices.get(siloName);
+            GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, renderingTransforms.getMVP(), 0);
             MyGLRenderer.checkGlError("draw f");
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }

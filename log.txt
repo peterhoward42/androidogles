@@ -31,16 +31,29 @@ o  Digress redisgn for lighting
         *  Feed global towards-light state into app
         *  Get this through to shader as a uniform
         *  Make color equal to light dirn to see if arriving
-        o  Find out how to translate face normal into world space theoretically
-        o  Decide how to split vMVP into sufficiently separate components so
+        *  Find out how to translate face normal into world space theoretically
+        *  Decide how to split vMVP into sufficiently separate components so
            to do
+           *  Don't need to split, just need to provide transform to convert
+              vertex normals in model space into world space. 
+           *  Call it modelToWorldNormalTrans
+        *  Digress to split helpers into better named classes
         o  Split mMVP as above - with regression test
+            *  Matrix helper - makeRotationsIsolatedTransform
+            *  Convert the map returned by buildSiloRenderingMatrices to
+               use RenderingTransforms objects as values, which have a property
+               mvpTransform, and modelToWorldDirectionVectorTransform.
+               *  code
+               o  regression test
+            o  Set the new field using trans factory.
+            o  Use it once model to view trans known to capture normaltrans
         o  Rotate vertex normal into world space in vertex shader
         o  Get color working just as f vertex normal ignoring light, eg
            those pointing approx right one color, and rest another to debug
            rotated normals.
         o  Now calc dot product and base color on full calc
     o  Pass calced light into fragment as varying and use it
+    o  When stable, see if can wean off needless vec4 in favour of vec3s
 o  Try differing animation so faces turn away or towards light source
 o  Try a cad generated source
 

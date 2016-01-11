@@ -7,8 +7,6 @@ attribute vec4 a_Normal;
 
 varying vec4 vColor;
 
-// nonsense, and is overriden below. but makes attrib used.
-
 void main() {
     gl_Position = uMVPMatrix * a_Position;
     vColor = a_Normal; // keep it alive if even though not used

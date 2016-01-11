@@ -90,8 +90,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Build the transform lookup table for the triangles renderer
         // Map<String, float[]> siloRenderingMatrices = buildSiloRenderingMatrices(cameraPosition);
-        Map<String, float[]> renderingMatrices = buildSiloRenderingMatrices(cameraPosition);
-        mTrianglesRenderer.draw(renderingMatrices, lightDirectionReversedAndNormalised);
+        Map<String, RenderingTransforms> siloRenderingMatrices =
+                buildSiloRenderingMatrices(cameraPosition);
+        mTrianglesRenderer.draw(siloRenderingMatrices, lightDirectionReversedAndNormalised);
     }
 
     @Override
@@ -117,7 +118,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         return new XYZf(positionVect[0], positionVect[1], positionVect[2]);
     }
 
-    private Map<String, float[]> buildSiloRenderingMatrices(XYZf cameraPosition) {
+    private Map<String, RenderingTransforms> buildSiloRenderingMatrices(XYZf cameraPosition) {
         // We combine three transforms: ObjectToWorld, WorldToCamera, and Projection.
         // Only the first of which differs per silo.
 
@@ -133,11 +134,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
-        Map<String, float[]> mapToReturn = new HashMap<String, float[]>();
+        Map<String, RenderingTransforms> mapToReturn = new HashMap<String, RenderingTransforms>();
         for (String siloName: mSceneDirector.getSiloNames()) {
             float[] objectToWorldTransform = mSceneDirector.getCurrentObjectToWorldTransform(siloName);
-            mapToReturn.put(siloName, MatrixCombiner.combineThree(
-                    projectionTransform, worldToCameraTransform, objectToWorldTransform));
+            float[] mvp = MatrixCombiner.combineThree(
+                    projectionTransform, worldToCameraTransform, objectToWorldTransform);
+            RenderingTransforms renderingTransforms = new RenderingTransforms(mvp, null);
+            mapToReturn.put(siloName, renderingTransforms);
         }
         return mapToReturn;
     }

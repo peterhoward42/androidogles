@@ -1,6 +1,5 @@
 package com.example.android.opengl;
 
-import android.opengl.Matrix;
 import android.os.SystemClock;
 
 import java.util.HashSet;
@@ -33,9 +32,7 @@ public class SceneDirector {
     }
 
     private float[] mainSiloWorldTrans() {
-        float[] m = new float[16];
-        Matrix.setIdentityM(m, 0);
-        return m;
+        return TransformFactory.identity();
     }
 
     /** The auxilliary silo is animated.
@@ -45,8 +42,8 @@ public class SceneDirector {
         // Cause it live somewhere away from the origin and to spin.
         float period = 5; // seconds
         float angle = (360 * SystemClock.uptimeMillis() / (period * 1000)) % 360;
-        float rotationM[] = MatrixHelper.makeYAxisRotationMatrix(angle);
-        float[] translationM = MatrixHelper.makeTranslationMatrix(60, 60, -60);
+        float rotationM[] = TransformFactory.yAxisRotation(angle);
+        float[] translationM = TransformFactory.translation(60, 60, -60);
         return MatrixCombiner.combineTwo(translationM, rotationM);
     }
 }

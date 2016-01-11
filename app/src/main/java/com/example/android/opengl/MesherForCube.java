@@ -1,7 +1,5 @@
 package com.example.android.opengl;
 
-import android.opengl.Matrix;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,18 +26,18 @@ public class MesherForCube {
         Collection<Triangle> trianglesToReturn = new ArrayList<Triangle>();
 
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeYAxisRotationMatrix(0), refTriangles));
+                TransformFactory.yAxisRotation(0), refTriangles));
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeYAxisRotationMatrix(90), refTriangles));
+                TransformFactory.yAxisRotation(90), refTriangles));
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeYAxisRotationMatrix(180), refTriangles));
+                TransformFactory.yAxisRotation(180), refTriangles));
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeYAxisRotationMatrix(270), refTriangles));
+                TransformFactory.yAxisRotation(270), refTriangles));
 
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeZAxisRotationMatrix(90), refTriangles));
+                TransformFactory.zAxisRotation(90), refTriangles));
         trianglesToReturn.addAll(TriangleManipulator.makeTransformedCopies(
-                MatrixHelper.makeZAxisRotationMatrix(270), refTriangles));
+                TransformFactory.zAxisRotation(270), refTriangles));
 
         return trianglesToReturn;
     }
