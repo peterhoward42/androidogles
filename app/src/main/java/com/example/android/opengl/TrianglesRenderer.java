@@ -117,7 +117,10 @@ public class TrianglesRenderer {
         MyGLRenderer.checkGlError("draw b");
 
         int mvpTransformHandle = GLES20.glGetUniformLocation(mProgram, "mvpTransform");
-        MyGLRenderer.checkGlError("draw d");
+        MyGLRenderer.checkGlError("draw d.1");
+
+        int modelToWorldDirectionTransformHandle = GLES20.glGetUniformLocation(mProgram, "modelToWorldDirectionTransform");
+        MyGLRenderer.checkGlError("draw d.2");
 
         int towardsLightHandle = GLES20.glGetUniformLocation(mProgram, "towardsLight");
         MyGLRenderer.checkGlError("draw e");
@@ -143,7 +146,12 @@ public class TrianglesRenderer {
 
             RenderingTransforms renderingTransforms = siloRenderingMatrices.get(siloName);
             GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, renderingTransforms.getMvpForVertices(), 0);
-            MyGLRenderer.checkGlError("draw f");
+            MyGLRenderer.checkGlError("draw f.1");
+
+            GLES20.glUniformMatrix4fv(modelToWorldDirectionTransformHandle, 1, false,
+                    renderingTransforms.getModelToWorldForDirections(), 0);
+            MyGLRenderer.checkGlError("draw f.2");
+
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }
         GLES20.glDisableVertexAttribArray(positionHandle);

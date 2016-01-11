@@ -1,14 +1,13 @@
 uniform mat4 mvpTransform;
+uniform mat4 modelToWorldDirectionTransform;
 uniform vec4 towardsLight;
 
 attribute vec4 position;
-
 attribute vec4 normal;
 
 varying vec4 color;
 
 void main() {
     gl_Position = mvpTransform * position;
-    color = normal; // keep it alive if even though not used
-    color = towardsLight;
+    color = (0.2 + max(0.8 * dot(modelToWorldDirectionTransform * normal, towardsLight), 0)) * [1,1,1];
 }
