@@ -35,12 +35,6 @@ public class XYZf {
         return new float[] {mX, mY, mZ};
     }
 
-    public Object roundingHash() {
-        // Format each field in optimum format (including scientific) in 8 significant
-        // digits.
-        return String.format("%8g", mX) + String.format("%8g", mY) + String.format("%8g", mZ);
-    }
-
     public XYZf plus(XYZf rhs) {
         return new XYZf(mX + rhs.mX, mY + rhs.mY, mZ + rhs.mZ);
     }
@@ -68,5 +62,9 @@ public class XYZf {
     public XYZf normalised() {
         float length = this.resultantLength();
         return new XYZf(mX / length, mY / length, mZ / length);
+    }
+
+    public String formatRounded() {
+        return String.format("%.5f %.5f %.5f", mX, mY, mZ);
     }
 }

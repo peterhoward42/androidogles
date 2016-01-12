@@ -51,7 +51,9 @@ o  Digress redisgn for lighting
             *  Provide uniform for model to world direction trans
         o  Have a go at proper lighting calcs
             *  Run?
-            o  Correct light
+            o  Correct light = no
+                o  Look into unit tests
+                    o  Nice and easy - finish relevant population
             o  Each face of main box should have differing colour, but
                unchanging.
             o  Satellite box faces should darken as they rotate
