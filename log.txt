@@ -54,6 +54,8 @@ o  Digress redisgn for lighting
             o  Correct light = no
                 o  Look into unit tests
                     o  Nice and easy - finish relevant population
+                        o  test transform factories by using them
+                        o  make transformed triangle suspect
             o  Each face of main box should have differing colour, but
                unchanging.
             o  Satellite box faces should darken as they rotate

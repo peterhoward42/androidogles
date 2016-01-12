@@ -10,6 +10,17 @@ import com.example.android.opengl.XYZf;
  */
 public class TriangleTest extends InstrumentationTestCase {
 
+
+    public void testFormatRounded() throws Exception {
+        XYZf a = new XYZf(0, 100, 0);
+        XYZf b = new XYZf(0, 0, 100);
+        XYZf c = new XYZf(0, 0, 0);
+        Triangle triangle = new Triangle(a, b, c);
+        assertEquals(
+                "0.00000 100.00000 0.00000, 0.00000 0.00000 100.00000, 0.00000 0.00000 0.00000, 1.00000 0.00000 0.00000",
+                triangle.formatRounded());
+    }
+
     public void testGetNormalShouldBePlusX() throws Exception {
         // Create triangle that lies in ZY plane, and has CCW winding order that defines the
         // front faces as being the one facing the plux X direction. Check that the internally

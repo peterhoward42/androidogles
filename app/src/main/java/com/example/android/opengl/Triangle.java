@@ -39,10 +39,19 @@ public class Triangle {
 
     public XYZf getNormal() { return mNormal; }
 
+    public String formatRounded() {
+        return String.format("%s, %s, %s, %s",
+                mVertices[0].formatRounded(),
+                mVertices[1].formatRounded(),
+                mVertices[2].formatRounded(),
+                mNormal.formatRounded()
+                );
+    }
+
     private XYZf calculateNormal() {
         XYZf edgeOne = mVertices[0].minus(mVertices[1]);
         XYZf edgeTwo = mVertices[2].minus(mVertices[1]);
-        XYZf crossProduct = edgeOne.crossProduct(edgeTwo);
+        XYZf crossProduct = edgeTwo.crossProduct(edgeOne);
         return crossProduct.normalised();
     }
 }

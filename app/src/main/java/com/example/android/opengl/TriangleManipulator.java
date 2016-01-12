@@ -11,9 +11,9 @@ public class TriangleManipulator {
     public static Triangle makeTransformedTriangle(
             float[] transform, Triangle triangleToTransform) {
         return new Triangle(
-                DoTransform.point(transform, triangleToTransform.firstVertex()),
-                DoTransform.point(transform, triangleToTransform.secondVertex()),
-                DoTransform.point(transform, triangleToTransform.thirdVertex())
+                TransformApply.point(transform, triangleToTransform.firstVertex()),
+                TransformApply.point(transform, triangleToTransform.secondVertex()),
+                TransformApply.point(transform, triangleToTransform.thirdVertex())
         );
     }
 

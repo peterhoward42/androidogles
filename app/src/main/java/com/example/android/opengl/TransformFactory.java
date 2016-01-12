@@ -71,9 +71,4 @@ public class TransformFactory {
 
         return out;
     }
-
-    /*
-    in
-        col0-0 col0-1 col0-2 col0-3 col1-0 col1-1 col1-2 col1-3 col2-0 col2-1 col3-2
-     */
 }
