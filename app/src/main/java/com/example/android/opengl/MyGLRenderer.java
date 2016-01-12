@@ -39,7 +39,7 @@ import java.util.Map;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private final XYZf towardsLightInWorldSpace = new XYZf(1f, 1f, 0.5f).normalised();
+    private final XYZf towardsLightInWorldSpace = new XYZf(0f, .2f, 1.0f).normalised();
 
     private TrianglesRenderer mTrianglesRenderer;
 
@@ -119,9 +119,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     private Map<String, RenderingTransforms> buildSiloRenderingMatrices(XYZf cameraPosition) {
-        // For each silo we generate a model-view-projection transform by combinging three
+        // For each silo we generate a model-view-projection transform by combining three
         // transforms: ObjectToWorld, WorldToCamera, and Projection. Only the first of which
-        // differs per silo. The we add an auxilliary transform for transforming direction vectors
+        // differs per silo. Then we add an auxiliary transform for transforming direction vectors
         // from object to world space.
 
         // World to Camera
@@ -178,8 +178,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int[] compiled = new int[1];
         GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
         if (compiled[0] == 0) {
-            GLES20.glDeleteShader(shader);
             String msg = "load shader c" + ": " + GLES20.glGetShaderInfoLog(shader);
+            GLES20.glDeleteShader(shader);
             Log.e(TAG, msg);
             throw new RuntimeException("Could not compile program: " + msg);
         }

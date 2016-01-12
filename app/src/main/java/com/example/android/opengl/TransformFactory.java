@@ -43,12 +43,37 @@ public class TransformFactory {
     }
 
     /** If we have a point transform from space A to space B, then this function will derive
-     * from it, a transform that will transform direction vectors from space A to space B.
+     * from it, a (3*3) transform that will transform direction vectors from space A to space B.
      * @param fullTransform The point transform from space A to space B.
-     * @return The transform for direction vectors.
+     * @return The 3*3 transform for direction vectors.
      */
     public static float[] directionTransformFromVertexTransform(float[] fullTransform) {
         float[] inverseOfFullTransform = inverted(fullTransform);
-        return transposed(inverseOfFullTransform);
+        float[] transposed = transposed(inverseOfFullTransform);
+        float[] topLeftPart = isolate3x3From4x4(transposed);
+        return topLeftPart;
     }
+
+    public static float[] isolate3x3From4x4(float[] in) {
+        float[] out = new float[9];
+
+        out[0] = in[0];
+        out[1] = in[1];
+        out[2] = in[2];
+
+        out[3] = in[4];
+        out[4] = in[5];
+        out[5] = in[6];
+
+        out[6] = in[8];
+        out[7] = in[9];
+        out[8] = in[10];
+
+        return out;
+    }
+
+    /*
+    in
+        col0-0 col0-1 col0-2 col0-3 col1-0 col1-1 col1-2 col1-3 col2-0 col2-1 col3-2
+     */
 }

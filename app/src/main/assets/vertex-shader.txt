@@ -1,13 +1,21 @@
+const vec3 darkColor = vec3(0.2, 0.2, 0.2);
+const vec3 lightColor = vec3(0.8, 0.8, 0.8);
+
 uniform mat4 mvpTransform;
-uniform mat4 modelToWorldDirectionTransform;
-uniform vec4 towardsLight;
+uniform mat3     modelToWorldDirectionTransform;
+uniform vec3 towardsLight;
 
 attribute vec4 position;
-attribute vec4 normal;
+attribute vec3 normal;
 
 varying vec4 color;
 
 void main() {
     gl_Position = mvpTransform * position;
-    color = (0.2 + max(0.8 * dot(modelToWorldDirectionTransform * normal, towardsLight), 0)) * [1,1,1];
+
+    // Lighting
+    vec3 worldNormal = normalize(modelToWorldDirectionTransform * normal);
+    float brightness = clamp(dot(worldNormal, towardsLight), 0.0, 1.0);
+    vec3 rgb = mix(lightColor, darkColor, brightness);
+    color = vec4(rgb, 1.0);
 }

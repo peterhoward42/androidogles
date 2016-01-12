@@ -49,16 +49,16 @@ o  Digress redisgn for lighting
             *  Use it once model to view trans known to capture normaltrans
         *  Rotate vertex normal into world space in vertex shader
             *  Provide uniform for model to world direction trans
-        o  Get color working just as f vertex normal ignoring light, eg
-           those pointing approx right one color, and rest another to debug
-           rotated normals.
-           o  Run?
-           o  Faces on rotating box should take on continuously changing
-              colors, while faces on big box should be different from each
-              other, but stay constant.
-        o  Now calc dot product and base color on full calc
-    o  Pass calced light into fragment as varying and use it
-    o  When stable, see if can wean off needless vec4 in favour of vec3s
+        o  Have a go at proper lighting calcs
+            *  Run?
+            o  Correct light
+            o  Each face of main box should have differing colour, but
+               unchanging.
+            o  Satellite box faces should darken as they rotate
+        o  Rationalise crossProduct and similar in xyzf
+            o  Make float array native storage inside it, and expose as
+               property
+            o  Remove vector ops from xyzf into transform classes maybe
 o  Try differing animation so faces turn away or towards light source
 o  Try a cad generated source
 

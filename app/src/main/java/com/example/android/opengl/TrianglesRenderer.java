@@ -124,7 +124,7 @@ public class TrianglesRenderer {
 
         int towardsLightHandle = GLES20.glGetUniformLocation(mProgram, "towardsLight");
         MyGLRenderer.checkGlError("draw e");
-        GLES20.glUniform4fv(towardsLightHandle, 1, convertToVec4(towardsLight), 0);
+        GLES20.glUniform3fv(towardsLightHandle, 1, towardsLight.asFloatArray(), 0);
         MyGLRenderer.checkGlError("draw f");
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
@@ -148,7 +148,7 @@ public class TrianglesRenderer {
             GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, renderingTransforms.getMvpForVertices(), 0);
             MyGLRenderer.checkGlError("draw f.1");
 
-            GLES20.glUniformMatrix4fv(modelToWorldDirectionTransformHandle, 1, false,
+            GLES20.glUniformMatrix3fv(modelToWorldDirectionTransformHandle, 1, false,
                     renderingTransforms.getModelToWorldForDirections(), 0);
             MyGLRenderer.checkGlError("draw f.2");
 
@@ -176,14 +176,5 @@ public class TrianglesRenderer {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    private float[] convertToVec4(final XYZf normalisedVector) {
-        float[] toReturn = new float[4];
-        toReturn[0] = normalisedVector.X();
-        toReturn[1] = normalisedVector.Y();
-        toReturn[2] = normalisedVector.Z();
-        toReturn[3] = 1f;
-        return toReturn;
     }
 }

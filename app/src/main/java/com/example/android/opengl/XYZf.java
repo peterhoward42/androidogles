@@ -31,6 +31,10 @@ public class XYZf {
         return mZ;
     }
 
+    public final float[] asFloatArray() {
+        return new float[] {mX, mY, mZ};
+    }
+
     public Object roundingHash() {
         // Format each field in optimum format (including scientific) in 8 significant
         // digits.
