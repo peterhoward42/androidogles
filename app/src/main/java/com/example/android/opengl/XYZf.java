@@ -9,42 +9,52 @@ package com.example.android.opengl;
  */
 public class XYZf {
 
-    private float mX;
-    private float mY;
-    private float mZ;
+    private float[] xyz;
 
     public XYZf(float x, float y, float z) {
-        mX = x;
-        mY = y;
-        mZ = z;
+        xyz = new float[]{x, y, z};
     }
 
     public final float X() {
-        return mX;
+        return xyz[0];
     }
 
     public final float Y() {
-        return mY;
+        return xyz[1];
     }
 
     public final float Z() {
-        return mZ;
+        return xyz[2];
     }
 
     public final float[] asFloatArray() {
-        return new float[] {mX, mY, mZ};
+        return xyz;
     }
 
     public XYZf plus(XYZf rhs) {
-        return new XYZf(mX + rhs.mX, mY + rhs.mY, mZ + rhs.mZ);
+        return new XYZf(
+                xyz[0] + rhs.xyz[0],
+                xyz[1] + rhs.xyz[1],
+                xyz[2] + rhs.xyz[2]
+        );
     }
 
     public XYZf minus(XYZf rhs) {
-        return new XYZf(mX - rhs.mX, mY - rhs.mY, mZ - rhs.mZ);
+        return new XYZf(
+                xyz[0] - rhs.xyz[0],
+                xyz[1] - rhs.xyz[1],
+                xyz[2] - rhs.xyz[2]
+        );
     }
 
     public float resultantLength() {
-        return (float) Math.sqrt(mX * mX + mY * mY + mZ * mZ);
+        return (float) Math.sqrt(xyz[0]
+                        * xyz[0]
+                        + xyz[1]
+                        * xyz[1]
+                        + xyz[2]
+                        * xyz[2]
+        );
     }
 
     public XYZf normalisedCrossProduct(XYZf b) {
@@ -53,18 +63,39 @@ public class XYZf {
 
     public XYZf crossProduct(XYZf p2) {
         XYZf result = new XYZf(0, 0, 0);
-        result.mX = this.mY * p2.mZ - p2.mY * this.mZ;
-        result.mY = this.mZ * p2.mX - p2.mZ * this.mX;
-        result.mZ = this.mX * p2.mY - p2.mX * this.mY;
+        result.xyz[0]
+                = this.xyz[1]
+                * p2.xyz[2]
+                - p2.xyz[1]
+                * this.xyz[2]
+        ;
+        result.xyz[1]
+                = this.xyz[2]
+                * p2.xyz[0]
+                - p2.xyz[2]
+                * this.xyz[0]
+        ;
+        result.xyz[2]
+                = this.xyz[0]
+                * p2.xyz[1]
+                - p2.xyz[0]
+                * this.xyz[1]
+        ;
         return result;
     }
 
     public XYZf normalised() {
         float length = this.resultantLength();
-        return new XYZf(mX / length, mY / length, mZ / length);
+        return new XYZf(xyz[0]
+                / length, xyz[1]
+                / length, xyz[2]
+                / length);
     }
 
     public String formatRounded() {
-        return String.format("%.5f %.5f %.5f", mX, mY, mZ);
+        return String.format("%.5f %.5f %.5f", xyz[0]
+                , xyz[1]
+                , xyz[2]
+        );
     }
 }

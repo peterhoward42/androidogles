@@ -57,11 +57,7 @@ o  Digress redisgn for lighting
             *  Each face of main box should have differing colour, but
                unchanging.
 
-o  Rationalise crossProduct and similar in xyzf
-    o  Make float array native storage inside it, and expose as
-               property
-    o  Remove vector ops from xyzf into transform classes maybe
-o  Try differing animation so faces turn away or towards light source
+o  Convert internals of XYZf to use float[] storage.
 o  Try a cad generated source
 
 -----------------------------------------------------------------------------
@@ -69,14 +65,4 @@ o  Try a cad generated source
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
-Lighting calcs on paper
-    o  Need towards-light direction vector in world space
-    o  Need face normal rotated from model to world space
-    o  Max dot product will be 1.0 when normal aligns with towards-light
-    o  Dot will be zero when normal is perpendicular to towards-light
-    o  Dot will be negative when normal faces to opposite half-sphere to that
-       of light (but shouldn't get these if face culling is working)
-    o  Desire max brightness when dot is 1.0
-    o  Attenuating to ambient when dot is <= 0
-
 -----------------------------------------------------------------------------
