@@ -17,4 +17,12 @@ public class MatrixFormatter {
         s += String.format("%.2f", matrix[15]);
         return s;
     }
+
+    public static String fmtMatrix3x3(float[] matrix) {
+        String s = "";
+        for (int i = 0; i < 8; i++)
+            s += String.format("%.2f,", matrix[i]);
+        s += String.format("%.2f", matrix[8]);
+        return s;
+    }
 }

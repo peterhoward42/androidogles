@@ -49,20 +49,18 @@ o  Digress redisgn for lighting
             *  Use it once model to view trans known to capture normaltrans
         *  Rotate vertex normal into world space in vertex shader
             *  Provide uniform for model to world direction trans
-        o  Have a go at proper lighting calcs
+        *  Have a go at proper lighting calcs
             *  Run?
-            o  Correct light = no
-                o  Look into unit tests
-                    o  Nice and easy - finish relevant population
-                        o  test transform factories by using them
-                        o  make transformed triangle suspect
-            o  Each face of main box should have differing colour, but
+            *  Correct light = no
+                *  Look into unit tests
+                    *  Nice and easy - finish relevant population
+            *  Each face of main box should have differing colour, but
                unchanging.
-            o  Satellite box faces should darken as they rotate
-        o  Rationalise crossProduct and similar in xyzf
-            o  Make float array native storage inside it, and expose as
+
+o  Rationalise crossProduct and similar in xyzf
+    o  Make float array native storage inside it, and expose as
                property
-            o  Remove vector ops from xyzf into transform classes maybe
+    o  Remove vector ops from xyzf into transform classes maybe
 o  Try differing animation so faces turn away or towards light source
 o  Try a cad generated source
 

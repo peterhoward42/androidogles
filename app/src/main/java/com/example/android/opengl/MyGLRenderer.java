@@ -39,7 +39,7 @@ import java.util.Map;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private final XYZf towardsLightInWorldSpace = new XYZf(0f, .2f, 1.0f).normalised();
+    private final XYZf towardsLightInWorldSpace = new XYZf(15f, 8f, 10f).normalised();
 
     private TrianglesRenderer mTrianglesRenderer;
 

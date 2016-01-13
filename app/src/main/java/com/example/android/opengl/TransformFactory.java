@@ -14,10 +14,16 @@ public class TransformFactory {
     }
 
     public static float[] translation(float x, float y, float z) {
-        float[] m = identity();
-        Matrix.translateM(m, 0, x, y, z);
-        return m;
+        // @formatter:off
+        float[] toReturn = {
+                1f, 0f, 0f, 0f,
+                0f, 1f, 0f, 0f,
+                0f, 0f, 1f, 0f,
+                x, y, z, 1};
+        // @formatter:on
+        return toReturn;
     }
+
     public static float[] yAxisRotation(float angleDeg) {
         float[] m = new float[16];
         Matrix.setRotateM(m, 0, angleDeg, 0, 1, 0);
@@ -37,21 +43,9 @@ public class TransformFactory {
     }
 
     public static float[] transposed(float[] toTranspose) {
-        float[] transposed = identity();
+        float[] transposed = new float[16];
         Matrix.transposeM(transposed, 0, toTranspose, 0);
         return transposed;
-    }
-
-    /** If we have a point transform from space A to space B, then this function will derive
-     * from it, a (3*3) transform that will transform direction vectors from space A to space B.
-     * @param fullTransform The point transform from space A to space B.
-     * @return The 3*3 transform for direction vectors.
-     */
-    public static float[] directionTransformFromVertexTransform(float[] fullTransform) {
-        float[] inverseOfFullTransform = inverted(fullTransform);
-        float[] transposed = transposed(inverseOfFullTransform);
-        float[] topLeftPart = isolate3x3From4x4(transposed);
-        return topLeftPart;
     }
 
     public static float[] isolate3x3From4x4(float[] in) {
@@ -70,5 +64,31 @@ public class TransformFactory {
         out[8] = in[10];
 
         return out;
+    }
+
+    public static float[] expand3x3To4x4WithZeros(float[] threeByThree) {
+        float[] in = threeByThree;
+        // @formatter:off
+        float[] toReturn = new float[] {
+                in[0], in[1], in[2], 0,
+                in[3], in[4], in[5], 0,
+                in[6], in[7], in[8], 0,
+                0,     0,     0,     0};
+        // @formatter:on
+        return toReturn;
+    }
+
+    /**
+     * If we have a point transform from space A to space B, then this function will derive
+     * from it, a (3*3) transform that will transform direction vectors from space A to space B.
+     *
+     * @param fullTransform The point transform from space A to space B.
+     * @return The 3*3 transform for direction vectors.
+     */
+    public static float[] directionTransformFromVertexTransform(float[] fullTransform) {
+        float[] inverseOfFullTransform = inverted(fullTransform);
+        float[] transposed = transposed(inverseOfFullTransform);
+        float[] topLeftPart = isolate3x3From4x4(transposed);
+        return topLeftPart;
     }
 }

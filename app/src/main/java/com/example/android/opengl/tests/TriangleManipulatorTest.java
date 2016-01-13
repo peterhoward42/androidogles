@@ -20,7 +20,7 @@ public class TriangleManipulatorTest extends InstrumentationTestCase {
         float[] transform = TransformFactory.translation(10f, 0f, 0f);
         Triangle after = TriangleManipulator.makeTransformedTriangle(transform, before);
         assertEquals(
-                "wait till transform factory validated",
+                "10.00000 100.00000 0.00000, 10.00000 0.00000 100.00000, 10.00000 0.00000 0.00000, 1.00000 0.00000 0.00000",
                 after.formatRounded());
     }
 }

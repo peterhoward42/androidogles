@@ -1,12 +1,10 @@
 package com.example.android.opengl.tests;
 
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import com.example.android.opengl.MatrixCombiner;
 import com.example.android.opengl.MatrixFormatter;
 import com.example.android.opengl.TransformFactory;
-import com.example.android.opengl.XYZf;
 
 /**
  * Created by phoward on 12/01/2016.
