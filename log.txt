@@ -14,24 +14,35 @@ Android GL Play Around
 *  Have different bits of the model use different location transforms
 *  Digress redesign for lighting
 *  Timeout strip all debug out
-o  Create bit of package hierachy
+*  Create bit of package hierachy
 o  Try a STL file source
     o  Consider how best keep existing code alive including
        silo specific animation and at least hooks for camera animation
-        o  Should SceneDirector and SceneObjects be named differently?
-        o  Scene Objects
-            o  Convert to interface, consider name carefully is it just
+        *  Scene Objects
+            *  Convert to interface, consider name carefully is it just
                scene model contents?
-        o  Scene Director
-            o  Convert to interface
+        *  Scene Assembler
+            *  Convert to interface
         o  Projection
-            o  Call to build silo rendering matrices in myglrenderer should
-               delegate out to specialised class, with DI tbd
-        o  Camera
-            o  Feed into the above
-        o  Light position ditto
+            *  Create SceneOptics class and instaniate one in same place
+               as models etc are instantiated.
+            *  Move camera look at into it
+                *  Work through myglrenderer weaning of original camera
+                    *  animated position
+                    *  delegate calc of world to cam transform to it,
+                       and thus no longer need to track cam posn in renderer
+                    *  projection transform
+                    *  Move projection marices into it
+            *  Camera
+            o  Move light dirn into it
+        o  Unit test for scene optics
+        o  Unit test for new transform factory: perspective
+        o  How to derive camera look at, cam animation, light dirn, and near 
+           far etc view to match scene presented?
         o  Utility to make collection of triangles from .stl
             o  Maybe including correction of winding order
+        o  Resource for an stl file
+        o  Alternative scene build in activity
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

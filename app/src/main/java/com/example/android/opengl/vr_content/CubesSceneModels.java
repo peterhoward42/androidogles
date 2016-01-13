@@ -10,15 +10,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A set of models that live in a scene, each in a named silo (person, engine...). The models are
- * defined with coordinates in their own private model space, and need to be shifted to their
- * proper dispositions to create a proper scene.
+ * A trivial implementation of ISceneModels for test and development purposes, with content
+ * comprising just a 100mm cube and a 20mm cube.
  */
-public class SceneModels {
+public class CubesSceneModels implements ISceneModels {
 
     private Map<String, Collection<Triangle>> mSilos;
 
-    public SceneModels() {
+    public CubesSceneModels() {
         mSilos = new HashMap<String, Collection<Triangle>>();
 
         Collection<Triangle> mainSilo = new ArrayList<Triangle>();

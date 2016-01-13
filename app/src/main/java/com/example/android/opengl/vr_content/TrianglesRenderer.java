@@ -54,7 +54,7 @@ public class TrianglesRenderer {
 
     private final int mProgram;
 
-    // This map shares keys (silo names) with the SceneModels provided to the constructor.
+    // This map shares keys (silo names) with the ISceneModels provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
     //private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
@@ -66,7 +66,7 @@ public class TrianglesRenderer {
      * @Param sceneTriangles The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
-    public TrianglesRenderer(AssetManager assetManager, SceneModels sceneModels) {
+    public TrianglesRenderer(AssetManager assetManager, ISceneModels sceneModels) {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();

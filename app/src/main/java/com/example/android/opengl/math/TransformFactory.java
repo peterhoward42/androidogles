@@ -48,6 +48,13 @@ public class TransformFactory {
         return transposed;
     }
 
+    public static float[] perspective(
+            float fieldOfViewDegrees, float screenAspect, float near, float far) {
+        float[] perspectiveMatrix = new float[16];
+        Matrix.perspectiveM(perspectiveMatrix, 0, fieldOfViewDegrees, screenAspect, near, far);
+        return perspectiveMatrix;
+    }
+
     public static float[] isolate3x3From4x4(float[] in) {
         float[] out = new float[9];
 

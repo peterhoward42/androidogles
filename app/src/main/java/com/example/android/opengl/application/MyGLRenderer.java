@@ -24,14 +24,13 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.example.android.opengl.vr_content.CameraLookAt;
+import com.example.android.opengl.vr_content.ISceneAssembler;
+import com.example.android.opengl.vr_content.ISceneModels;
 import com.example.android.opengl.vr_content.RenderingTransforms;
-import com.example.android.opengl.vr_content.SceneAssembler;
-import com.example.android.opengl.vr_content.SceneModels;
+import com.example.android.opengl.vr_content.SceneOptics;
 import com.example.android.opengl.vr_content.TrianglesRenderer;
 import com.example.android.opengl.geom.XYZf;
 import com.example.android.opengl.math.MatrixCombiner;
-import com.example.android.opengl.math.TimeBasedSinusoid;
 import com.example.android.opengl.math.TransformFactory;
 
 import java.util.HashMap;
@@ -54,24 +53,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
-    private SceneModels mSceneModels;
-    private SceneAssembler mSceneAssembler;
-    private CameraLookAt mCameraLookAt;
+    private ISceneModels mSceneModels;
+    private ISceneAssembler mSceneAssembler;
+    private SceneOptics mSceneOptics;
     private float mScreenAspect;
 
-    public MyGLRenderer(AssetManager assetManager,
-                        SceneModels sceneModels, SceneAssembler sceneAssembler) {
+    public MyGLRenderer(AssetManager assetManager, ISceneModels sceneModels,
+                        ISceneAssembler sceneAssembler, SceneOptics sceneOptics) {
         super();
         mAssetManager = assetManager;
         mSceneModels = sceneModels;
         mSceneAssembler = sceneAssembler;
+        mSceneOptics = sceneOptics;
     }
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-
-        final XYZf cameraLookAtPoint = new XYZf(0, 0, 0);
-        mCameraLookAt = new CameraLookAt(cameraLookAtPoint);
 
         // Set the background frame color
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -93,14 +90,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        // Set camera distance back from the action towards the viewer enough for perspective
-        // transform to nearly fill the screen. OpenGL has a RH coordinate system, so
-        // the Z axis grows from rear to front of the phone.
-        XYZf cameraPosition = animatedPosition();
-
         // Build the transform lookup table for the triangles renderer
         Map<String, RenderingTransforms> siloRenderingMatrices =
-                buildSiloRenderingMatrices(cameraPosition);
+                buildSiloRenderingMatrices();
         mTrianglesRenderer.draw(siloRenderingMatrices, towardsLightInWorldSpace);
     }
 
@@ -110,38 +102,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mScreenAspect = (float) width / height;
     }
 
-    private XYZf animatedPosition() {
-        // Centred over Greenwich, oscillating with SHM East and West.
-        final float period = 2; // seconds
-        final float amplitude = 35; // degrees
-        final float latitude = 51.4f; // degrees
-        final float orbitHeightFromCentre = 200; // scene linear dimensions
-        float[] equatorAtMeridian = new float[]{0, 0, orbitHeightFromCentre, 1};
-
-        float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
-
-        float[] eulerRotationsMatrix = new float[16];
-        Matrix.setRotateEulerM(eulerRotationsMatrix, 0, latitude, longitude, 0);
-        float[] positionVect = new float[4];
-        Matrix.multiplyMV(positionVect, 0, eulerRotationsMatrix, 0, equatorAtMeridian, 0);
-        return new XYZf(positionVect[0], positionVect[1], positionVect[2]);
-    }
-
-    private Map<String, RenderingTransforms> buildSiloRenderingMatrices(XYZf cameraPosition) {
+    private Map<String, RenderingTransforms> buildSiloRenderingMatrices() {
         // For each silo we generate a model-view-projection transform by combining three
         // transforms: ObjectToWorld, WorldToCamera, and Projection. Only the first of which
         // differs per silo. Then we add an auxiliary transform for transforming direction vectors
         // from object to world space.
 
         // World to Camera
-        float[] worldToCameraTransform = mCameraLookAt.worldToCameraTransform(cameraPosition);
-
-        // Projection
-        final float FOV = 90;
-        final float near = 120;
-        final float far = 280;
-        float[] projectionTransform = new float[16];
-        Matrix.perspectiveM(projectionTransform, 0, FOV, mScreenAspect, near, far);
+        float[] worldToCameraTransform = mSceneOptics.calculateWorldToCameraTransform();
+        float[] projectionTransform = mSceneOptics.calculateProjectionTransform(mScreenAspect);
 
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
@@ -151,10 +120,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     mSceneAssembler.getCurrentObjectToWorldTransform(siloName);
             float[] objectToWorldForDirections =
                     TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
-            float[] mvp = MatrixCombiner.combineThree(
+            float[] modelViewProjection = MatrixCombiner.combineThree(
                     projectionTransform, worldToCameraTransform, objectToWorldForVertices);
             RenderingTransforms renderingTransforms =
-                    new RenderingTransforms(mvp, objectToWorldForDirections);
+                    new RenderingTransforms(modelViewProjection, objectToWorldForDirections);
             mapToReturn.put(siloName, renderingTransforms);
         }
         return mapToReturn;

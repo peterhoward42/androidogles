@@ -18,8 +18,9 @@ package com.example.android.opengl.application;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import com.example.android.opengl.vr_content.SceneAssembler;
-import com.example.android.opengl.vr_content.SceneModels;
+import com.example.android.opengl.vr_content.ISceneAssembler;
+import com.example.android.opengl.vr_content.ISceneModels;
+import com.example.android.opengl.vr_content.SceneOptics;
 
 /**
  * A view container where OpenGL ES graphics can be drawn on screen.
@@ -30,15 +31,19 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
 
-    public MyGLSurfaceView(Context context,
-                           SceneModels sceneModels, SceneAssembler sceneAssembler) {
+    public MyGLSurfaceView(
+            Context context,
+            ISceneModels sceneModels,
+            ISceneAssembler sceneAssembler,
+            SceneOptics sceneOptics) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(context.getAssets(), sceneModels, sceneAssembler);
+        mRenderer = new MyGLRenderer(context.getAssets(), sceneModels,
+                sceneAssembler, sceneOptics);
         setRenderer(mRenderer);
     }
 }

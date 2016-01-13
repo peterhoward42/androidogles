@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Knows where SceneModels should be scaled, placed and oriented in world space to build the
+ * Knows where CubesSceneModels should be scaled, placed and oriented in world space to build the
  * required scene.
  */
-public class SceneAssembler {
+public class CubesSceneAssembler implements ISceneAssembler {
 
     public Set<String> getSiloNames() {
         Set<String> returnedSet = new HashSet<String>();
