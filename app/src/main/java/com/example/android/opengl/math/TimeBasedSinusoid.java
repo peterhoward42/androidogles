@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.math;
 
 import android.os.SystemClock;
 

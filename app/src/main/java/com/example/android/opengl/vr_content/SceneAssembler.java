@@ -1,14 +1,18 @@
-package com.example.android.opengl;
+package com.example.android.opengl.vr_content;
 
 import android.os.SystemClock;
+
+import com.example.android.opengl.math.MatrixCombiner;
+import com.example.android.opengl.math.TransformFactory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by phoward on 25/11/2015.
+ * Knows where SceneModels should be scaled, placed and oriented in world space to build the
+ * required scene.
  */
-public class SceneDirector {
+public class SceneAssembler {
 
     public Set<String> getSiloNames() {
         Set<String> returnedSet = new HashSet<String>();

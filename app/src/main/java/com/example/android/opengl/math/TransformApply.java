@@ -1,6 +1,8 @@
-package com.example.android.opengl;
+package com.example.android.opengl.math;
 
 import android.opengl.Matrix;
+
+import com.example.android.opengl.geom.XYZf;
 
 /**
  * Created by phoward on 11/01/2016.

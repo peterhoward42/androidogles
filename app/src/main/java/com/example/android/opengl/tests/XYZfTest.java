@@ -2,8 +2,7 @@ package com.example.android.opengl.tests;
 
 import android.test.InstrumentationTestCase;
 
-import com.example.android.opengl.Triangle;
-import com.example.android.opengl.XYZf;
+import com.example.android.opengl.geom.XYZf;
 
 /**
  * Created by phoward on 12/01/2016.

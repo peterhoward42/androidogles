@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.opengl;
+package com.example.android.opengl.application;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -23,6 +23,16 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
+
+import com.example.android.opengl.vr_content.CameraLookAt;
+import com.example.android.opengl.vr_content.RenderingTransforms;
+import com.example.android.opengl.vr_content.SceneAssembler;
+import com.example.android.opengl.vr_content.SceneModels;
+import com.example.android.opengl.vr_content.TrianglesRenderer;
+import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.math.MatrixCombiner;
+import com.example.android.opengl.math.TimeBasedSinusoid;
+import com.example.android.opengl.math.TransformFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,17 +54,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
-    private SceneObjectSilos mSceneObjectSilos;
-    private SceneDirector mSceneDirector;
+    private SceneModels mSceneModels;
+    private SceneAssembler mSceneAssembler;
     private CameraLookAt mCameraLookAt;
     private float mScreenAspect;
 
     public MyGLRenderer(AssetManager assetManager,
-                        SceneObjectSilos sceneObjectSilos, SceneDirector sceneDirector) {
+                        SceneModels sceneModels, SceneAssembler sceneAssembler) {
         super();
         mAssetManager = assetManager;
-        mSceneObjectSilos = sceneObjectSilos;
-        mSceneDirector = sceneDirector;
+        mSceneModels = sceneModels;
+        mSceneAssembler = sceneAssembler;
     }
 
     @Override
@@ -73,7 +83,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // The real-time rendering of frames later on, takes a transform matrix for
         // each silo, and the application of these transforms to the scene object
         // coordinates is delegated by the lower level renderer onto the hardware.
-        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mSceneObjectSilos);
+        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mSceneModels);
     }
 
     @Override
@@ -89,7 +99,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         XYZf cameraPosition = animatedPosition();
 
         // Build the transform lookup table for the triangles renderer
-        // Map<String, float[]> siloRenderingMatrices = buildSiloRenderingMatrices(cameraPosition);
         Map<String, RenderingTransforms> siloRenderingMatrices =
                 buildSiloRenderingMatrices(cameraPosition);
         mTrianglesRenderer.draw(siloRenderingMatrices, towardsLightInWorldSpace);
@@ -137,9 +146,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
         Map<String, RenderingTransforms> mapToReturn = new HashMap<String, RenderingTransforms>();
-        for (String siloName : mSceneDirector.getSiloNames()) {
+        for (String siloName : mSceneAssembler.getSiloNames()) {
             float[] objectToWorldForVertices =
-                    mSceneDirector.getCurrentObjectToWorldTransform(siloName);
+                    mSceneAssembler.getCurrentObjectToWorldTransform(siloName);
             float[] objectToWorldForDirections =
                     TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
             float[] mvp = MatrixCombiner.combineThree(
@@ -163,14 +172,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
      */
     public static int loadShader(int type, String shaderCode) {
 
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
         int shader = GLES20.glCreateShader(type);
-        MyGLRenderer.checkGlError("load shader a");
-
-        // add the source code to the shader
         GLES20.glShaderSource(shader, shaderCode);
-        MyGLRenderer.checkGlError("load shader b");
 
         // compile it - noting differing error discovery - what a pain!
         GLES20.glCompileShader(shader);
@@ -178,7 +181,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int[] compiled = new int[1];
         GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
         if (compiled[0] == 0) {
-            String msg = "load shader c" + ": " + GLES20.glGetShaderInfoLog(shader);
+            String msg = "load shader" + ": " + GLES20.glGetShaderInfoLog(shader);
             GLES20.glDeleteShader(shader);
             Log.e(TAG, msg);
             throw new RuntimeException("Could not compile program: " + msg);

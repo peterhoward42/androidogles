@@ -1,7 +1,9 @@
-package com.example.android.opengl;
+package com.example.android.opengl.geom;
+
+import com.example.android.opengl.geom.Triangle;
+import com.example.android.opengl.geom.XYZf;
 
 import java.util.Collection;
-import java.util.Stack;
 
 /**
  * Offers the service of packing the vertices and face-normals from a collection of triangles into

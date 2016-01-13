@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.util;
 
 /**
  * Created by phoward on 17/11/2015.

@@ -1,4 +1,7 @@
-package com.example.android.opengl;
+package com.example.android.opengl.vr_content;
+
+import com.example.android.opengl.geom.MesherForCube;
+import com.example.android.opengl.geom.Triangle;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,11 +14,11 @@ import java.util.Set;
  * defined with coordinates in their own private model space, and need to be shifted to their
  * proper dispositions to create a proper scene.
  */
-public class SceneObjectSilos {
+public class SceneModels {
 
     private Map<String, Collection<Triangle>> mSilos;
 
-    public SceneObjectSilos() {
+    public SceneModels() {
         mSilos = new HashMap<String, Collection<Triangle>>();
 
         Collection<Triangle> mainSilo = new ArrayList<Triangle>();

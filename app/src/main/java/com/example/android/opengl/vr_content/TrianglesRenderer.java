@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.opengl;
+package com.example.android.opengl.vr_content;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +26,13 @@ import java.util.Map;
 
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
+
+import com.example.android.opengl.util.FileOperations;
+import com.example.android.opengl.util.SystemConstants;
+import com.example.android.opengl.geom.TriangleSerializer;
+import com.example.android.opengl.application.MyGLRenderer;
+import com.example.android.opengl.geom.Triangle;
+import com.example.android.opengl.geom.XYZf;
 
 /**
  * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
@@ -47,7 +54,7 @@ public class TrianglesRenderer {
 
     private final int mProgram;
 
-    // This map shares keys (silo names) with the SceneObjectSilos provided to the constructor.
+    // This map shares keys (silo names) with the SceneModels provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
     //private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
@@ -59,17 +66,17 @@ public class TrianglesRenderer {
      * @Param sceneTriangles The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
-    public TrianglesRenderer(AssetManager assetManager, SceneObjectSilos sceneObjectSilos) {
+    public TrianglesRenderer(AssetManager assetManager, SceneModels sceneModels) {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();
         mNumberOfVerticesInSilo = new HashMap<String, Integer>();
-        for (String siloName : sceneObjectSilos.getSiloNames()) {
+        for (String siloName : sceneModels.getSiloNames()) {
             mNumberOfVerticesInSilo.put(siloName,
-                    3 * sceneObjectSilos.getNumberOfTrianglesInSilo(siloName));
-            Collection<Triangle> triangles = sceneObjectSilos.getSilo(siloName);
+                    3 * sceneModels.getNumberOfTrianglesInSilo(siloName));
+            Collection<Triangle> triangles = sceneModels.getSilo(siloName);
             mVertexBuffers.put(siloName,
-                    makeVertexBufferForSilo(sceneObjectSilos.getSilo(siloName)));
+                    makeVertexBufferForSilo(sceneModels.getSilo(siloName)));
         }
 
         String vertexShaderSource = getShaderFromAsset(assetManager, "vertex-shader.txt");
@@ -83,49 +90,34 @@ public class TrianglesRenderer {
                 GLES20.GL_FRAGMENT_SHADER,
                 fragmentShaderSource);
 
-        mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
-        MyGLRenderer.checkGlError("tri rend construct a");
+        mProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(mProgram, vertexShader);
+        GLES20.glAttachShader(mProgram, fragmentShader);
+        GLES20.glLinkProgram(mProgram);
 
-        GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
-        MyGLRenderer.checkGlError("tri rend construct c");
-
-        GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
-        MyGLRenderer.checkGlError("tri rend construct c");
-
-        GLES20.glLinkProgram(mProgram);                  // create OpenGL program executables
-
-        MyGLRenderer.checkGlError("tri rend construct d");
+        MyGLRenderer.checkGlError("Building GLES20 program");
     }
 
     public void draw(Map<String, RenderingTransforms> siloRenderingMatrices,
                      final XYZf towardsLight) {
         GLES20.glUseProgram(mProgram);
-        MyGLRenderer.checkGlError("draw p");
-
         GLES20.glFrontFace(GLES20.GL_CCW);
-        MyGLRenderer.checkGlError("draw q");
-
         GLES20.glEnable(GLES20.GL_CULL_FACE);
-        MyGLRenderer.checkGlError("draw r");
 
         int positionHandle = GLES20.glGetAttribLocation(mProgram, "position");
         GLES20.glEnableVertexAttribArray(positionHandle);
-        MyGLRenderer.checkGlError("draw a");
 
         int normalHandle = GLES20.glGetAttribLocation(mProgram, "normal");
         GLES20.glEnableVertexAttribArray(normalHandle);
-        MyGLRenderer.checkGlError("draw b");
 
         int mvpTransformHandle = GLES20.glGetUniformLocation(mProgram, "mvpTransform");
-        MyGLRenderer.checkGlError("draw d.1");
 
-        int modelToWorldDirectionTransformHandle = GLES20.glGetUniformLocation(mProgram, "modelToWorldDirectionTransform");
-        MyGLRenderer.checkGlError("draw d.2");
+        int modelToWorldDirectionTransformHandle = GLES20.glGetUniformLocation(
+                mProgram, "modelToWorldDirectionTransform");
 
         int towardsLightHandle = GLES20.glGetUniformLocation(mProgram, "towardsLight");
-        MyGLRenderer.checkGlError("draw e");
         GLES20.glUniform3fv(towardsLightHandle, 1, towardsLight.asFloatArray(), 0);
-        MyGLRenderer.checkGlError("draw f");
+        MyGLRenderer.checkGlError("Common part of GLES20 draw() call.");
 
         // Iterate to draw each silo of triangles separately - each with its own dedicated
         // transform.
@@ -146,11 +138,10 @@ public class TrianglesRenderer {
 
             RenderingTransforms renderingTransforms = siloRenderingMatrices.get(siloName);
             GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, renderingTransforms.getMvpForVertices(), 0);
-            MyGLRenderer.checkGlError("draw f.1");
 
             GLES20.glUniformMatrix3fv(modelToWorldDirectionTransformHandle, 1, false,
                     renderingTransforms.getModelToWorldForDirections(), 0);
-            MyGLRenderer.checkGlError("draw f.2");
+            MyGLRenderer.checkGlError("End of silo-specific loop in GLES20 draw() call.");
 
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
         }

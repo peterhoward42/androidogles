@@ -2,10 +2,10 @@ package com.example.android.opengl.tests;
 
 import android.test.InstrumentationTestCase;
 
-import com.example.android.opengl.MatrixFormatter;
-import com.example.android.opengl.TransformApply;
-import com.example.android.opengl.TransformFactory;
-import com.example.android.opengl.XYZf;
+import com.example.android.opengl.math.MatrixFormatter;
+import com.example.android.opengl.math.TransformApply;
+import com.example.android.opengl.math.TransformFactory;
+import com.example.android.opengl.geom.XYZf;
 
 /**
  * Created by phoward on 12/01/2016.

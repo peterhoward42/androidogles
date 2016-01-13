@@ -1,6 +1,8 @@
-package com.example.android.opengl;
+package com.example.android.opengl.vr_content;
 
 import android.opengl.Matrix;
+
+import com.example.android.opengl.geom.XYZf;
 
 /**
  * A camera with a fixed field of view, that is permanently bound to look at a point

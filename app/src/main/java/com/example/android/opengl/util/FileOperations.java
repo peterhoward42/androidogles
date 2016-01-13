@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.util;
 
 import java.io.IOException;
 import java.io.InputStream;

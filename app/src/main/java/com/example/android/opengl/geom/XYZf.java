@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.geom;
 
 /**
  * Created by phoward on 13/11/2015.

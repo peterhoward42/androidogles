@@ -1,10 +1,12 @@
-package com.example.android.opengl;
+package com.example.android.opengl.geom;
+
+import com.example.android.opengl.math.TransformFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Capable of providing a set of @link com.example.android.opengl.Triangle Triangles
+ * Capable of providing a set of @link com.example.android.opengl.geom.Triangle Triangles
  * that wrap the surfaces of a given cuboid.
  */
 public class MesherForCube {

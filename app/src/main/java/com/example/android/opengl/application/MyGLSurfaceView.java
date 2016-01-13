@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.opengl;
+package com.example.android.opengl.application;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+
+import com.example.android.opengl.vr_content.SceneAssembler;
+import com.example.android.opengl.vr_content.SceneModels;
 
 /**
  * A view container where OpenGL ES graphics can be drawn on screen.
@@ -28,14 +31,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
     private final MyGLRenderer mRenderer;
 
     public MyGLSurfaceView(Context context,
-                           SceneObjectSilos sceneObjectSilos, SceneDirector sceneDirector) {
+                           SceneModels sceneModels, SceneAssembler sceneAssembler) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(context.getAssets(), sceneObjectSilos, sceneDirector);
+        mRenderer = new MyGLRenderer(context.getAssets(), sceneModels, sceneAssembler);
         setRenderer(mRenderer);
     }
 }

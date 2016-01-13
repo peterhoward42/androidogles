@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.math;
 
 /**
  * Created by phoward on 11/01/2016.

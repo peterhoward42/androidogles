@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.opengl.vr_content;
 
 /**
  * Created by phoward on 11/01/2016.

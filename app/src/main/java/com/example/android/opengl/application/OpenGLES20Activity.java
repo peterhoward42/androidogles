@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.opengl;
+package com.example.android.opengl.application;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import com.example.android.opengl.vr_content.SceneAssembler;
+import com.example.android.opengl.vr_content.SceneModels;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -29,7 +32,7 @@ public class OpenGLES20Activity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
-        mGLView = new MyGLSurfaceView(this, new SceneObjectSilos(), new SceneDirector());
+        mGLView = new MyGLSurfaceView(this, new SceneModels(), new SceneAssembler());
         setContentView(mGLView);
     }
 

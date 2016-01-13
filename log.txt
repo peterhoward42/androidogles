@@ -12,53 +12,26 @@ Android GL Play Around
 *  Dependency inject data for > 1 co-planar triangle
 *  Have the camera transform change with time and add triangles out of plane
 *  Have different bits of the model use different location transforms
-o  Digress redisgn for lighting
-    *  Decide input data structure for scene model - leave as is
-    *  Convert back to drawArrays() with flat shading
-    *  Do security check in
-    *  Fix bug where not all faces shown
-    *  Add in calculated face normals to triangle objects
-    *  Convey face normals into vertex shader
-    o  Digress to enable and check face culling
-        o  When enabled should still render faces now
-        o  If we reverse normals (or some) should all disappear
-    o  Do and debug lighting calcs in vertex shader but don't use
-        *  Timeout to get face culling working
-        *  Shift new matrix stuff in mesher for cuboid into sensible places
-        *  Timeout to make satellite rotate about Y axis as well as orbiting
-        *  Do lighting calcs on paper
-        *  Find out what good max and min colors are that are visible .2 to .8
-        *  Feed global towards-light state into app
-        *  Get this through to shader as a uniform
-        *  Make color equal to light dirn to see if arriving
-        *  Find out how to translate face normal into world space theoretically
-        *  Decide how to split vMVP into sufficiently separate components so
-           to do
-           *  Don't need to split, just need to provide transform to convert
-              vertex normals in model space into world space. 
-           *  Call it modelToWorldNormalTrans
-        *  Digress to split helpers into better named classes
-        o  Split mMVP as above - with regression test
-            *  Matrix helper - makeRotationsIsolatedTransform
-            *  Convert the map returned by buildSiloRenderingMatrices to
-               use RenderingTransforms objects as values, which have a property
-               mvpTransform, and modelToWorldDirectionVectorTransform.
-               *  code
-               *  regression test
-            *  Set the new field using trans factory.
-            *  Use it once model to view trans known to capture normaltrans
-        *  Rotate vertex normal into world space in vertex shader
-            *  Provide uniform for model to world direction trans
-        *  Have a go at proper lighting calcs
-            *  Run?
-            *  Correct light = no
-                *  Look into unit tests
-                    *  Nice and easy - finish relevant population
-            *  Each face of main box should have differing colour, but
-               unchanging.
-
-o  Convert internals of XYZf to use float[] storage.
-o  Try a cad generated source
+*  Digress redesign for lighting
+*  Timeout strip all debug out
+o  Create bit of package hierachy
+o  Try a STL file source
+    o  Consider how best keep existing code alive including
+       silo specific animation and at least hooks for camera animation
+        o  Should SceneDirector and SceneObjects be named differently?
+        o  Scene Objects
+            o  Convert to interface, consider name carefully is it just
+               scene model contents?
+        o  Scene Director
+            o  Convert to interface
+        o  Projection
+            o  Call to build silo rendering matrices in myglrenderer should
+               delegate out to specialised class, with DI tbd
+        o  Camera
+            o  Feed into the above
+        o  Light position ditto
+        o  Utility to make collection of triangles from .stl
+            o  Maybe including correction of winding order
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

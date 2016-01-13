@@ -1,8 +1,4 @@
-package com.example.android.opengl;
-
-import android.opengl.Matrix;
-
-import java.util.Collection;
+package com.example.android.opengl.geom;
 
 /**
  * Geometry definition of triangle in model space. In CCW winding order.
