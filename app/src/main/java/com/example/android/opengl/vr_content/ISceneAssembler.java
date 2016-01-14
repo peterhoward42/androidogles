@@ -9,5 +9,6 @@ public interface ISceneAssembler {
 
     public Set<String> getSiloNames();
     public float[] getCurrentObjectToWorldTransform(String siloName);
+    public float getEffectiveRadius();
 }
 

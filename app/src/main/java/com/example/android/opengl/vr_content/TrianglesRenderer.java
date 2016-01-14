@@ -57,7 +57,6 @@ public class TrianglesRenderer {
     // This map shares keys (silo names) with the ISceneModels provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
-    //private float color[] = {0.8f, 0.8f, 0.8f, 1.0f};
 
     /**
      * Constructor.
@@ -98,7 +97,7 @@ public class TrianglesRenderer {
         MyGLRenderer.checkGlError("Building GLES20 program");
     }
 
-    public void draw(Map<String, RenderingTransforms> siloRenderingMatrices,
+    public void draw(Map<String, TransformPipelines> siloTransformPipelines,
                      final XYZf towardsLight) {
         GLES20.glUseProgram(mProgram);
         GLES20.glFrontFace(GLES20.GL_CCW);
@@ -136,11 +135,11 @@ public class TrianglesRenderer {
             GLES20.glVertexAttribPointer(normalHandle, NORMAL_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
                     VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
 
-            RenderingTransforms renderingTransforms = siloRenderingMatrices.get(siloName);
-            GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, renderingTransforms.getMvpForVertices(), 0);
+            TransformPipelines transformPipelines = siloTransformPipelines.get(siloName);
+            GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, transformPipelines.getMvpForVertices(), 0);
 
             GLES20.glUniformMatrix3fv(modelToWorldDirectionTransformHandle, 1, false,
-                    renderingTransforms.getModelToWorldForDirections(), 0);
+                    transformPipelines.getModelToWorldForDirections(), 0);
             MyGLRenderer.checkGlError("End of silo-specific loop in GLES20 draw() call.");
 
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));

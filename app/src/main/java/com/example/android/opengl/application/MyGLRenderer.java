@@ -21,15 +21,13 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.android.opengl.vr_content.ISceneAssembler;
 import com.example.android.opengl.vr_content.ISceneModels;
-import com.example.android.opengl.vr_content.RenderingTransforms;
+import com.example.android.opengl.vr_content.TransformPipelines;
 import com.example.android.opengl.vr_content.SceneOptics;
 import com.example.android.opengl.vr_content.TrianglesRenderer;
-import com.example.android.opengl.geom.XYZf;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
 
@@ -48,7 +46,6 @@ import java.util.Map;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
-    private final XYZf towardsLightInWorldSpace = new XYZf(15f, 8f, 10f).normalised();
 
     private TrianglesRenderer mTrianglesRenderer;
 
@@ -91,9 +88,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Build the transform lookup table for the triangles renderer
-        Map<String, RenderingTransforms> siloRenderingMatrices =
-                buildSiloRenderingMatrices();
-        mTrianglesRenderer.draw(siloRenderingMatrices, towardsLightInWorldSpace);
+        Map<String, TransformPipelines> siloTransformPipelines =
+                buildSiloTransformPipelines();
+        mTrianglesRenderer.draw(siloTransformPipelines, mSceneOptics.getTowardsLightDirection());
     }
 
     @Override
@@ -102,7 +99,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mScreenAspect = (float) width / height;
     }
 
-    private Map<String, RenderingTransforms> buildSiloRenderingMatrices() {
+    private Map<String, TransformPipelines> buildSiloTransformPipelines() {
         // For each silo we generate a model-view-projection transform by combining three
         // transforms: ObjectToWorld, WorldToCamera, and Projection. Only the first of which
         // differs per silo. Then we add an auxiliary transform for transforming direction vectors
@@ -114,7 +111,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
-        Map<String, RenderingTransforms> mapToReturn = new HashMap<String, RenderingTransforms>();
+        Map<String, TransformPipelines> mapToReturn = new HashMap<String, TransformPipelines>();
         for (String siloName : mSceneAssembler.getSiloNames()) {
             float[] objectToWorldForVertices =
                     mSceneAssembler.getCurrentObjectToWorldTransform(siloName);
@@ -122,9 +119,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
             float[] modelViewProjection = MatrixCombiner.combineThree(
                     projectionTransform, worldToCameraTransform, objectToWorldForVertices);
-            RenderingTransforms renderingTransforms =
-                    new RenderingTransforms(modelViewProjection, objectToWorldForDirections);
-            mapToReturn.put(siloName, renderingTransforms);
+            TransformPipelines transformPipelines =
+                    new TransformPipelines(modelViewProjection, objectToWorldForDirections);
+            mapToReturn.put(siloName, transformPipelines);
         }
         return mapToReturn;
     }

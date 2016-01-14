@@ -23,7 +23,7 @@ o  Try a STL file source
                scene model contents?
         *  Scene Assembler
             *  Convert to interface
-        o  Projection
+        *  Projection
             *  Create SceneOptics class and instaniate one in same place
                as models etc are instantiated.
             *  Move camera look at into it
@@ -34,11 +34,16 @@ o  Try a STL file source
                     *  projection transform
                     *  Move projection marices into it
             *  Camera
-            o  Move light dirn into it
-        o  Unit test for scene optics
-        o  Unit test for new transform factory: perspective
-        o  How to derive camera look at, cam animation, light dirn, and near 
-           far etc view to match scene presented?
+            *  Move light dirn into it
+        *  Unit test for new transform factory: perspective
+        *  How to derive camera look at point, cam animation, light dirn, and 
+           near far etc view to match scene presented?
+           *  Look at point, can stay fixed
+           *  Camera animation
+                *  Need radius advice from scene assembler
+           *  Light direction - keep fixed
+           *  FOV keep fixed
+           *  Near / far / 
         o  Utility to make collection of triangles from .stl
             o  Maybe including correction of winding order
         o  Resource for an stl file

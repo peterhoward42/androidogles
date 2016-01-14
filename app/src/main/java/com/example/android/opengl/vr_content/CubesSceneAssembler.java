@@ -22,6 +22,13 @@ public class CubesSceneAssembler implements ISceneAssembler {
         return returnedSet;
     }
 
+    public float getEffectiveRadius() {
+        // The worst case bounding box to include the satellite cube is 120mm across flats.
+        // I.e. with a half-width of 60. And the worst case diagonal then by Pythagorus is the root
+        // of the sum of this squared.
+        return 85.0f;
+    }
+
     public float[] getCurrentObjectToWorldTransform(String siloName) {
         float[] returnedMatrix = null;
         switch (siloName) {

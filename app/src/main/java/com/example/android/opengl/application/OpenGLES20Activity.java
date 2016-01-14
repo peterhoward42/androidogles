@@ -21,6 +21,7 @@ import android.os.Bundle;
 
 import com.example.android.opengl.vr_content.CubesSceneAssembler;
 import com.example.android.opengl.vr_content.CubesSceneModels;
+import com.example.android.opengl.vr_content.ISceneAssembler;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 public class OpenGLES20Activity extends Activity {
@@ -33,11 +34,12 @@ public class OpenGLES20Activity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
+        ISceneAssembler sceneAssembler = new CubesSceneAssembler();
         mGLView = new MyGLSurfaceView(
                 this,
                 new CubesSceneModels(),
-                new CubesSceneAssembler(),
-                new SceneOptics());
+                sceneAssembler,
+                new SceneOptics(sceneAssembler.getEffectiveRadius()));
         setContentView(mGLView);
     }
 

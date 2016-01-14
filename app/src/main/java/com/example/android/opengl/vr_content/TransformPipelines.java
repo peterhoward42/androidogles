@@ -3,11 +3,11 @@ package com.example.android.opengl.vr_content;
 /**
  * Created by phoward on 11/01/2016.
  */
-public class RenderingTransforms {
+public class TransformPipelines {
 
     private float[] mvpForVertices;
     private float[] modelToWorldForDirections;
-    public RenderingTransforms(final float[] mvpForVertices, final float[] modelToWorldForDirections) {
+    public TransformPipelines(final float[] mvpForVertices, final float[] modelToWorldForDirections) {
         this.mvpForVertices = mvpForVertices;
         this.modelToWorldForDirections = modelToWorldForDirections;
     }

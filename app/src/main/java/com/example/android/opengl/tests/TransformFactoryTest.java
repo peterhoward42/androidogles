@@ -21,29 +21,6 @@ public class TransformFactoryTest extends InstrumentationTestCase {
         assertEquals("2.00000 3.00000 4.00000", q.formatRounded());
     }
 
-    public void testTranslation() throws Exception {
-        float[] t = TransformFactory.translation(5.0f, 6.0f, 7.0f);
-        XYZf p = new XYZf(2.0f, 3.0f, 4.0f);
-        XYZf q = TransformApply.point(t, p);
-        assertEquals("7.00000 9.00000 11.00000", q.formatRounded());
-    }
-
-    public void testYAxisRotation() throws Exception {
-        float[] t = TransformFactory.yAxisRotation(90f);
-        XYZf p = new XYZf(100.0f, 0, 0);
-        XYZf q = TransformApply.point(t, p);
-        // pity about the minus zero :-(
-        assertEquals("-0.00000 0.00000 -100.00000", q.formatRounded());
-    }
-
-    public void testZAxisRotation() throws Exception {
-        float[] t = TransformFactory.zAxisRotation(90f);
-        XYZf p = new XYZf(100.0f, 0, 0);
-        XYZf q = TransformApply.point(t, p);
-        // pity about the minus zero :-(
-        assertEquals("-0.00000 100.00000 0.00000", q.formatRounded());
-    }
-
     public void testInverted() throws Exception {
         float[] t = TransformFactory.translation(1f, 2f, 3f);
         float[] t2 = TransformFactory.inverted(t);
@@ -88,6 +65,30 @@ public class TransformFactoryTest extends InstrumentationTestCase {
                 MatrixFormatter.fmtMatrix4x4(expanded));
     }
 
+    public void testTranslation() throws Exception {
+        float[] t = TransformFactory.translation(5.0f, 6.0f, 7.0f);
+        XYZf p = new XYZf(2.0f, 3.0f, 4.0f);
+        XYZf q = TransformApply.point(t, p);
+        assertEquals("7.00000 9.00000 11.00000", q.formatRounded());
+    }
+
+    public void testYAxisRotation() throws Exception {
+        float[] t = TransformFactory.yAxisRotation(90f);
+        XYZf p = new XYZf(100.0f, 0, 0);
+        XYZf q = TransformApply.point(t, p);
+        // pity about the minus zero :-(
+        assertEquals("-0.00000 0.00000 -100.00000", q.formatRounded());
+    }
+
+    public void testZAxisRotation() throws Exception {
+        float[] t = TransformFactory.zAxisRotation(90f);
+        XYZf p = new XYZf(100.0f, 0, 0);
+        XYZf q = TransformApply.point(t, p);
+        // pity about the minus zero :-(
+        assertEquals("-0.00000 100.00000 0.00000", q.formatRounded());
+    }
+
+
     public void testDirectionTransformFromVertexTransform() throws Exception {
         // Derive a direction from the vector between two points in space.
         // Transform the points into a different space.
@@ -106,5 +107,18 @@ public class TransformFactoryTest extends InstrumentationTestCase {
                 TransformFactory.directionTransformFromVertexTransform(vertexTransform);
         XYZf transformedDirection = TransformApply.direction(directionTransform, direction);
         assertEquals(directionDash.formatRounded(), transformedDirection.formatRounded());
+    }
+
+    // This is  just a regression test that uses a set of parameters that have been shown to work
+    // visually in the real app.
+    public void testPerspective() throws Exception {
+        float fov = 90;
+        float aspect = 0.6f;
+        float near = 120;
+        float far = 280;
+        float[] perspective = TransformFactory.perspective(fov, aspect, near, far);
+        assertEquals(
+                "1.67,0.00,0.00,0.00,0.00,1.00,0.00,0.00,0.00,0.00,-2.50,-1.00,0.00,0.00,-420.00,0.00",
+                MatrixFormatter.fmtMatrix4x4(perspective));
     }
 }

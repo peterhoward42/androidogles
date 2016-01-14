@@ -14,9 +14,18 @@ public class SceneOptics {
 
     private CameraLookAt mCameraLookAt;
 
-    public SceneOptics() {
-        // Use hard coded look at point for now - ie the origin.
+    private final XYZf towardsLightDirection = new XYZf(15f, 8f, 10f).normalised();
+    private final float mCameraOrbitalHeight;
+    private final float mNear;
+    private final float mFar;
+
+    public SceneOptics(final float sceneEffectiveRadius) {
+        // Use hard coded camera look at point for now - ie the origin.
         mCameraLookAt = new CameraLookAt(new XYZf(0f, 0f, 0f));
+        // Set the camera orbital height as a function of the scene's effective radius
+        mCameraOrbitalHeight = 2.5f * sceneEffectiveRadius; // empirically satisfactory
+        mNear = mCameraOrbitalHeight - sceneEffectiveRadius;
+        mFar = mCameraOrbitalHeight + sceneEffectiveRadius;
     }
 
     public float[] calculateWorldToCameraTransform() {
@@ -27,7 +36,11 @@ public class SceneOptics {
         final float fieldOfViewDegrees = 90;
         final float near = 120;
         final float far = 280;
-        return TransformFactory.perspective(fieldOfViewDegrees, screenAspect, near, far);
+        return TransformFactory.perspective(fieldOfViewDegrees, screenAspect, mNear, mFar);
+    }
+
+    public XYZf getTowardsLightDirection() {
+        return towardsLightDirection;
     }
 
     private XYZf getCurrentCameraPosition() {
@@ -35,8 +48,7 @@ public class SceneOptics {
         final float period = 2; // seconds
         final float amplitude = 35; // degrees
         final float latitude = 51.4f; // degrees
-        final float orbitHeightFromCentre = 200; // scene linear dimensions
-        float[] equatorAtMeridian = new float[]{0, 0, orbitHeightFromCentre, 1};
+        float[] equatorAtMeridian = new float[]{0, 0, mCameraOrbitalHeight, 1};
 
         float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
 
