@@ -21,12 +21,18 @@ import android.os.Bundle;
 
 import com.example.android.opengl.vr_content.CubesSceneAssembler;
 import com.example.android.opengl.vr_content.CubesSceneModels;
+import com.example.android.opengl.vr_content.GutterSceneAssembler;
+import com.example.android.opengl.vr_content.GutterSceneModels;
 import com.example.android.opengl.vr_content.ISceneAssembler;
+import com.example.android.opengl.vr_content.ISceneModels;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 public class OpenGLES20Activity extends Activity {
 
     private GLSurfaceView mGLView;
+
+    private final int CUBES = 1;
+    private final int GUTTER = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +40,29 @@ public class OpenGLES20Activity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
-        ISceneAssembler sceneAssembler = new CubesSceneAssembler();
+        ISceneAssembler sceneAssembler;
+        ISceneModels sceneModels;
+
+        // We dial in which scene we want to use here.
+        final int choice = GUTTER;
+        switch (choice) {
+            case CUBES:
+                sceneModels = new CubesSceneModels();
+                sceneAssembler = new CubesSceneAssembler();
+                break;
+            case GUTTER:
+                GutterSceneModels gutterScenModels = new GutterSceneModels(this.getApplicationContext().getAssets());
+                sceneModels = gutterScenModels;
+                sceneAssembler = new GutterSceneAssembler(gutterScenModels);
+                break;
+            default:
+                sceneModels = null;
+                sceneAssembler = null;
+        }
+
         mGLView = new MyGLSurfaceView(
                 this,
-                new CubesSceneModels(),
+                sceneModels,
                 sceneAssembler,
                 new SceneOptics(sceneAssembler.getEffectiveRadius()));
         setContentView(mGLView);

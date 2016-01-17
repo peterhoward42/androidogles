@@ -44,16 +44,17 @@ o  Try a STL file source
            *  Light direction - keep fixed
            *  FOV keep fixed
            *  Near / far / 
-        o  Utility to make collection of triangles from .stl
+        *  Utility to make collection of triangles from .stl
             *  First make collection of triangles class
                 *  Unit test
                 *  Regression test
-            o  Now factory
-                o  Code unit test
-                o  Satisfy
-            o  Maybe including correction of winding order
-        o  Resource for an stl file
+            *  Now factory
+        *  Resource for an stl file
         o  Alternative scene build in activity
+            o  new transform test
+            o  Timeout for bounding box class plus tests
+            o  Timeout for bounding box of mesh plus tests
+            o  Now test new scene UXP
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

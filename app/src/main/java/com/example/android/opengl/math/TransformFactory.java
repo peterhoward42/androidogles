@@ -2,6 +2,8 @@ package com.example.android.opengl.math;
 
 import android.opengl.Matrix;
 
+import com.example.android.opengl.geom.XYZf;
+
 /**
  * Created by phoward on 11/01/2016.
  */
@@ -22,6 +24,10 @@ public class TransformFactory {
                 x, y, z, 1};
         // @formatter:on
         return toReturn;
+    }
+
+    public static float[] translation(XYZf xyz) {
+        return translation(xyz.X(), xyz.Y(), xyz.Z());
     }
 
     public static float[] yAxisRotation(float angleDeg) {

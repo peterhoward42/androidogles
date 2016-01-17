@@ -27,6 +27,14 @@ public class XYZf {
         return xyz[2];
     }
 
+    public void overwriteX(final float q) {
+        xyz[0] = q;
+    }
+
+    public void overwriteY(final float q) { xyz[1] = q; }
+
+    public void overwriteZ(final float q) { xyz[2] = q; }
+
     public final float[] asFloatArray() {
         return xyz;
     }

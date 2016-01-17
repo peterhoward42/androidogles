@@ -15,6 +15,7 @@ public class MeshFactoryFromStlFileTest extends InstrumentationTestCase {
         MeshFactoryFromStlFile meshFactory = new MeshFactoryFromStlFile(fileContent);
         Mesh mesh = meshFactory.makeMesh();
         assertNotNull(mesh);
+        assertEquals(2, mesh.size());
     }
 
     private final String makeFileContent() {
