@@ -18,13 +18,4 @@ public class TriangleManipulator {
                 TransformApply.point(transform, triangleToTransform.thirdVertex())
         );
     }
-
-    public static Collection<Triangle> makeTransformedCopies(
-            float[] transform, Collection<Triangle> trianglesToTransform) {
-        Collection<Triangle> twoTriangles = new ArrayList<Triangle>();
-        for (Triangle triangle : trianglesToTransform) {
-            twoTriangles.add(TriangleManipulator.makeTransformedTriangle(transform, triangle));
-        }
-        return twoTriangles;
-    }
 }

@@ -10,20 +10,20 @@ import java.util.Collection;
  * a contiguous array of floats. The face-normal of the triangle is duplicated for each vertex.
  *
  */
-public class TriangleSerializer {
+public class MeshSerializer {
 
-    private Collection<Triangle> mTriangles;
+    private Mesh mesh;
 
-    public TriangleSerializer(Collection<Triangle> triangles) {
-        mTriangles = triangles;
+    public MeshSerializer(Mesh mesh) {
+        this.mesh = mesh;
     }
 
     public float[] serializeToContiguousFloats() {
-        int numberOfVertices = 3 * mTriangles.size();
+        int numberOfVertices = 3 * mesh.size();
         int numberOfFloats = 6 * numberOfVertices; // 3 for position, 3 for normal vector
         float[] theFloats = new float[numberOfFloats];
         int i = 0;
-        for (Triangle triangle: mTriangles) {
+        for (Triangle triangle: mesh.getTriangles()) {
             XYZf faceNormal =  triangle.getNormal();
             for (XYZf vertex: triangle.vertices()) {
                 theFloats[i++] = vertex.X();

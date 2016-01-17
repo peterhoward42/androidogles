@@ -27,9 +27,10 @@ import java.util.Map;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 
+import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.util.FileOperations;
 import com.example.android.opengl.util.SystemConstants;
-import com.example.android.opengl.geom.TriangleSerializer;
+import com.example.android.opengl.geom.MeshSerializer;
 import com.example.android.opengl.application.MyGLRenderer;
 import com.example.android.opengl.geom.Triangle;
 import com.example.android.opengl.geom.XYZf;
@@ -62,7 +63,7 @@ public class TrianglesRenderer {
      * Constructor.
      *
      * @Param assetManager Used to dependency-inject the shader source code to be used.
-     * @Param sceneTriangles The sets of triangles you wish to be repeatedly transformed then
+     * @Param sceneModels The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
     public TrianglesRenderer(AssetManager assetManager, ISceneModels sceneModels) {
@@ -73,7 +74,7 @@ public class TrianglesRenderer {
         for (String siloName : sceneModels.getSiloNames()) {
             mNumberOfVerticesInSilo.put(siloName,
                     3 * sceneModels.getNumberOfTrianglesInSilo(siloName));
-            Collection<Triangle> triangles = sceneModels.getSilo(siloName);
+            Mesh mesh = sceneModels.getSilo(siloName);
             mVertexBuffers.put(siloName,
                     makeVertexBufferForSilo(sceneModels.getSilo(siloName)));
         }
@@ -148,13 +149,13 @@ public class TrianglesRenderer {
         GLES20.glDisableVertexAttribArray(normalHandle);
     }
 
-    private FloatBuffer makeVertexBufferForSilo(Collection<Triangle> triangles) {
-        int numberOfVertices = 3 * triangles.size();
+    private FloatBuffer makeVertexBufferForSilo(Mesh mesh) {
+        int numberOfVertices = 3 * mesh.size();
         int numberOfBytesRequired = VERTEX_ARRAY_STRIDE_IN_BYTES * numberOfVertices;
         ByteBuffer vertexBytes = ByteBuffer.allocateDirect(numberOfBytesRequired);
         vertexBytes.order(ByteOrder.nativeOrder());
         FloatBuffer vertexBuffer = vertexBytes.asFloatBuffer();
-        vertexBuffer.put(new TriangleSerializer(triangles).serializeToContiguousFloats());
+        vertexBuffer.put(new MeshSerializer(mesh).serializeToContiguousFloats());
         vertexBuffer.position(0);
         return vertexBuffer;
     }

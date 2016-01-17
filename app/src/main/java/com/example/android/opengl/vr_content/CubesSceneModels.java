@@ -1,10 +1,8 @@
 package com.example.android.opengl.vr_content;
 
-import com.example.android.opengl.geom.MesherForCube;
-import com.example.android.opengl.geom.Triangle;
+import com.example.android.opengl.geom.Mesh;
+import com.example.android.opengl.geom.MeshFactorySimpleCubes;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -15,21 +13,19 @@ import java.util.Set;
  */
 public class CubesSceneModels implements ISceneModels {
 
-    private Map<String, Collection<Triangle>> mSilos;
+    private Map<String, Mesh> mSilos;
 
     public CubesSceneModels() {
-        mSilos = new HashMap<String, Collection<Triangle>>();
+        mSilos = new HashMap<String, Mesh>();
 
-        Collection<Triangle> mainSilo = new ArrayList<Triangle>();
-        mainSilo.addAll(new MesherForCube(100).getTriangles());
+        Mesh mainSilo = new MeshFactorySimpleCubes(100).makeMesh();
         mSilos.put("mainSilo", mainSilo);
 
-        Collection<Triangle> auxSilo = new ArrayList<Triangle>();
-        auxSilo.addAll(new MesherForCube(20).getTriangles());
+        Mesh auxSilo = new MeshFactorySimpleCubes(20).makeMesh();
         mSilos.put("auxSilo", auxSilo);
     }
 
-    public Collection<Triangle> getSilo(String siloName) {
+    public Mesh getSilo(String siloName) {
         return mSilos.get(siloName);
     }
 

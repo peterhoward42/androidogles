@@ -1,5 +1,6 @@
 package com.example.android.opengl.vr_content;
 
+import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.geom.Triangle;
 
 import java.util.Collection;
@@ -13,6 +14,6 @@ import java.util.Set;
 public interface ISceneModels {
 
     public Set<String> getSiloNames();
-    public Collection<Triangle> getSilo(String siloName);
+    public Mesh getSilo(String siloName);
     public int getNumberOfTrianglesInSilo(String siloName);
 }
