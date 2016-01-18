@@ -72,6 +72,13 @@ public class TransformFactoryTest extends InstrumentationTestCase {
         assertEquals("7.00000 9.00000 11.00000", q.formatRounded());
     }
 
+    public void testTranslationWithXYZf() throws Exception {
+        float[] t = TransformFactory.translation(new XYZf(5.0f, 6.0f, 7.0f));
+        XYZf p = new XYZf(2.0f, 3.0f, 4.0f);
+        XYZf q = TransformApply.point(t, p);
+        assertEquals("7.00000 9.00000 11.00000", q.formatRounded());
+    }
+
     public void testYAxisRotation() throws Exception {
         float[] t = TransformFactory.yAxisRotation(90f);
         XYZf p = new XYZf(100.0f, 0, 0);

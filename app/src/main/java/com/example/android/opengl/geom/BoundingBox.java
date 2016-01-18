@@ -9,8 +9,8 @@ public class BoundingBox {
     private XYZf mMaxima;
     private XYZf mCentre;
 
-    private final float HUGE = 1e12f;
-    private final float TINY = 1e-12f;
+    private final float HUGE = Float.MAX_VALUE;
+    private final float TINY = Float.MIN_VALUE;
 
     public BoundingBox(final Mesh mesh) {
         mMinima = new XYZf(HUGE, HUGE, HUGE);
@@ -32,12 +32,19 @@ public class BoundingBox {
         mCentre.overwriteZ(0.5f * (mMinima.Z() + mMaxima.Z()));
     }
 
+    public XYZf getMinima() {
+        return mMinima;
+    }
+    public XYZf getMaxima() {
+        return mMaxima;
+    }
+
     public final XYZf getCentre() {
         return mCentre;
     }
 
     public final float getLargestDimension() {
-        float largest = TINY;
+        float largest = Float.MIN_VALUE;
         largest = Math.max(largest, Math.abs(mMaxima.X() - mMinima.X()));
         largest = Math.max(largest, Math.abs(mMaxima.Y() - mMinima.Y()));
         largest = Math.max(largest, Math.abs(mMaxima.Z() - mMinima.Z()));

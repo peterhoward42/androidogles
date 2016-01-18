@@ -51,9 +51,13 @@ o  Try a STL file source
             *  Now factory
         *  Resource for an stl file
         o  Alternative scene build in activity
-            o  new transform test
-            o  Timeout for bounding box class plus tests
-            o  Timeout for bounding box of mesh plus tests
+            *  new transform test
+            *  Timeout for bounding box class plus tests
+            *  Timeout for bounding box of mesh plus tests
+            o  Timeout for gutter model tests
+                *  Code all accessor tests up to make inspection easier
+                o  Assess correctness of the answers
+            o  Timeout for new model assembler tests incl comments
             o  Now test new scene UXP
 
 -----------------------------------------------------------------------------

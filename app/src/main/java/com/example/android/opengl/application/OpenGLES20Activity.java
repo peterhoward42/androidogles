@@ -51,9 +51,10 @@ public class OpenGLES20Activity extends Activity {
                 sceneAssembler = new CubesSceneAssembler();
                 break;
             case GUTTER:
-                GutterSceneModels gutterScenModels = new GutterSceneModels(this.getApplicationContext().getAssets());
-                sceneModels = gutterScenModels;
-                sceneAssembler = new GutterSceneAssembler(gutterScenModels);
+                GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(
+                        getApplicationContext().getAssets());
+                sceneModels = gutterSceneModels;
+                sceneAssembler = new GutterSceneAssembler(gutterSceneModels);
                 break;
             default:
                 sceneModels = null;

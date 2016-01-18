@@ -25,12 +25,20 @@ public class GutterSceneModels implements ISceneModels {
     private final String GUTTER_FILE_NAME = "gutter.stl";
     private BoundingBox mBoundingBox;
 
-    public GutterSceneModels(AssetManager assetManager) {
+    // We provide only a private constructor, to force use of the factory function below.
+    private GutterSceneModels() {
         mSilos = new HashMap<String, Mesh>();
+        mBoundingBox = null;
+    }
 
-        Mesh mesh = makeMeshFromGutterSTLFile(assetManager);
-        mSilos.put("mainSilo", mesh);
-        mBoundingBox = new BoundingBox(mesh);
+    /** Factory method - the only way to make one of these.
+     */
+    public static GutterSceneModels buildFromAssetFiles(AssetManager assetManager) {
+        GutterSceneModels models = new GutterSceneModels();
+        Mesh mesh = models.makeMeshFromGutterSTLFile(assetManager);
+        models.mSilos.put("mainSilo", mesh);
+        models.mBoundingBox = new BoundingBox(mesh);
+        return models;
     }
 
     public Mesh getSilo(String siloName) {
@@ -42,6 +50,10 @@ public class GutterSceneModels implements ISceneModels {
     }
 
     public int getNumberOfTrianglesInSilo(String siloName) { return mSilos.get(siloName).size(); }
+
+    public BoundingBox getBoundingBox() {
+        return mBoundingBox;
+    }
 
     public final float getEffectiveRadius() {
         return 0.5f * mBoundingBox.getLargestDimension();

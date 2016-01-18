@@ -92,7 +92,7 @@ public class TransformFactory {
     }
 
     /**
-     * If we have a point transform from space A to space B, then this function will derive
+     * If we have a (4*4) point transform from space A to space B, then this function will derive
      * from it, a (3*3) transform that will transform direction vectors from space A to space B.
      *
      * @param fullTransform The point transform from space A to space B.
