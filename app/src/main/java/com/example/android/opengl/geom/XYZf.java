@@ -4,6 +4,8 @@ package com.example.android.opengl.geom;
  * Created by phoward on 13/11/2015.
  */
 
+import android.util.Log;
+
 /**
  * An XYZ vector.
  */
@@ -31,9 +33,13 @@ public class XYZf {
         xyz[0] = q;
     }
 
-    public void overwriteY(final float q) { xyz[1] = q; }
+    public void overwriteY(final float q) {
+        xyz[1] = q;
+    }
 
-    public void overwriteZ(final float q) { xyz[2] = q; }
+    public void overwriteZ(final float q) {
+        xyz[2] = q;
+    }
 
     public final float[] asFloatArray() {
         return xyz;
@@ -63,6 +69,11 @@ public class XYZf {
                         + xyz[2]
                         * xyz[2]
         );
+    }
+
+    public float dotProduct(final XYZf other) {
+        float dot = (this.xyz[0] * other.xyz[0] + this.xyz[1] * other.xyz[1] + this.xyz[2] * other.xyz[2]);
+        return dot;
     }
 
     public XYZf normalisedCrossProduct(XYZf b) {

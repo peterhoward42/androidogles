@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.geom.MeshFactoryFromStlFile;
-import com.example.android.opengl.geom.MeshFactorySimpleCubes;
 import com.example.android.opengl.geom.XYZf;
 import com.example.android.opengl.util.FileOperations;
 
@@ -16,29 +15,30 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An implementation of ISceneModels for test and development purposes, with content
- * comprising a single object, that looks like a half-tube. It is read from an STL file.
+ * An implementation of IModelCollection comprising just one single model, derived from
+ * a given STL file.
  */
-public class GutterSceneModels implements ISceneModels {
+public class ModelCollectionSTL implements IModelCollection {
 
     private Map<String, Mesh> mSilos;
-    private final String GUTTER_FILE_NAME = "gutter.stl";
     private BoundingBox mBoundingBox;
 
     // We provide only a private constructor, to force use of the factory function below.
-    private GutterSceneModels() {
+    private ModelCollectionSTL() {
         mSilos = new HashMap<String, Mesh>();
         mBoundingBox = null;
     }
 
     /** Factory method - the only way to make one of these.
      */
-    public static GutterSceneModels buildFromAssetFiles(AssetManager assetManager) {
-        GutterSceneModels models = new GutterSceneModels();
-        Mesh mesh = models.makeMeshFromGutterSTLFile(assetManager);
-        models.mSilos.put("mainSilo", mesh);
-        models.mBoundingBox = new BoundingBox(mesh);
-        return models;
+    public static ModelCollectionSTL buildFromAssetFiles(
+            AssetManager assetManager,
+            final String assetFileName) {
+        ModelCollectionSTL modelCollectionSTL = new ModelCollectionSTL();
+        Mesh mesh = modelCollectionSTL.makeMeshFromGutterSTLFile(assetManager, assetFileName);
+        modelCollectionSTL.mSilos.put("mainSilo", mesh);
+        modelCollectionSTL.mBoundingBox = new BoundingBox(mesh);
+        return modelCollectionSTL;
     }
 
     public Mesh getSilo(String siloName) {
@@ -56,15 +56,16 @@ public class GutterSceneModels implements ISceneModels {
     }
 
     public final float getEffectiveRadius() {
-        return 0.5f * mBoundingBox.getLargestDimension();
+        float orthogonalComponent =  0.5f * mBoundingBox.getLargestDimension();
+        return (float)Math.hypot(orthogonalComponent, orthogonalComponent);
     }
 
-    public final XYZf getOffsetFromOriginOfBoundingBoxCentre() {
+    public final XYZf getBoundingBoxCentre() {
         return mBoundingBox.getCentre();
     }
 
-    private Mesh makeMeshFromGutterSTLFile(AssetManager assetManager) {
-        String fileContents = getSTLContentFromAsset(assetManager, GUTTER_FILE_NAME);
+    private Mesh makeMeshFromGutterSTLFile(AssetManager assetManager, final String assetFileName) {
+        String fileContents = getSTLContentFromAsset(assetManager, assetFileName);
         Mesh mesh = new MeshFactoryFromStlFile(fileContents).makeMesh();
         return mesh;
     }

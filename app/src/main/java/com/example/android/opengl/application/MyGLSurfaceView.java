@@ -18,8 +18,8 @@ package com.example.android.opengl.application;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
+import com.example.android.opengl.vr_content.IModelCollection;
 import com.example.android.opengl.vr_content.ISceneAssembler;
-import com.example.android.opengl.vr_content.ISceneModels;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 /**
@@ -33,7 +33,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(
             Context context,
-            ISceneModels sceneModels,
+            IModelCollection sceneModels,
             ISceneAssembler sceneAssembler,
             SceneOptics sceneOptics) {
         super(context);

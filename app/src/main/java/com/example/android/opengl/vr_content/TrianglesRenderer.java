@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,6 @@ import com.example.android.opengl.util.FileOperations;
 import com.example.android.opengl.util.SystemConstants;
 import com.example.android.opengl.geom.MeshSerializer;
 import com.example.android.opengl.application.MyGLRenderer;
-import com.example.android.opengl.geom.Triangle;
 import com.example.android.opengl.geom.XYZf;
 
 /**
@@ -55,7 +53,7 @@ public class TrianglesRenderer {
 
     private final int mProgram;
 
-    // This map shares keys (silo names) with the ISceneModels provided to the constructor.
+    // This map shares keys (silo names) with the IModelCollection provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
 
@@ -66,7 +64,7 @@ public class TrianglesRenderer {
      * @Param sceneModels The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
-    public TrianglesRenderer(AssetManager assetManager, ISceneModels sceneModels) {
+    public TrianglesRenderer(AssetManager assetManager, IModelCollection sceneModels) {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();

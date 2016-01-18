@@ -18,4 +18,8 @@ public class TriangleManipulator {
                 TransformApply.point(transform, triangleToTransform.thirdVertex())
         );
     }
+
+    public static Triangle toggleWindingOrder(final Triangle triangle) {
+        return new Triangle(triangle.firstVertex(), triangle.thirdVertex(), triangle.secondVertex());
+    }
 }

@@ -2,8 +2,8 @@ package com.example.android.opengl.vr_content;
 import java.util.Set;
 
 /**
- * Knows where CubesSceneModels should be scaled, placed and oriented in world space to build the
- * required scene.
+ * Knows where each silo in a ModelCollectionCubes should be scaled, placed and oriented in
+ * world space to build the required scene.
  */
 public interface ISceneAssembler {
 

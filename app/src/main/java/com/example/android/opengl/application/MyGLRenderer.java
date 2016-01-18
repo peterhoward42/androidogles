@@ -24,7 +24,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import com.example.android.opengl.vr_content.ISceneAssembler;
-import com.example.android.opengl.vr_content.ISceneModels;
+import com.example.android.opengl.vr_content.IModelCollection;
 import com.example.android.opengl.vr_content.TransformPipelines;
 import com.example.android.opengl.vr_content.SceneOptics;
 import com.example.android.opengl.vr_content.TrianglesRenderer;
@@ -50,12 +50,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
-    private ISceneModels mSceneModels;
+    private IModelCollection mSceneModels;
     private ISceneAssembler mSceneAssembler;
     private SceneOptics mSceneOptics;
     private float mScreenAspect;
 
-    public MyGLRenderer(AssetManager assetManager, ISceneModels sceneModels,
+    public MyGLRenderer(AssetManager assetManager, IModelCollection sceneModels,
                         ISceneAssembler sceneAssembler, SceneOptics sceneOptics) {
         super();
         mAssetManager = assetManager;

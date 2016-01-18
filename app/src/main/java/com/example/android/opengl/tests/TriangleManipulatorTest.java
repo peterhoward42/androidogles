@@ -23,4 +23,15 @@ public class TriangleManipulatorTest extends InstrumentationTestCase {
                 "10.00000 100.00000 0.00000, 10.00000 0.00000 100.00000, 10.00000 0.00000 0.00000, 1.00000 0.00000 0.00000",
                 after.formatRounded());
     }
+
+    public void testToggleWindingOrder() throws Exception {
+        XYZf a = new XYZf(0, 100, 0);
+        XYZf b = new XYZf(0, 0, 100);
+        XYZf c = new XYZf(0, 0, 0);
+        Triangle before = new Triangle(a, b, c);
+        Triangle toggled = TriangleManipulator.toggleWindingOrder(before);
+        assertEquals(
+                "0.00000 100.00000 0.00000, 0.00000 0.00000 0.00000, 0.00000 0.00000 100.00000, -1.00000 0.00000 0.00000",
+                toggled.formatRounded());
+    }
 }

@@ -16,49 +16,13 @@ Android GL Play Around
 *  Timeout strip all debug out
 *  Create bit of package hierachy
 o  Try a STL file source
-    o  Consider how best keep existing code alive including
-       silo specific animation and at least hooks for camera animation
-        *  Scene Objects
-            *  Convert to interface, consider name carefully is it just
-               scene model contents?
-        *  Scene Assembler
-            *  Convert to interface
-        *  Projection
-            *  Create SceneOptics class and instaniate one in same place
-               as models etc are instantiated.
-            *  Move camera look at into it
-                *  Work through myglrenderer weaning of original camera
-                    *  animated position
-                    *  delegate calc of world to cam transform to it,
-                       and thus no longer need to track cam posn in renderer
-                    *  projection transform
-                    *  Move projection marices into it
-            *  Camera
-            *  Move light dirn into it
-        *  Unit test for new transform factory: perspective
-        *  How to derive camera look at point, cam animation, light dirn, and 
-           near far etc view to match scene presented?
-           *  Look at point, can stay fixed
-           *  Camera animation
-                *  Need radius advice from scene assembler
-           *  Light direction - keep fixed
-           *  FOV keep fixed
-           *  Near / far / 
-        *  Utility to make collection of triangles from .stl
-            *  First make collection of triangles class
-                *  Unit test
-                *  Regression test
-            *  Now factory
-        *  Resource for an stl file
-        o  Alternative scene build in activity
-            *  new transform test
-            *  Timeout for bounding box class plus tests
-            *  Timeout for bounding box of mesh plus tests
-            o  Timeout for gutter model tests
-                *  Code all accessor tests up to make inspection easier
-                o  Assess correctness of the answers
-            o  Timeout for new model assembler tests incl comments
-            o  Now test new scene UXP
+    *  Basics
+    *  Should gutter models be stl models naming?
+    *  Try another sample stl
+    o  Check in
+
+o  SceneOptics.getCurrentCameraPosition() has stuff that should be in
+   transform or geom classes.
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

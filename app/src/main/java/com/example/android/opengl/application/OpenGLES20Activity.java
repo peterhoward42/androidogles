@@ -19,12 +19,12 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import com.example.android.opengl.vr_content.CubesSceneAssembler;
-import com.example.android.opengl.vr_content.CubesSceneModels;
-import com.example.android.opengl.vr_content.GutterSceneAssembler;
-import com.example.android.opengl.vr_content.GutterSceneModels;
+import com.example.android.opengl.vr_content.ModelCollectionSTL;
+import com.example.android.opengl.vr_content.SceneAssemblerCubes;
+import com.example.android.opengl.vr_content.IModelCollection;
+import com.example.android.opengl.vr_content.ModelCollectionCubes;
+import com.example.android.opengl.vr_content.SceneAssemblerSTL;
 import com.example.android.opengl.vr_content.ISceneAssembler;
-import com.example.android.opengl.vr_content.ISceneModels;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 public class OpenGLES20Activity extends Activity {
@@ -33,6 +33,7 @@ public class OpenGLES20Activity extends Activity {
 
     private final int CUBES = 1;
     private final int GUTTER = 2;
+    private final int BLADE = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,20 +42,26 @@ public class OpenGLES20Activity extends Activity {
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
         ISceneAssembler sceneAssembler;
-        ISceneModels sceneModels;
+        IModelCollection sceneModels;
 
         // We dial in which scene we want to use here.
-        final int choice = GUTTER;
+        final int choice = BLADE;
         switch (choice) {
             case CUBES:
-                sceneModels = new CubesSceneModels();
-                sceneAssembler = new CubesSceneAssembler();
+                sceneModels = new ModelCollectionCubes();
+                sceneAssembler = new SceneAssemblerCubes();
                 break;
             case GUTTER:
-                GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(
-                        getApplicationContext().getAssets());
-                sceneModels = gutterSceneModels;
-                sceneAssembler = new GutterSceneAssembler(gutterSceneModels);
+                ModelCollectionSTL gutter = ModelCollectionSTL.buildFromAssetFiles(
+                        getApplicationContext().getAssets(), "gutter.txt");
+                sceneModels = gutter;
+                sceneAssembler = new SceneAssemblerSTL(gutter);
+                break;
+            case BLADE:
+                ModelCollectionSTL blade = ModelCollectionSTL.buildFromAssetFiles(
+                        getApplicationContext().getAssets(), "blade.txt");
+                sceneModels = blade;
+                sceneAssembler = new SceneAssemblerSTL(blade);
                 break;
             default:
                 sceneModels = null;

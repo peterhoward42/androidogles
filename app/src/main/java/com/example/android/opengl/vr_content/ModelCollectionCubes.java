@@ -8,14 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A trivial implementation of ISceneModels for test and development purposes, with content
+ * A trivial implementation of IModelCollection for test and development purposes, with content
  * comprising just a 100mm cube and a 20mm cube.
  */
-public class CubesSceneModels implements ISceneModels {
+public class ModelCollectionCubes implements IModelCollection {
 
     private Map<String, Mesh> mSilos;
 
-    public CubesSceneModels() {
+    public ModelCollectionCubes() {
         mSilos = new HashMap<String, Mesh>();
 
         Mesh mainSilo = new MeshFactorySimpleCubes(100).makeMesh();

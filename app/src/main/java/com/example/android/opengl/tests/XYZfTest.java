@@ -37,6 +37,13 @@ public class XYZfTest extends InstrumentationTestCase {
         assertEquals("0.57735 0.57735 0.57735", a.normalised().formatRounded());
     }
 
+    public void testDotProduct() throws Exception {
+        XYZf a = new XYZf(1.0f, 0, 0).normalised();
+        XYZf b = new XYZf(1.0f, 1.0f, 0).normalised();
+        float dot = a.dotProduct(b);
+        assertEquals("0.707", String.format("%.3f", dot));
+    }
+
     public void testCrossProduct() throws Exception {
         // The cross product between X & Y vectors of length Q should be a Z vector
         // of length Q*Q.

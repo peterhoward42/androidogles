@@ -11,7 +11,7 @@ import java.util.Set;
  * (person, engine...). The models are defined with coordinates in their own private model space,
  * and need to be shifted to their proper dispositions to create a proper scene.
  */
-public interface ISceneModels {
+public interface IModelCollection {
 
     public Set<String> getSiloNames();
     public Mesh getSilo(String siloName);

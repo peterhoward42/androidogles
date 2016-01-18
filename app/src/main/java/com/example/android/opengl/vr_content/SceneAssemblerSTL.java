@@ -1,23 +1,19 @@
 package com.example.android.opengl.vr_content;
 
-import android.os.SystemClock;
-
 import com.example.android.opengl.geom.XYZf;
-import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Knows where CubesSceneModels should be scaled, placed and oriented in world space to build the
- * required scene.
+ * A simple implementation of ISceneAssembler that knows how to assemble a {@Class ModelCollectionSTL}
  */
-public class GutterSceneAssembler implements ISceneAssembler {
+public class SceneAssemblerSTL implements ISceneAssembler {
 
-    private GutterSceneModels mModel;
+    private ModelCollectionSTL mModel;
 
-    public GutterSceneAssembler(GutterSceneModels model) {
+    public SceneAssemblerSTL(ModelCollectionSTL model) {
         mModel = model;
     }
 
@@ -32,7 +28,7 @@ public class GutterSceneAssembler implements ISceneAssembler {
     }
 
     public float[] getCurrentObjectToWorldTransform(String siloName) {
-        XYZf offsetOfCentre = mModel.getOffsetFromOriginOfBoundingBoxCentre();
+        XYZf offsetOfCentre = mModel.getBoundingBoxCentre();
         float[] transform = TransformFactory.translation(offsetOfCentre);
         return TransformFactory.inverted(transform);
     }

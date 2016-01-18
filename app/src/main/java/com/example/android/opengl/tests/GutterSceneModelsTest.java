@@ -2,16 +2,12 @@ package com.example.android.opengl.tests;
 
 import android.content.res.AssetManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.application.OpenGLES20Activity;
 import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.geom.XYZf;
-import com.example.android.opengl.vr_content.GutterSceneModels;
-
-import java.util.List;
-import java.util.Set;
+import com.example.android.opengl.vr_content.ModelCollectionSTL;
 
 /**
  * Created by phoward on 18/01/2016.
@@ -24,30 +20,34 @@ public class GutterSceneModelsTest extends ActivityInstrumentationTestCase2<Open
 
     public void testFactory() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(assetManager);
-        Mesh mesh = gutterSceneModels.getSilo("mainSilo");
+        ModelCollectionSTL modelCollectionSTL = ModelCollectionSTL.buildFromAssetFiles(
+                assetManager, "gutter.txt");
+        Mesh mesh = modelCollectionSTL.getSilo("mainSilo");
         assertEquals(192, mesh.getTriangles().size());
     }
 
     public void testGetBoundingBox() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(assetManager);
-        BoundingBox boundingBox = gutterSceneModels.getBoundingBox();
+        ModelCollectionSTL modelCollectionSTL = ModelCollectionSTL.buildFromAssetFiles(
+                assetManager, "gutter.txt");
+        BoundingBox boundingBox = modelCollectionSTL.getBoundingBox();
         assertEquals("25.00000 25.00000 0.00000", boundingBox.getMinima().formatRounded());
         assertEquals("75.00000 75.00000 50.00000", boundingBox.getMaxima().formatRounded());
     }
 
     public void testGetEffectiveRadius() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(assetManager);
-        float radius = gutterSceneModels.getEffectiveRadius();
-        assertEquals(25.0f, radius);
+        ModelCollectionSTL modelCollectionSTL = ModelCollectionSTL.buildFromAssetFiles(
+                assetManager, "gutter.txt");
+        modelCollectionSTL.getEffectiveRadius();
+        assertEquals("35.36", String.format("%.2f", modelCollectionSTL.getEffectiveRadius()));
     }
 
     public void testGetOffsetFromOriginOfBoundingBoxCentre() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        GutterSceneModels gutterSceneModels = GutterSceneModels.buildFromAssetFiles(assetManager);
-        XYZf offset = gutterSceneModels.getOffsetFromOriginOfBoundingBoxCentre();
+        ModelCollectionSTL modelCollectionSTL = ModelCollectionSTL.buildFromAssetFiles(
+                assetManager, "gutter.txt");
+                XYZf offset = modelCollectionSTL.getBoundingBoxCentre();
         assertEquals("50.00000 50.00000 25.00000", offset.formatRounded());
     }
 }
