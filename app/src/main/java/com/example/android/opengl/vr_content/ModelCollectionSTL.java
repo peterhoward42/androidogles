@@ -4,7 +4,7 @@ import android.content.res.AssetManager;
 
 import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.Mesh;
-import com.example.android.opengl.geom.MeshFactoryFromStlFile;
+import com.example.android.opengl.geom.MeshFactoryFromSTLAscii;
 import com.example.android.opengl.geom.XYZf;
 import com.example.android.opengl.util.FileOperations;
 
@@ -66,7 +66,7 @@ public class ModelCollectionSTL implements IModelCollection {
 
     private Mesh makeMeshFromGutterSTLFile(AssetManager assetManager, final String assetFileName) {
         String fileContents = getSTLContentFromAsset(assetManager, assetFileName);
-        Mesh mesh = new MeshFactoryFromStlFile(fileContents).makeMesh();
+        Mesh mesh = new MeshFactoryFromSTLAscii(fileContents).makeMesh();
         return mesh;
     }
 

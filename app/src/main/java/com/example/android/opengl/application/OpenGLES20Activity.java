@@ -45,7 +45,7 @@ public class OpenGLES20Activity extends Activity {
         IModelCollection sceneModels;
 
         // We dial in which scene we want to use here.
-        final int choice = BLADE;
+        final int choice = CUBES;
         switch (choice) {
             case CUBES:
                 sceneModels = new ModelCollectionCubes();

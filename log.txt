@@ -15,18 +15,138 @@ Android GL Play Around
 *  Digress redesign for lighting
 *  Timeout strip all debug out
 *  Create bit of package hierachy
-o  Try a STL file source
-    *  Basics
-    *  Should gutter models be stl models naming?
-    *  Try another sample stl
-    o  Check in
+*  Try a STL file source
+o  More complex model
+    o  Work up to animated worm and wheel
+        *  Make resource files
+        o  Binary reader and unit test
+            *  Rename existing to ascii
+            *  Play with design of binary version
+            o  Work up to a unit test
+        o  purge the word gutter
+        o  design model / assr for worm and wheel
+        o  do it
+        o  try it
+o  Ditch blade stl for ip sake
 
-o  SceneOptics.getCurrentCameraPosition() has stuff that should be in
-   transform or geom classes.
+-----------------------------------------------------------------------------
+STL binary format
+-----------------------------------------------------------------------------
+UINT8[80] – Header
+UINT32 – Number of triangles
+
+foreach triangle
+REAL32[3] – Normal vector
+REAL32[3] – Vertex 1
+REAL32[3] – Vertex 2
+REAL32[3] – Vertex 3
+UINT16 – Attribute byte count
+end
 
 -----------------------------------------------------------------------------
+Java float to binary file i/o
 -----------------------------------------------------------------------------
------------------------------------------------------------------------------
------------------------------------------------------------------------------
+	
+
+/* Code with Design
+ *
+ * Created By: Caleb Jonasson
+ *
+ * Desc: This class file is used to create a binary file,
+ * write values to the file and check for errors along the way.
+ */
+ 
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+ 
+public class writebin {
+ 
+    public static void main(String[] args) {
+        //the filename to create.
+        String fileName = "file.dat";
+ 
+        //creating the space in memory for the file
+        ObjectOutputStream  outputStream = null;
+ 
+        try{
+            outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
+        }catch(IOException e){
+            System.out.println("Could not open the file." + e);
+            System.exit(0);
+        }
+ 
+        byte foo = 1;
+        short bar = 5;
+        int baz = 543;
+        long qurk = 123923892;
+ 
+        float flt = 1;
+        double dbl = 1.2323;
+ 
+        char chr = 'a';
+        String str = "hello";
+ 
+        boolean bool = false;
+ 
+        try{
+            //integet based
+            outputStream.writeByte(foo);
+            outputStream.writeShort(bar);
+            outputStream.writeInt(baz);
+            outputStream.writeLong(qurk);
+ 
+            //decimal based
+            outputStream.writeFloat(flt);
+            outputStream.writeDouble(dbl);
+ 
+            //alpha based
+            outputStream.writeChar(chr);
+            outputStream.writeUTF(str);
+ 
+            //true false based
+            outputStream.writeBoolean(bool);
+ 
+            outputStream.close();
+ 
+        }catch(IOException e){
+            System.out.println("Writing error: " + e);
+            System.exit(0);
+        }
+        System.out.println("Records have been written to the file.");
+ 
+        ObjectInputStream inputStream = null;
+        try{
+            inputStream = new ObjectInputStream(new FileInputStream(fileName));
+        }catch(IOException e){
+            System.out.println("There was a problem opening the file: " + e);
+            System.exit(0);
+        }
+        try{
+            byte var1 = inputStream.readByte();
+            short var2 = inputStream.readShort();
+            int var3 = inputStream.readInt();
+            long var4 = inputStream.readLong();
+ 
+            float var5 = inputStream.readFloat();
+            double var6 = inputStream.readDouble();
+ 
+            char var7 = inputStream.readChar();
+            String var8 = inputStream.readUTF();
+ 
+            boolean b1 = inputStream.readBoolean();
+ 
+            inputStream.close();
+        }catch(Exception e){
+            System.out.println("There was an issue reading from the file: " + e);
+            System.exit(0);
+        }
+        System.out.println("Reading of the file: " + fileName + " has been completed.");
+ 
+    }
+ 
+}
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

@@ -1,7 +1,9 @@
 package com.example.android.opengl.tests;
 
+import android.test.ActivityInstrumentationTestCase2;
 import android.test.InstrumentationTestCase;
 
+import com.example.android.opengl.application.OpenGLES20Activity;
 import com.example.android.opengl.math.MatrixFormatter;
 import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.math.TransformFactory;
@@ -10,7 +12,12 @@ import com.example.android.opengl.geom.XYZf;
 /**
  * Created by phoward on 12/01/2016.
  */
-public class TransformFactoryTest extends InstrumentationTestCase {
+
+public class TransformFactoryTest extends ActivityInstrumentationTestCase2<OpenGLES20Activity> {
+
+    public TransformFactoryTest() {
+        super(OpenGLES20Activity.class);
+    }
 
     // These are in dependency order
 
@@ -58,7 +65,7 @@ public class TransformFactoryTest extends InstrumentationTestCase {
         float[] t = {
                 1f, 2f, 3f,
                 4f, 5f, 6f,
-                7f, 8f, 9f, };
+                7f, 8f, 9f,};
         float[] expanded = TransformFactory.expand3x3To4x4WithZeros(t);
         assertEquals(
                 "1.00,2.00,3.00,0.00,4.00,5.00,6.00,0.00,7.00,8.00,9.00,0.00,0.00,0.00,0.00,0.00",
@@ -94,7 +101,6 @@ public class TransformFactoryTest extends InstrumentationTestCase {
         // pity about the minus zero :-(
         assertEquals("-0.00000 100.00000 0.00000", q.formatRounded());
     }
-
 
     public void testDirectionTransformFromVertexTransform() throws Exception {
         // Derive a direction from the vector between two points in space.
