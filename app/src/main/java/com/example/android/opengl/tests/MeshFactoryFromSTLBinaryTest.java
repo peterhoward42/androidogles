@@ -29,6 +29,6 @@ public class MeshFactoryFromSTLBinaryTest extends ActivityInstrumentationTestCas
         MeshFactoryFromSTLBinary meshFactory = new MeshFactoryFromSTLBinary(is);
         Mesh mesh = meshFactory.makeMesh();
         assertNotNull(mesh);
-        assertEquals(2, mesh.size());
+        assertEquals(130812, mesh.size());
     }
 }

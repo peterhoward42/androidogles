@@ -1,5 +1,7 @@
 package com.example.android.opengl.geom;
 
+import com.google.common.io.LittleEndianDataInputStream;
+
 import java.io.BufferedInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -19,8 +21,7 @@ public class MeshFactoryFromSTLBinary {
 
     private InputStream mInputStream;
     private Mesh mMesh;
-    private List<XYZf> mThreeVertices; // we accumulate them until we have three, then start over
-    private XYZf mCurrentNormal; // most recently seen facet normal line
+    private List<XYZf> mThreeVertices; // we read them in blocks of three
 
     private final int BYTES_IN_HEADER = 80;
 
@@ -44,7 +45,9 @@ public class MeshFactoryFromSTLBinary {
     }
 
     private DataInput createDataInputStream() throws FileNotFoundException {
-        DataInput openedStream = new DataInputStream(new BufferedInputStream(mInputStream));
+        // Note the replacement of Java's standard DataInputStream, with this special
+        // variant from Google's Guava library.
+        DataInput openedStream = new LittleEndianDataInputStream(new BufferedInputStream(mInputStream));
         return openedStream;
     }
 
@@ -70,13 +73,14 @@ public class MeshFactoryFromSTLBinary {
 
     private Triangle reconcileTriangleToStatedFacetNormal(
             Triangle triangle, final XYZf statedNormal) {
-        if (calculatedNormalIsOppositeToCurrentFacetNormal(triangle)) {
+        if (calculatedNormalIsOppositeToStatedNormal(triangle, statedNormal)) {
             return TriangleManipulator.toggleWindingOrder(triangle);
         }
         return triangle;
     }
 
-    private boolean calculatedNormalIsOppositeToCurrentFacetNormal(final Triangle triangle) {
-        return (triangle.getNormal().dotProduct(mCurrentNormal) < 0);
+    private boolean calculatedNormalIsOppositeToStatedNormal(
+            final Triangle triangle, final XYZf statedNormal) {
+        return (triangle.getNormal().dotProduct(statedNormal) < 0);
     }
 }

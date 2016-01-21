@@ -19,10 +19,10 @@ Android GL Play Around
 o  More complex model
     o  Work up to animated worm and wheel
         *  Make resource files
-        o  Binary reader and unit test
+        *  Binary reader and unit test
             *  Rename existing to ascii
             *  Play with design of binary version
-            o  Work up to a unit test
+            *  Work up to a unit test
         o  purge the word gutter
         o  design model / assr for worm and wheel
         o  do it
