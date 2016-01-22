@@ -1,10 +1,5 @@
 package com.example.android.opengl.geom;
 
-import com.example.android.opengl.geom.Triangle;
-import com.example.android.opengl.geom.XYZf;
-
-import java.util.Collection;
-
 /**
  * Offers the service of packing the vertices and face-normals from a collection of triangles into
  * a contiguous array of floats. The face-normal of the triangle is duplicated for each vertex.
@@ -19,7 +14,7 @@ public class MeshSerializer {
     }
 
     public float[] serializeToContiguousFloats() {
-        int numberOfVertices = 3 * mesh.size();
+        int numberOfVertices = 3 * mesh.getNumberOfTriangles();
         int numberOfFloats = 6 * numberOfVertices; // 3 for position, 3 for normal vector
         float[] theFloats = new float[numberOfFloats];
         int i = 0;

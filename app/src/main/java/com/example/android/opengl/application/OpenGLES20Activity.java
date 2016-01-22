@@ -31,7 +31,6 @@ public class OpenGLES20Activity extends Activity {
 
     private final int CUBES = 1;
     private final int GUTTER = 2;
-    private final int BLADE = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,10 +49,6 @@ public class OpenGLES20Activity extends Activity {
             case GUTTER:
                 dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
                         getApplicationContext().getAssets(), "gutter.txt");
-                break;
-            case BLADE:
-                dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
-                        getApplicationContext().getAssets(), "blade.txt");
                 break;
             default:
                 dynamicScene = null;

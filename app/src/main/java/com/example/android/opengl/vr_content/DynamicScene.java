@@ -13,7 +13,6 @@ public interface DynamicScene {
 
     public Set<String> getSiloNames();
     public Mesh getSilo(String siloName);
-    public int getNumberOfTrianglesInSilo(String siloName);
     public float[] getCurrentObjectToWorldTransform(String siloName);
     public float getEffectiveRadius();
 }

@@ -15,7 +15,7 @@ public class MeshFactoryFromSTLAsciiTest extends InstrumentationTestCase {
         MeshFactoryFromSTLAscii meshFactory = new MeshFactoryFromSTLAscii(fileContent);
         Mesh mesh = meshFactory.makeMesh();
         assertNotNull(mesh);
-        assertEquals(2, mesh.size());
+        assertEquals(2, mesh.getNumberOfTriangles());
     }
 
     private final String makeFileContent() {

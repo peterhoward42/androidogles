@@ -71,7 +71,7 @@ public class TrianglesRenderer {
         mNumberOfVerticesInSilo = new HashMap<String, Integer>();
         for (String siloName : dynamicScene.getSiloNames()) {
             mNumberOfVerticesInSilo.put(siloName,
-                    3 * dynamicScene.getNumberOfTrianglesInSilo(siloName));
+                    3 * dynamicScene.getSilo((siloName)).getNumberOfTriangles());
             Mesh mesh = dynamicScene.getSilo(siloName);
             mVertexBuffers.put(siloName,
                     makeVertexBufferForSilo(dynamicScene.getSilo(siloName)));
@@ -148,7 +148,7 @@ public class TrianglesRenderer {
     }
 
     private FloatBuffer makeVertexBufferForSilo(Mesh mesh) {
-        int numberOfVertices = 3 * mesh.size();
+        int numberOfVertices = 3 * mesh.getNumberOfTriangles();
         int numberOfBytesRequired = VERTEX_ARRAY_STRIDE_IN_BYTES * numberOfVertices;
         ByteBuffer vertexBytes = ByteBuffer.allocateDirect(numberOfBytesRequired);
         vertexBytes.order(ByteOrder.nativeOrder());

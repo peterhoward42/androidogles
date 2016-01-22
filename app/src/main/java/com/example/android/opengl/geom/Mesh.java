@@ -27,7 +27,7 @@ public class Mesh {
         return triangles;
     }
 
-    public final int size() {
+    public final int getNumberOfTriangles() {
         return triangles.size();
     }
 }

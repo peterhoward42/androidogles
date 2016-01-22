@@ -17,7 +17,10 @@ Android GL Play Around
 *  Create bit of package hierachy
 *  Try a STL file source
 *  Combine modelcollection with assembler into dynamic scene
-o  Add binary stl dynamicscene
+*  Ditch num tri qry on dynamic scene - is duplicate of mesh api
+*  Change name of qry on mesh from size to numberOfTriangles
+*  Can we rename effective radius to make it clearer
+*  Ditch blade stl for ip sake
 o  More complex model
     o  Work up to animated worm and wheel
         *  Make resource files
@@ -25,10 +28,12 @@ o  More complex model
         *  Need to close stream? (no client must)
         *  improve class names
         *  time based sinusoid fails to use pi in calcs
-        o  design aspirational model / assr for worm and wheel
+        *  design aspirational model / assr for worm and wheel
         o  do it
-        o  try it
-o  Ditch blade stl for ip sake
+            o  Create specialised dynamic scene and select it in activity
+            o  Have it read and store stl meshes
+            o  Write the whole thing with loads assumptions
+            o  Fix up geom etc by disabling and reenabling gradually
 
 -----------------------------------------------------------------------------
 STL binary format
@@ -42,8 +47,15 @@ o  What is the uxp
     o  Gear teeth mesh properly
     o  Animated sync slow model
 o  What therefore are the demands of the interfaces?
-    o  ModelCollection
-        o  Get mesh by name
-        o  Query num triangles by name per mesh
-    o  
+    o  get silo names
+    o  get mesh by name
+    o  get object to world transform as f(time)
+    o  get effective radius
 o  How do it?
+    o  silo for work and silo for wheel
+    o  give dynamicscene const transforms that set models to their
+       baseline, pre-animated positions
+    o  give dynamic scene angular velocity ratios betwixt the two
+    o  give dynamic scene angular velocity for worm
+    o  on time demand derive rotn transforms for wheel and work, and combine
+       with pre-position transforms to answer the question

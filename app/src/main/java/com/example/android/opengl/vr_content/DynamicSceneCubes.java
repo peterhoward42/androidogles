@@ -37,8 +37,6 @@ public class DynamicSceneCubes implements DynamicScene {
         return mSilos.keySet();
     }
 
-    public int getNumberOfTrianglesInSilo(String siloName) { return mSilos.get(siloName).size(); }
-
     public float getEffectiveRadius() {
         // The worst case bounding box to include the satellite cube is 120mm across flats.
         // I.e. with a half-width of 60. And the worst case diagonal then by Pythagorus is the root

@@ -50,8 +50,6 @@ public class DynamicSceneSTL implements DynamicScene {
         return mSilos.keySet();
     }
 
-    public int getNumberOfTrianglesInSilo(String siloName) { return mSilos.get(siloName).size(); }
-
     public BoundingBox getBoundingBox() {
         return mBoundingBox;
     }
