@@ -4,13 +4,9 @@ import com.google.common.io.LittleEndianDataInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,22 +16,19 @@ import java.util.List;
 public class MeshFactoryFromSTLBinary {
 
     private InputStream mInputStream;
-    private Mesh mMesh;
     private List<XYZf> mThreeVertices; // we read them in blocks of three
 
     private final int BYTES_IN_HEADER = 80;
 
     public MeshFactoryFromSTLBinary(InputStream inputStream) {
         mInputStream = inputStream;
-        mMesh = new Mesh();
     }
 
-    public Mesh makeMesh() throws FileNotFoundException, IOException {
+    public Mesh makeMesh() throws IOException {
         DataInput dataSource = createDataInputStream();
         dataSource.skipBytes(BYTES_IN_HEADER);
         int numberOfTriangles = readNumberOfTriangles(dataSource);
-        readAllTriangles(dataSource, numberOfTriangles);
-        return mMesh;
+        return readAllTrianglesAndPopulateMesh(dataSource, numberOfTriangles);
     }
 
     private int readNumberOfTriangles(DataInput dataSource) throws IOException {
@@ -51,8 +44,9 @@ public class MeshFactoryFromSTLBinary {
         return openedStream;
     }
 
-    private void readAllTriangles(
+    private Mesh readAllTrianglesAndPopulateMesh(
             DataInput dataSource, final int numberOfTriangles) throws IOException {
+        Mesh mesh = new Mesh();
         for (int i = 0; i < numberOfTriangles; i++) {
             XYZf statedNormal = makeXYZfByReadingThreeFloats(dataSource);
             Triangle newTriangle = new Triangle(
@@ -60,8 +54,9 @@ public class MeshFactoryFromSTLBinary {
                     makeXYZfByReadingThreeFloats(dataSource),
                     makeXYZfByReadingThreeFloats(dataSource));
             newTriangle = reconcileTriangleToStatedFacetNormal(newTriangle, statedNormal);
-            mMesh.addTriangle(newTriangle);
+            mesh.addTriangle(newTriangle);
         }
+        return mesh;
     }
 
     private XYZf makeXYZfByReadingThreeFloats(DataInput dataSource) throws IOException {

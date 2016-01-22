@@ -3,7 +3,8 @@ package com.example.android.opengl.math;
 import android.os.SystemClock;
 
 /**
- * Created by phoward on 01/12/2015.
+ * Models a sinusoid function with an amplitude and frequency of your choice, and provides a method
+ * to evaluate the function at the current system time.
  */
 public class TimeBasedSinusoid {
 
@@ -17,7 +18,6 @@ public class TimeBasedSinusoid {
 
     public float evaluateAtTimeNow() {
         float timeNow = SystemClock.uptimeMillis() / 1000.0f;
-        float freq = 1 / mPeriodSeconds;
-        return mAmplitude * (float)Math.sin(timeNow / mPeriodSeconds);
+        return mAmplitude * (float)Math.sin(2.0 * Math.PI * timeNow / mPeriodSeconds);
     }
 }

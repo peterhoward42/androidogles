@@ -53,7 +53,7 @@ public class TrianglesRenderer {
 
     private final int mProgram;
 
-    // This map shares keys (silo names) with the IModelCollection provided to the constructor.
+    // This map shares keys (silo names) with the SceneMeshCollection provided to the constructor.
     private Map<String, FloatBuffer> mVertexBuffers;
     private Map<String, Integer> mNumberOfVerticesInSilo;
 
@@ -64,17 +64,17 @@ public class TrianglesRenderer {
      * @Param sceneModels The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
-    public TrianglesRenderer(AssetManager assetManager, IModelCollection sceneModels) {
+    public TrianglesRenderer(AssetManager assetManager, DynamicScene dynamicScene) {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();
         mNumberOfVerticesInSilo = new HashMap<String, Integer>();
-        for (String siloName : sceneModels.getSiloNames()) {
+        for (String siloName : dynamicScene.getSiloNames()) {
             mNumberOfVerticesInSilo.put(siloName,
-                    3 * sceneModels.getNumberOfTrianglesInSilo(siloName));
-            Mesh mesh = sceneModels.getSilo(siloName);
+                    3 * dynamicScene.getNumberOfTrianglesInSilo(siloName));
+            Mesh mesh = dynamicScene.getSilo(siloName);
             mVertexBuffers.put(siloName,
-                    makeVertexBufferForSilo(sceneModels.getSilo(siloName)));
+                    makeVertexBufferForSilo(dynamicScene.getSilo(siloName)));
         }
 
         String vertexShaderSource = getShaderFromAsset(assetManager, "vertex-shader.txt");

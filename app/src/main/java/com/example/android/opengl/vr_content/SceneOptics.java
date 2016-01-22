@@ -45,7 +45,7 @@ public class SceneOptics {
 
     private XYZf getCurrentCameraPosition() {
         // Centred over Greenwich, oscillating with SHM East and West.
-        final float period = 2; // seconds
+        final float period = 4; // seconds
         final float amplitude = 35; // degrees
         final float latitude = 51.4f; // degrees
         float[] equatorAtMeridian = new float[]{0, 0, mCameraOrbitalHeight, 1};

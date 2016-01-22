@@ -2,25 +2,42 @@ package com.example.android.opengl.vr_content;
 
 import android.os.SystemClock;
 
+import com.example.android.opengl.geom.Mesh;
+import com.example.android.opengl.geom.MeshFactorySimpleCubes;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * Knows where ModelCollectionCubes should be scaled, placed and oriented in world space to build the
- * required scene.
+ * A trivial implementation of DynamicScene for test and development purposes, with content
+ * comprising just a 100mm cube and a 20mm cube.
  */
-public class SceneAssemblerCubes implements ISceneAssembler {
+public class DynamicSceneCubes implements DynamicScene {
+
+    private Map<String, Mesh> mSilos;
+
+    public DynamicSceneCubes() {
+        mSilos = new HashMap<String, Mesh>();
+
+        Mesh mainSilo = new MeshFactorySimpleCubes(100).makeMesh();
+        mSilos.put("mainSilo", mainSilo);
+
+        Mesh auxSilo = new MeshFactorySimpleCubes(20).makeMesh();
+        mSilos.put("auxSilo", auxSilo);
+    }
+
+    public Mesh getSilo(String siloName) {
+        return mSilos.get(siloName);
+    }
 
     public Set<String> getSiloNames() {
-        Set<String> returnedSet = new HashSet<String>();
-        returnedSet.add("mainSilo");
-        returnedSet.add("auxSilo");
-
-        return returnedSet;
+        return mSilos.keySet();
     }
+
+    public int getNumberOfTrianglesInSilo(String siloName) { return mSilos.get(siloName).size(); }
 
     public float getEffectiveRadius() {
         // The worst case bounding box to include the satellite cube is 120mm across flats.
@@ -58,4 +75,3 @@ public class SceneAssemblerCubes implements ISceneAssembler {
         return MatrixCombiner.combineTwo(translationM, rotationM);
     }
 }
-

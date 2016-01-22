@@ -16,15 +16,13 @@
 package com.example.android.opengl.application;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import com.example.android.opengl.vr_content.ModelCollectionSTL;
-import com.example.android.opengl.vr_content.SceneAssemblerCubes;
-import com.example.android.opengl.vr_content.IModelCollection;
-import com.example.android.opengl.vr_content.ModelCollectionCubes;
-import com.example.android.opengl.vr_content.SceneAssemblerSTL;
-import com.example.android.opengl.vr_content.ISceneAssembler;
+import com.example.android.opengl.vr_content.DynamicScene;
+import com.example.android.opengl.vr_content.DynamicSceneCubes;
+import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 public class OpenGLES20Activity extends Activity {
@@ -41,38 +39,30 @@ public class OpenGLES20Activity extends Activity {
 
         // Create a GLSurfaceView instance and set it
         // as the ContentView for this Activity
-        ISceneAssembler sceneAssembler;
-        IModelCollection sceneModels;
+        DynamicScene dynamicScene;
 
         // We dial in which scene we want to use here.
         final int choice = CUBES;
         switch (choice) {
             case CUBES:
-                sceneModels = new ModelCollectionCubes();
-                sceneAssembler = new SceneAssemblerCubes();
+                dynamicScene = new DynamicSceneCubes();
                 break;
             case GUTTER:
-                ModelCollectionSTL gutter = ModelCollectionSTL.buildFromAssetFiles(
+                dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
                         getApplicationContext().getAssets(), "gutter.txt");
-                sceneModels = gutter;
-                sceneAssembler = new SceneAssemblerSTL(gutter);
                 break;
             case BLADE:
-                ModelCollectionSTL blade = ModelCollectionSTL.buildFromAssetFiles(
+                dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
                         getApplicationContext().getAssets(), "blade.txt");
-                sceneModels = blade;
-                sceneAssembler = new SceneAssemblerSTL(blade);
                 break;
             default:
-                sceneModels = null;
-                sceneAssembler = null;
+                dynamicScene = null;
         }
 
         mGLView = new MyGLSurfaceView(
                 this,
-                sceneModels,
-                sceneAssembler,
-                new SceneOptics(sceneAssembler.getEffectiveRadius()));
+                dynamicScene,
+                new SceneOptics(dynamicScene.getEffectiveRadius()));
         setContentView(mGLView);
     }
 

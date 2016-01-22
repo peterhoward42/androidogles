@@ -18,8 +18,7 @@ package com.example.android.opengl.application;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import com.example.android.opengl.vr_content.IModelCollection;
-import com.example.android.opengl.vr_content.ISceneAssembler;
+import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 /**
@@ -33,8 +32,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLSurfaceView(
             Context context,
-            IModelCollection sceneModels,
-            ISceneAssembler sceneAssembler,
+            DynamicScene dynamicScene,
             SceneOptics sceneOptics) {
         super(context);
 
@@ -42,8 +40,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(context.getAssets(), sceneModels,
-                sceneAssembler, sceneOptics);
+        mRenderer = new MyGLRenderer(context.getAssets(), dynamicScene,
+                sceneOptics);
         setRenderer(mRenderer);
     }
 }

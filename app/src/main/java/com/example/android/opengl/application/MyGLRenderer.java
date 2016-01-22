@@ -23,8 +23,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import com.example.android.opengl.vr_content.ISceneAssembler;
-import com.example.android.opengl.vr_content.IModelCollection;
+import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.TransformPipelines;
 import com.example.android.opengl.vr_content.SceneOptics;
 import com.example.android.opengl.vr_content.TrianglesRenderer;
@@ -50,17 +49,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private TrianglesRenderer mTrianglesRenderer;
 
     private AssetManager mAssetManager;
-    private IModelCollection mSceneModels;
-    private ISceneAssembler mSceneAssembler;
+    private DynamicScene mDynamicScene;
     private SceneOptics mSceneOptics;
     private float mScreenAspect;
 
-    public MyGLRenderer(AssetManager assetManager, IModelCollection sceneModels,
-                        ISceneAssembler sceneAssembler, SceneOptics sceneOptics) {
+    public MyGLRenderer(
+            AssetManager assetManager, DynamicScene dynamicScene, SceneOptics sceneOptics) {
         super();
         mAssetManager = assetManager;
-        mSceneModels = sceneModels;
-        mSceneAssembler = sceneAssembler;
+        mDynamicScene = dynamicScene;
         mSceneOptics = sceneOptics;
     }
 
@@ -77,7 +74,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // The real-time rendering of frames later on, takes a transform matrix for
         // each silo, and the application of these transforms to the scene object
         // coordinates is delegated by the lower level renderer onto the hardware.
-        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mSceneModels);
+        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mDynamicScene);
     }
 
     @Override
@@ -112,9 +109,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
         Map<String, TransformPipelines> mapToReturn = new HashMap<String, TransformPipelines>();
-        for (String siloName : mSceneAssembler.getSiloNames()) {
+        for (String siloName : mDynamicScene.getSiloNames()) {
             float[] objectToWorldForVertices =
-                    mSceneAssembler.getCurrentObjectToWorldTransform(siloName);
+                    mDynamicScene.getCurrentObjectToWorldTransform(siloName);
             float[] objectToWorldForDirections =
                     TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
             float[] modelViewProjection = MatrixCombiner.combineThree(
