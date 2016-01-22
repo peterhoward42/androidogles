@@ -16,21 +16,22 @@
 package com.example.android.opengl.application;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
+import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
 import com.example.android.opengl.vr_content.SceneOptics;
 
 public class OpenGLES20Activity extends Activity {
 
     private GLSurfaceView mGLView;
 
-    private final int CUBES = 1;
-    private final int GUTTER = 2;
+    private final int CUBES_PROGRAMMATIC_GENERATED = 1;
+    private final int CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE = 2;
+    private final int WORM_AND_WHEEL_ANIMATED = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,14 +42,17 @@ public class OpenGLES20Activity extends Activity {
         DynamicScene dynamicScene;
 
         // We dial in which scene we want to use here.
-        final int choice = CUBES;
+        final int choice = CUBES_PROGRAMMATIC_GENERATED;
         switch (choice) {
-            case CUBES:
+            case CUBES_PROGRAMMATIC_GENERATED:
                 dynamicScene = new DynamicSceneCubes();
                 break;
-            case GUTTER:
+            case CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
                 dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
                         getApplicationContext().getAssets(), "gutter.txt");
+                break;
+            case WORM_AND_WHEEL_ANIMATED:
+                dynamicScene = new DynamicSceneWormAndWheel(getApplicationContext().getAssets());
                 break;
             default:
                 dynamicScene = null;
