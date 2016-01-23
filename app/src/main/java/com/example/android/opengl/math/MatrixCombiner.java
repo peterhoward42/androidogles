@@ -17,4 +17,10 @@ public class MatrixCombiner {
         float[] tmp = combineTwo(applySecond, applyFirst);
         return combineTwo(applyThird, tmp);
     }
+
+    public static float[] combineFour(
+            float[] applyFourth, float[] applyThird, float[] applySecond, float[] applyFirst) {
+        float[] tmp = combineThree(applyThird, applySecond, applyFirst);
+        return combineTwo(applyFourth, tmp);
+    }
 }

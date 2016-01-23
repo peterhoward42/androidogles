@@ -6,9 +6,7 @@ import android.os.SystemClock;
 import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.geom.MeshFactoryFromSTLBinary;
-import com.example.android.opengl.geom.XYZf;
 import com.example.android.opengl.math.MatrixCombiner;
-import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.math.TransformFactory;
 
 import java.io.IOException;
@@ -32,13 +30,10 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
 
     private final double WORM_SPEED_OF_ROTATION = 2.0f; // radians/s
     private final double GEARING_FACTOR = 1.0 / 20.0;
+    private final float SCENE_RADIUS_FACTOR = 1.5f;
 
-    private float[] mStaticWorldTransformWorm;
-    private float[] mStaticWorldTransformWheel;
-    private BoundingBox mStaticWormBoundingBox;
-    private BoundingBox mStaticWheelBoundingBox;
-    private BoundingBox mStaticAssemblyBoundingBox;
-
+    private BoundingBox mWormBox;
+    private BoundingBox mWheelBox;
 
     public DynamicSceneWormAndWheel(
             AssetManager assetManager) {
@@ -48,9 +43,8 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
         mSilos = new HashMap<String, Mesh>();
         mSilos.put(KEY_FOR_WORM, makeMesh(assetManager, STL_FILENAME_WORM));
         mSilos.put(KEY_FOR_WHEEL, makeMesh(assetManager, STL_FILENAME_WHEEL));
-        initMetaDataForWorm();
-        initMetaDataForWheel();
-        initAssemblyStaticBoundingBox();
+        mWormBox = new BoundingBox(mSilos.get(KEY_FOR_WORM));
+        mWheelBox = new BoundingBox(mSilos.get(KEY_FOR_WHEEL));
     }
 
     public Mesh getSilo(String siloName) {
@@ -62,68 +56,31 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
     }
 
     public float getEffectiveRadius() {
-        float halfBox = 0.5f * mStaticAssemblyBoundingBox.getLargestDimension();
-        return (float)Math.hypot((double)halfBox, (double)halfBox);
+        return SCENE_RADIUS_FACTOR * mWheelBox.getLargestDimension();
     }
 
     public float[] getCurrentObjectToWorldTransform(String siloName) {
-        // Rotatative animations are a function of angular velocity and elapsed time
         double wormThetaRadians = WORM_SPEED_OF_ROTATION * SystemClock.uptimeMillis() / 1000.0f;
         if (siloName == KEY_FOR_WORM) {
-            // We take the static transform that places the worm into the world in the right
-            // place, and add a rotational animation to it
-            float[] wormAnimTransformation =
-                    TransformFactory.yAxisRotation((float)Math.toDegrees(wormThetaRadians));
-            return MatrixCombiner.combineTwo(wormAnimTransformation, mStaticWorldTransformWorm);
+            // Animate the worm model's rotation about its own axis.
+            float[] t1 = TransformFactory.translation(0,0,0); // no op
+            // Translate its centroid to the world centre
+            float[] t2 = TransformFactory.inverted(TransformFactory.translation(mWormBox.getCentre()));
+            // Rotate it so that its axis is oriented how we want it
+            float[] t3 = TransformFactory.translation(0,0,0); // no op
+            // Translate it out to the edge of the wheel so the teeth mesh
+            float[] t4 = TransformFactory.translation(0,0,0); // no op
+            return MatrixCombiner.combineFour(t4, t3, t2, t1);
         }
         else {
-            double wheelThetaRadians = GEARING_FACTOR * wormThetaRadians;
-            float[] wheelAnimTransformation =
-                    TransformFactory.zAxisRotation((float)Math.toDegrees(wheelThetaRadians));
-            return MatrixCombiner.combineTwo(wheelAnimTransformation, mStaticWorldTransformWheel);
+            // Animate the wheel model's rotation about its own axis.
+            float[] t1 = TransformFactory.translation(0,0,0); // no op
+            // Translate its centroid to the world centre
+            float[] t2 = TransformFactory.inverted(TransformFactory.translation(mWheelBox.getCentre()));
+            // Rotate it so that its axis is oriented how we want it
+            float[] t3 = TransformFactory.translation(0,0,0); // no op
+            return MatrixCombiner.combineThree(t3, t2, t1);
         }
-    }
-
-    private void initMetaDataForWorm() {
-        Mesh wormInModelSpace = mSilos.get(KEY_FOR_WORM);
-        mStaticWormBoundingBox = new BoundingBox(wormInModelSpace);
-
-        // Translate it so that its centroid is at the origin
-        XYZf wormCentre = mStaticWormBoundingBox.getCentre();
-        float[] transformToCenter =
-                TransformFactory.inverted(TransformFactory.translation(wormCentre));
-
-        // Swivel it around to align it with the right axis
-        float[] transformToAlignAxis = TransformFactory.yAxisRotation(0.0f); // no-op till we can see it
-
-        // Offset it to near the circumference of the wheel so they mesh
-        float[] transformToShiftToWheel = TransformFactory.translation(0, 0, 0); // no-op
-
-        float[] resultantTransform = MatrixCombiner.combineThree(
-                transformToShiftToWheel, transformToAlignAxis, transformToCenter);
-
-        mStaticWorldTransformWorm = resultantTransform;
-    }
-
-    private void initMetaDataForWheel() {
-        Mesh wheelInModelSpace = mSilos.get(KEY_FOR_WHEEL);
-        mStaticWormBoundingBox = new BoundingBox(wheelInModelSpace);
-
-        // Translate it so that its centroid is at the origin
-        XYZf wheelCentre = mStaticWormBoundingBox.getCentre();
-        float[] transformToCenter =
-                TransformFactory.inverted(TransformFactory.translation(wheelCentre));
-
-        // Swivel it around to align it with the right axis
-        float[] transformToAlignAxis = TransformFactory.yAxisRotation(0.0f); // no-op till we can see it
-
-        // Rotate it a tiny bit to align the pitch of the teeth with those on the worm
-        float[] transformToAlignTeeth = TransformFactory.yAxisRotation(0.0f); // no op
-
-        float[] resultantTransform = MatrixCombiner.combineThree(
-                transformToAlignTeeth, transformToAlignAxis, transformToCenter);
-
-        mStaticWorldTransformWheel = resultantTransform;
     }
 
     private Mesh makeMesh(AssetManager assetManager, final String assetFileName) {
@@ -136,13 +93,5 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    private void initAssemblyStaticBoundingBox() {
-        BoundingBox staticWormBoxInWorld =
-                TransformApply.boundingBox(mStaticWorldTransformWorm, mStaticWormBoundingBox);
-        BoundingBox staticWheelBoxInWorld =
-                TransformApply.boundingBox(mStaticWorldTransformWheel, mStaticWheelBoundingBox);
-        mStaticAssemblyBoundingBox = BoundingBox.combine(staticWormBoxInWorld, staticWheelBoxInWorld);
     }
 }
