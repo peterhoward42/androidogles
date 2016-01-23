@@ -37,6 +37,9 @@ public class XYZf {
     }
 
     public void overwriteX(final float q) {
+        if ((q == q) == false) {
+            int a = 42; // q is NaN
+        }
         xyz[0] = q;
     }
 

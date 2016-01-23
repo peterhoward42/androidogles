@@ -55,6 +55,7 @@ public class MeshFactoryFromSTLBinary {
                     makeXYZfByReadingThreeFloats(dataSource));
             newTriangle = reconcileTriangleToStatedFacetNormal(newTriangle, statedNormal);
             mesh.addTriangle(newTriangle);
+            dataSource.skipBytes(2); // What the spec calls the "attribute byte count"
         }
         return mesh;
     }
