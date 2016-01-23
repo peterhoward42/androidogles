@@ -33,6 +33,9 @@ o  More complex model
             o  Create specialised dynamic scene and select it in activity
             o  Have it read and store stl meshes
             o  Write the whole thing with loads assumptions
+            o  bb makefromminmax
+            o  Implement and test TransformApply.boundingBox
+            o  Implement and test BoundingBox.combine()
             o  Fix up geom etc by disabling and reenabling gradually
 
 -----------------------------------------------------------------------------

@@ -2,6 +2,7 @@ package com.example.android.opengl.math;
 
 import android.opengl.Matrix;
 
+import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.XYZf;
 
 /**
@@ -17,6 +18,12 @@ public class TransformApply {
         Matrix.multiplyMV(
                 result, 0, transform, 0, new float[]{point.X(), point.Y(), point.Z(), 1}, 0);
         return new XYZf(result[0], result[1], result[2]);
+    }
+
+    public static BoundingBox boundingBox(float[] transform, final BoundingBox box) {
+        XYZf minimaVertex = box.getMinima();
+        XYZf maximaVertex = box.getMaxima();
+        return BoundingBox.makeFromGivenMinimaAndMaxima(minimaVertex, maximaVertex);
     }
 
     /** Create a transformed variant of a direction vector.

@@ -11,6 +11,10 @@ public class BoundingBox {
     private XYZf mMaxima;
     private XYZf mCentre;
 
+    /** Constructor - deducing sizes by interrrogating a given {@link com.example.android.opengl.geom.Mesh}
+     *
+     * @param mesh The mesh to interrogate.
+     */
     public BoundingBox(final Mesh mesh) {
         mMinima = new XYZf(HUGE, HUGE, HUGE);
         mMaxima = new XYZf(TINY, TINY, TINY);
@@ -26,10 +30,19 @@ public class BoundingBox {
                 mMaxima.overwriteZ(Math.max(mMaxima.Z(), vertex.Z()));
             }
         }
-        mCentre = new XYZf(
-                0.5f * (mMinima.X() + mMaxima.X()),
-                0.5f * (mMinima.Y() + mMaxima.Y()),
-                0.5f * (mMinima.Z() + mMaxima.Z()));
+        initCentreFromMinimaAndMaxima();
+    }
+
+    /** Factory - based on pre-calculated vertices for the minima vertex and the
+     * maxima vertex.
+     * @return
+     */
+    public static BoundingBox makeFromGivenMinimaAndMaxima(final XYZf minima, final XYZf maxima) {
+        BoundingBox box = new BoundingBox();
+        box.mMinima = minima;
+        box.mMaxima = maxima;
+        box.initCentreFromMinimaAndMaxima();
+        return box;
     }
 
     public XYZf getMinima() {
@@ -49,5 +62,16 @@ public class BoundingBox {
         largest = Math.max(largest, Math.abs(mMaxima.Y() - mMinima.Y()));
         largest = Math.max(largest, Math.abs(mMaxima.Z() - mMinima.Z()));
         return largest;
+    }
+
+    private BoundingBox() {
+        // For use by factory methods only.
+    }
+
+    private void initCentreFromMinimaAndMaxima() {
+        mCentre = new XYZf(
+                0.5f * (mMinima.X() + mMaxima.X()),
+                0.5f * (mMinima.Y() + mMaxima.Y()),
+                0.5f * (mMinima.Z() + mMaxima.Z()));
     }
 }
