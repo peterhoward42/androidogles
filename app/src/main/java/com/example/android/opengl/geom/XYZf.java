@@ -41,19 +41,20 @@ public class XYZf {
         return xyz[2];
     }
 
-    public void overwriteX(final float q) {
-        if ((q == q) == false) {
-            int a = 42; // q is NaN
-        }
-        xyz[0] = q;
+    public XYZf minimizedTo(final XYZf potentialNewMinima) {
+        XYZf q = potentialNewMinima;
+        return new XYZf(
+                Math.min(X(), q.X()),
+                Math.min(Y(), q.Y()),
+                Math.min(Z(), q.Z()));
     }
 
-    public void overwriteY(final float q) {
-        xyz[1] = q;
-    }
-
-    public void overwriteZ(final float q) {
-        xyz[2] = q;
+    public XYZf maximizedTo(final XYZf potentialNewMaxima) {
+        XYZf q = potentialNewMaxima;
+        return new XYZf(
+                Math.max(X(), q.X()),
+                Math.max(Y(), q.Y()),
+                Math.max(Z(), q.Z()));
     }
 
     public final float[] asFloatArray() {

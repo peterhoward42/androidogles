@@ -36,15 +36,11 @@ o  More complex model
             *  Implement and test BoundingBox factory from min max
             *  Implement and test TransformApply.boundingBox
             *  Implement and test BoundingBox.combine()
-        o  Quick app test - just see what happens
+        *  Quick app test - just see what happens
             *  Something shows
             *  STL bin reader needs unit test to regression the 2 byte short
                read
-        o  Move bb into incremental api and give mesh one
-            o  Do it
-            o  Deprecate old methods
-            o  Compile up
-            o  Extend and mod existing unit tests
+        *  Move bb into incremental api and give mesh one
         o  Fix up geom etc by disabling and reenabling gradually
             o  Fix camera temp
             o  Make sure move to world centre as v first thing, before

@@ -27,13 +27,8 @@ public class BoundingBox {
             return;
         }
         // General case
-        mMinima.overwriteX(Math.min(mMinima.X(), vertex.X()));
-        mMinima.overwriteY(Math.min(mMinima.Y(), vertex.Y()));
-        mMinima.overwriteZ(Math.min(mMinima.Z(), vertex.Z()));
-
-        mMaxima.overwriteX(Math.max(mMaxima.X(), vertex.X()));
-        mMinima.overwriteY(Math.min(mMinima.Y(), vertex.Y()));
-        mMinima.overwriteZ(Math.min(mMinima.Z(), vertex.Z()));
+        mMinima = mMinima.minimizedTo(vertex);
+        mMaxima = mMaxima.maximizedTo(vertex);
     }
 
     public XYZf getMinima() {
