@@ -27,10 +27,11 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
     private final String STL_FILENAME_WORM = "worm-gear.stl";
     private final String STL_FILENAME_WHEEL = "worm-wheel.stl";
 
-    private final double WORM_SPEED_OF_ROTATION = 2.0f; // radians/s
-    private final double GEAR_RATIO = 1.0 / 20.0;
+    private final double WORM_SPEED_OF_ROTATION = 4.0f; // radians/s
+    private final double GEAR_RATIO = 1.0 / 50.0;
     private final float SCENE_RADIUS_FACTOR = 0.75f;
-    private final double WHEEL_MATCH_TO_WORM = 0.0; // radians
+    private final double WHEEL_SETUP_ADJUSTMENT_ANGLE = 0.0; // radians
+    private final float AXES_SEPARATION = 85.0f;
 
     public DynamicSceneWormAndWheel(
             AssetManager assetManager) {
@@ -56,19 +57,18 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
 
     public float[] getCurrentObjectToWorldTransform(String siloName) {
         double wormAnimatedRotation = WORM_SPEED_OF_ROTATION * SystemClock.uptimeMillis() / 1000.0f;
-        double wheelAnimatedRotation = WHEEL_MATCH_TO_WORM + GEAR_RATIO * wormAnimatedRotation;
+        double wheelAnimatedRotation = WHEEL_SETUP_ADJUSTMENT_ANGLE + GEAR_RATIO * -wormAnimatedRotation;
         if (siloName == KEY_FOR_WORM) {
             Mesh worm = mSilos.get(KEY_FOR_WORM);
-            // Animate the worm model's rotation about its own axis.
-            float[] t1 = TransformFactory.translation(0,0,0); // no op
-            // Translate its centroid to the world centre
-            float[] t2 = TransformFactory.inverted(
+            // Place it at the world centre to make rotations easier
+            float[] t1 = TransformFactory.inverted(
                     TransformFactory.translation(worm.getBoundingBox().getCentre()));
-            // Rotate it so that its axis is oriented how we want it
-            float[] t3 = TransformFactory.translation(0,0,0); // no op
+            // Animate the worm model's rotation about its own axis.
+            float[] t2 = TransformFactory.rotationAboutZ(
+                    (float) Math.toDegrees(wormAnimatedRotation));
             // Translate it out to the edge of the wheel so the teeth mesh
-            float[] t4 = TransformFactory.translation(0,0,0); // no op
-            return MatrixCombiner.combineFour(t4, t3, t2, t1);
+            float[] t3 = TransformFactory.translation(0, AXES_SEPARATION, 0);
+            return MatrixCombiner.combineThree(t3, t2, t1);
         }
         else {
             Mesh wheel = mSilos.get(KEY_FOR_WHEEL);
@@ -77,8 +77,9 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
                     TransformFactory.translation(wheel.getBoundingBox().getCentre()));
             // Align its axes the way we want them
             float[] t2 = TransformFactory.translation(0,0,0); // no op
-            // Animate the wheel model's rotation.
-            float[] t3 = TransformFactory.rotationAboutX((float) wheelAnimatedRotation);
+            // Animate the wheel's rotation.
+            float[] t3 = TransformFactory.rotationAboutX(
+                    (float)Math.toDegrees(wheelAnimatedRotation));
             return MatrixCombiner.combineThree(t3, t2, t1);
         }
     }

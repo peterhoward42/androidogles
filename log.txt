@@ -41,14 +41,17 @@ o  More complex model
             *  STL bin reader needs unit test to regression the 2 byte short
                read
         *  Move bb into incremental api and give mesh one
-        o  Fix up wheel geom etc by disabling and reenabling gradually
+        *  Fix up wheel geom etc by disabling and reenabling gradually
             *  Wheel seems transparent, have I got Z depth buffering enabled?
             *  Fix camera temporarily
             *  Make sure move to world centre as v first thing, before
                doing any rotations, and then translate again
                afterwards.
-            o  Animate wheel
-        o  Fix up worm geom simularly
+            *  Animate wheel
+        *  Fix up worm geom similarly
+            *  Basics work
+    o  Improve projection
+    o  When project nice, tweak animation and position params
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
