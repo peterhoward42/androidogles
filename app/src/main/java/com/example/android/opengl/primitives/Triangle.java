@@ -1,4 +1,6 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.primitives;
+
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Geometry definition of triangle in model space. In CCW winding order.

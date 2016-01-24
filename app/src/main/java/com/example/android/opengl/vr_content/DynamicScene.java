@@ -1,6 +1,6 @@
 package com.example.android.opengl.vr_content;
 
-import com.example.android.opengl.geom.Mesh;
+import com.example.android.opengl.mesh.Mesh;
 
 import java.util.Set;
 

@@ -4,8 +4,8 @@ import android.content.res.AssetManager;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.example.android.opengl.application.OpenGLES20Activity;
-import com.example.android.opengl.geom.BoundingBox;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.mesh.BoundingBox;
+import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 

@@ -1,9 +1,11 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
 
 import com.example.android.opengl.math.TransformFactory;
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
- * Capable of providing a @link com.example.android.opengl.geom.Mesh that wraps the surfaces of
+ * Capable of providing a @link com.example.android.opengl.mesh.Mesh that wraps the surfaces of
  * a given cuboid.
  */
 public class MeshFactorySimpleCubes {
@@ -25,18 +27,18 @@ public class MeshFactorySimpleCubes {
         Mesh meshToReturn = new Mesh();
 
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.yAxisRotation(0), refMesh));
+                TransformFactory.rotationAboutY(0), refMesh));
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.yAxisRotation(90), refMesh));
+                TransformFactory.rotationAboutY(90), refMesh));
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.yAxisRotation(180), refMesh));
+                TransformFactory.rotationAboutY(180), refMesh));
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.yAxisRotation(270), refMesh));
+                TransformFactory.rotationAboutY(270), refMesh));
 
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.zAxisRotation(90), refMesh));
+                TransformFactory.rotationAboutZ(90), refMesh));
         meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
-                TransformFactory.zAxisRotation(270), refMesh));
+                TransformFactory.rotationAboutZ(270), refMesh));
 
         return meshToReturn;
     }

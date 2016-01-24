@@ -1,4 +1,6 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
+
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Encapsulates an orthogonal 3d bounding box. You build it incrementally by giving

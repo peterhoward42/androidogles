@@ -4,9 +4,8 @@ import android.content.res.AssetManager;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.example.android.opengl.application.OpenGLES20Activity;
-import com.example.android.opengl.geom.BoundingBox;
-import com.example.android.opengl.geom.Mesh;
-import com.example.android.opengl.geom.MeshFactoryFromSTLBinary;
+import com.example.android.opengl.mesh.Mesh;
+import com.example.android.opengl.mesh.MeshFactoryFromSTLBinary;
 
 import java.io.InputStream;
 

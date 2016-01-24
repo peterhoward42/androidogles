@@ -2,7 +2,7 @@ package com.example.android.opengl.math;
 
 import android.opengl.Matrix;
 
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Created by phoward on 11/01/2016.
@@ -30,13 +30,19 @@ public class TransformFactory {
         return translation(xyz.X(), xyz.Y(), xyz.Z());
     }
 
-    public static float[] yAxisRotation(float angleDeg) {
+    public static float[] rotationAboutX(float angleDeg) {
+        float[] m = new float[16];
+        Matrix.setRotateM(m, 0, angleDeg, 1, 0, 0);
+        return m;
+    }
+
+    public static float[] rotationAboutY(float angleDeg) {
         float[] m = new float[16];
         Matrix.setRotateM(m, 0, angleDeg, 0, 1, 0);
         return m;
     }
 
-    public static float[] zAxisRotation(float angleDeg) {
+    public static float[] rotationAboutZ(float angleDeg) {
         float[] m = new float[16];
         Matrix.setRotateM(m, 0, angleDeg, 0, 0, 1);
         return m;

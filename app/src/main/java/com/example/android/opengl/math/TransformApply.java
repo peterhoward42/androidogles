@@ -2,8 +2,8 @@ package com.example.android.opengl.math;
 
 import android.opengl.Matrix;
 
-import com.example.android.opengl.geom.BoundingBox;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.mesh.BoundingBox;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Created by phoward on 11/01/2016.

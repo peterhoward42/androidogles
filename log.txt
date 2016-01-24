@@ -41,35 +41,16 @@ o  More complex model
             *  STL bin reader needs unit test to regression the 2 byte short
                read
         *  Move bb into incremental api and give mesh one
-        o  Fix up geom etc by disabling and reenabling gradually
-            o  Fix camera temp
-            o  Make sure move to world centre as v first thing, before
+        o  Fix up wheel geom etc by disabling and reenabling gradually
+            *  Wheel seems transparent, have I got Z depth buffering enabled?
+            *  Fix camera temporarily
+            *  Make sure move to world centre as v first thing, before
                doing any rotations, and then translate again
                afterwards.
-        o  Could shift bounding box into side effect of mesh read, or mesh add
-           triangle.
+            o  Animate wheel
+        o  Fix up worm geom simularly
 
 -----------------------------------------------------------------------------
-STL binary format
 -----------------------------------------------------------------------------
-
 -----------------------------------------------------------------------------
-STL scene assembly model
 -----------------------------------------------------------------------------
-o  What is the uxp
-    o  Static oblique viewpoint
-    o  Gear teeth mesh properly
-    o  Animated sync slow model
-o  What therefore are the demands of the interfaces?
-    o  get silo names
-    o  get mesh by name
-    o  get object to world transform as f(time)
-    o  get effective radius
-o  How do it?
-    o  silo for work and silo for wheel
-    o  give dynamicscene const transforms that set models to their
-       baseline, pre-animated positions
-    o  give dynamic scene angular velocity ratios betwixt the two
-    o  give dynamic scene angular velocity for worm
-    o  on time demand derive rotn transforms for wheel and work, and combine
-       with pre-position transforms to answer the question

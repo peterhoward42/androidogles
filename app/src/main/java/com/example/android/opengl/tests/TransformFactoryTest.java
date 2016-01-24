@@ -1,13 +1,12 @@
 package com.example.android.opengl.tests;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.application.OpenGLES20Activity;
 import com.example.android.opengl.math.MatrixFormatter;
 import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.math.TransformFactory;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Created by phoward on 12/01/2016.
@@ -87,7 +86,7 @@ public class TransformFactoryTest extends ActivityInstrumentationTestCase2<OpenG
     }
 
     public void testYAxisRotation() throws Exception {
-        float[] t = TransformFactory.yAxisRotation(90f);
+        float[] t = TransformFactory.rotationAboutY(90f);
         XYZf p = new XYZf(100.0f, 0, 0);
         XYZf q = TransformApply.point(t, p);
         // pity about the minus zero :-(
@@ -95,7 +94,7 @@ public class TransformFactoryTest extends ActivityInstrumentationTestCase2<OpenG
     }
 
     public void testZAxisRotation() throws Exception {
-        float[] t = TransformFactory.zAxisRotation(90f);
+        float[] t = TransformFactory.rotationAboutZ(90f);
         XYZf p = new XYZf(100.0f, 0, 0);
         XYZf q = TransformApply.point(t, p);
         // pity about the minus zero :-(
@@ -111,7 +110,7 @@ public class TransformFactoryTest extends ActivityInstrumentationTestCase2<OpenG
         XYZf a = new XYZf(0, 0, 0);
         XYZf b = new XYZf(100, 0, 0);
         XYZf direction = b.minus(a);
-        float[] vertexTransform = TransformFactory.yAxisRotation(90);
+        float[] vertexTransform = TransformFactory.rotationAboutY(90);
         XYZf aDash = TransformApply.point(vertexTransform, a);
         XYZf bDash = TransformApply.point(vertexTransform, b);
         XYZf directionDash = bDash.minus(aDash);

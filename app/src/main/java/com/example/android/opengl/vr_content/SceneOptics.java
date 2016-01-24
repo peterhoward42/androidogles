@@ -2,8 +2,7 @@ package com.example.android.opengl.vr_content;
 
 import android.opengl.Matrix;
 
-import com.example.android.opengl.geom.XYZf;
-import com.example.android.opengl.math.TimeBasedSinusoid;
+import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformFactory;
 
 /**
@@ -50,7 +49,8 @@ public class SceneOptics {
         final float latitude = 51.4f; // degrees
         float[] equatorAtMeridian = new float[]{0, 0, mCameraOrbitalHeight, 1};
 
-        float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
+        float longitude = -30.0f;
+        //float longitude = new TimeBasedSinusoid(amplitude, period).evaluateAtTimeNow();
 
         float[] eulerRotationsMatrix = new float[16];
         Matrix.setRotateEulerM(eulerRotationsMatrix, 0, latitude, longitude, 0);

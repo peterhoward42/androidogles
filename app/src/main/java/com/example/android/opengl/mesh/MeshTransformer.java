@@ -1,4 +1,6 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
+
+import com.example.android.opengl.primitives.Triangle;
 
 /**
  * Knows how to make transformed copies of a {@link Mesh}

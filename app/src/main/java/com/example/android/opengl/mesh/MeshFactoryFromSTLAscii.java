@@ -1,19 +1,13 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
 
-import android.content.res.AssetManager;
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.primitives.XYZf;
 
-import com.example.android.opengl.math.TransformFactory;
-
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
-import java.util.regex.Pattern;
 
 /**
- * Capable of providing a @link com.example.android.opengl.geom.Mesh by parsing the contents
+ * Capable of providing a @link com.example.android.opengl.mesh.Mesh by parsing the contents
  * of an STL file.
  */
 public class MeshFactoryFromSTLAscii {

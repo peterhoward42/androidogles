@@ -42,7 +42,7 @@ public class OpenGLES20Activity extends Activity {
         DynamicScene dynamicScene;
 
         // We dial in which scene we want to use here.
-        final int choice = CUBES_PROGRAMMATIC_GENERATED;
+        final int choice = WORM_AND_WHEEL_ANIMATED;
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
                 dynamicScene = new DynamicSceneCubes();

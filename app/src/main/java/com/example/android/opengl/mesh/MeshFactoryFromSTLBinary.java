@@ -1,5 +1,7 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
 
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.primitives.XYZf;
 import com.google.common.io.LittleEndianDataInputStream;
 
 import java.io.BufferedInputStream;
@@ -10,7 +12,7 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Capable of providing a @link com.example.android.opengl.geom.Mesh by parsing the contents
+ * Capable of providing a @link com.example.android.opengl.mesh.Mesh by parsing the contents
  * of a binary STL file.
  */
 public class MeshFactoryFromSTLBinary {

@@ -1,11 +1,13 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
+
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.primitives.XYZf;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
- * A mesh comprising a collection of {@link com.example.android.opengl.geom.Triangle}.
+ * A mesh comprising a collection of {@link Triangle}.
  * With meta data about aggregate properties like bounding box.
  */
 public class Mesh {

@@ -1,10 +1,8 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.primitives;
 
 /**
  * Created by phoward on 13/11/2015.
  */
-
-import android.util.Log;
 
 /**
  * An XYZ vector.

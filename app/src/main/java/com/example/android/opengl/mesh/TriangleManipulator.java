@@ -1,9 +1,7 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
 
 import com.example.android.opengl.math.TransformApply;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import com.example.android.opengl.primitives.Triangle;
 
 /**
  * Created by phoward on 09/01/2016.

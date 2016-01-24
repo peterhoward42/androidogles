@@ -2,8 +2,8 @@ package com.example.android.opengl.vr_content;
 
 import android.os.SystemClock;
 
-import com.example.android.opengl.geom.Mesh;
-import com.example.android.opengl.geom.MeshFactorySimpleCubes;
+import com.example.android.opengl.mesh.Mesh;
+import com.example.android.opengl.mesh.MeshFactorySimpleCubes;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
 
@@ -68,7 +68,7 @@ public class DynamicSceneCubes implements DynamicScene {
         // Cause it live somewhere away from the origin and to spin.
         float period = 5; // seconds
         float angle = (360 * SystemClock.uptimeMillis() / (period * 1000)) % 360;
-        float rotationM[] = TransformFactory.yAxisRotation(angle);
+        float rotationM[] = TransformFactory.rotationAboutY(angle);
         float[] translationM = TransformFactory.translation(60, 60, -60);
         return MatrixCombiner.combineTwo(translationM, rotationM);
     }

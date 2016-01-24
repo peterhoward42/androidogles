@@ -1,4 +1,7 @@
-package com.example.android.opengl.geom;
+package com.example.android.opengl.mesh;
+
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Offers the service of packing the vertices and face-normals from a collection of triangles into

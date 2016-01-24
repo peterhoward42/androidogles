@@ -2,20 +2,17 @@ package com.example.android.opengl.vr_content;
 
 import android.content.res.AssetManager;
 
-import com.example.android.opengl.geom.BoundingBox;
-import com.example.android.opengl.geom.Mesh;
-import com.example.android.opengl.geom.MeshFactoryFromSTLAscii;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.mesh.BoundingBox;
+import com.example.android.opengl.mesh.Mesh;
+import com.example.android.opengl.mesh.MeshFactoryFromSTLAscii;
+import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformFactory;
 import com.example.android.opengl.util.FileOperations;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

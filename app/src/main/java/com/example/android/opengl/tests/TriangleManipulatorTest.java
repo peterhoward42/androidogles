@@ -3,9 +3,9 @@ package com.example.android.opengl.tests;
 import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.math.TransformFactory;
-import com.example.android.opengl.geom.Triangle;
-import com.example.android.opengl.geom.TriangleManipulator;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.primitives.Triangle;
+import com.example.android.opengl.mesh.TriangleManipulator;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Created by phoward on 12/01/2016.

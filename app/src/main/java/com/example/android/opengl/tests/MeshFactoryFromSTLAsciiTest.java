@@ -1,8 +1,8 @@
 package com.example.android.opengl.tests;
 import android.test.InstrumentationTestCase;
 
-import com.example.android.opengl.geom.Mesh;
-import com.example.android.opengl.geom.MeshFactoryFromSTLAscii;
+import com.example.android.opengl.mesh.Mesh;
+import com.example.android.opengl.mesh.MeshFactoryFromSTLAscii;
 
 /**
  * Created by phoward on 12/01/2016.

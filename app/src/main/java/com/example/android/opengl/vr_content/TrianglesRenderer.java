@@ -26,12 +26,12 @@ import java.util.Map;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 
-import com.example.android.opengl.geom.Mesh;
+import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.util.FileOperations;
 import com.example.android.opengl.util.SystemConstants;
-import com.example.android.opengl.geom.MeshSerializer;
+import com.example.android.opengl.mesh.MeshSerializer;
 import com.example.android.opengl.application.MyGLRenderer;
-import com.example.android.opengl.geom.XYZf;
+import com.example.android.opengl.primitives.XYZf;
 
 /**
  * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
@@ -101,6 +101,7 @@ public class TrianglesRenderer {
         GLES20.glUseProgram(mProgram);
         GLES20.glFrontFace(GLES20.GL_CCW);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
         int positionHandle = GLES20.glGetAttribLocation(mProgram, "position");
         GLES20.glEnableVertexAttribArray(positionHandle);
