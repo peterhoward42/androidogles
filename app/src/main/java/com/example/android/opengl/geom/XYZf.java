@@ -17,11 +17,16 @@ public class XYZf {
         xyz = new float[]{x, y, z};
     }
 
-    /** This constructor exists only to avoid the clutter of casting doubles that emerge from
-     * functions like Math.max() to floats all over the place in calling code.
+    /**
+     * These constructors exists only to spare calling code the typecasting of parameters in
+     * special cases.
      */
     public XYZf(double x, double y, double z) {
-        xyz = new float[]{(float)x, (float)y, (float)z};
+        xyz = new float[]{(float) x, (float) y, (float) z};
+    }
+
+    public XYZf(int x, int y, int z) {
+        xyz = new float[]{(float) x, (float) y, (float) z};
     }
 
     public final float X() {

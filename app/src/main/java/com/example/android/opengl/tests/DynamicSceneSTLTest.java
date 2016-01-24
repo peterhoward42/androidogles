@@ -20,7 +20,7 @@ public class DynamicSceneSTLTest extends ActivityInstrumentationTestCase2<OpenGL
 
     public void testGetBoundingBox() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromAssetFiles(
+        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromSTLFile(
                 assetManager, "gutter.txt");
         BoundingBox boundingBox = dynamicSceneSTL.getBoundingBox();
         assertEquals("25.00000 25.00000 0.00000", boundingBox.getMinima().formatRounded());
@@ -29,7 +29,7 @@ public class DynamicSceneSTLTest extends ActivityInstrumentationTestCase2<OpenGL
 
     public void testGetOffsetFromOriginOfBoundingBoxCentre() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromAssetFiles(
+        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromSTLFile(
                 assetManager, "gutter.txt");
         XYZf offset = dynamicSceneSTL.getBoundingBoxCentre();
         assertEquals("50.00000 50.00000 25.00000", offset.formatRounded());
@@ -37,14 +37,14 @@ public class DynamicSceneSTLTest extends ActivityInstrumentationTestCase2<OpenGL
 
     public void testGetEffectiveRadius() throws Exception {
         AssetManager assetManager = getActivity().getAssets();
-        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromAssetFiles(
+        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromSTLFile(
                 assetManager, "gutter.txt");
         assertEquals("35.36", String.format("%.2f", dynamicSceneSTL.getEffectiveRadius()));
     }
 
     public void testGetCurrentObjectToWorldTransform() {
         AssetManager assetManager = getActivity().getAssets();
-        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromAssetFiles(
+        DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromSTLFile(
                 assetManager, "gutter.txt");
         float[] transform = dynamicSceneSTL.getCurrentObjectToWorldTransform("mainSilo");
         XYZf modelCentre = dynamicSceneSTL.getBoundingBoxCentre();

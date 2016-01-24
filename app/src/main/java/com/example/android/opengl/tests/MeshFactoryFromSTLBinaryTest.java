@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.example.android.opengl.application.OpenGLES20Activity;
+import com.example.android.opengl.geom.BoundingBox;
 import com.example.android.opengl.geom.Mesh;
 import com.example.android.opengl.geom.MeshFactoryFromSTLBinary;
 
@@ -14,7 +15,7 @@ import java.io.InputStream;
  */
 public class MeshFactoryFromSTLBinaryTest extends ActivityInstrumentationTestCase2<OpenGLES20Activity> {
 
-    private final String BINARY_STL_FILENAME = "worm-wheel.stl";
+    private final String BINARY_STL_FILENAME = "testcube_10mm.stl";
 
     public MeshFactoryFromSTLBinaryTest() {
         super(OpenGLES20Activity.class);
@@ -26,6 +27,7 @@ public class MeshFactoryFromSTLBinaryTest extends ActivityInstrumentationTestCas
         MeshFactoryFromSTLBinary meshFactory = new MeshFactoryFromSTLBinary(is);
         Mesh mesh = meshFactory.makeMesh();
         assertNotNull(mesh);
-        assertEquals(130812, mesh.getNumberOfTriangles());
+        assertEquals(12, mesh.getNumberOfTriangles());
+        assertEquals("10.00", String.format("%.2f", mesh.getBoundingBox().getLargestDimension()));
     }
 }

@@ -37,11 +37,19 @@ o  More complex model
             *  Implement and test TransformApply.boundingBox
             *  Implement and test BoundingBox.combine()
         o  Quick app test - just see what happens
-            o  Something shows
-            o  STL bin reader needs unit test to regression the 2 byte short
+            *  Something shows
+            *  STL bin reader needs unit test to regression the 2 byte short
                read
+        o  Move bb into incremental api and give mesh one
+            o  Do it
+            o  Deprecate old methods
+            o  Compile up
+            o  Extend and mod existing unit tests
         o  Fix up geom etc by disabling and reenabling gradually
             o  Fix camera temp
+            o  Make sure move to world centre as v first thing, before
+               doing any rotations, and then translate again
+               afterwards.
         o  Could shift bounding box into side effect of mesh read, or mesh add
            triangle.
 

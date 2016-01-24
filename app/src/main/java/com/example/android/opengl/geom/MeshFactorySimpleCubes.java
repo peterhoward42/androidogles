@@ -2,9 +2,6 @@ package com.example.android.opengl.geom;
 
 import com.example.android.opengl.math.TransformFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 /**
  * Capable of providing a @link com.example.android.opengl.geom.Mesh that wraps the surfaces of
  * a given cuboid.
@@ -27,18 +24,18 @@ public class MeshFactorySimpleCubes {
 
         Mesh meshToReturn = new Mesh();
 
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.yAxisRotation(0), refMesh));
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.yAxisRotation(90), refMesh));
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.yAxisRotation(180), refMesh));
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.yAxisRotation(270), refMesh));
 
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.zAxisRotation(90), refMesh));
-        meshToReturn.addAllTriangles(MeshTransformer.transformedCopy(
+        meshToReturn.appendAllTrianglesFromMesh(MeshTransformer.transformedCopy(
                 TransformFactory.zAxisRotation(270), refMesh));
 
         return meshToReturn;

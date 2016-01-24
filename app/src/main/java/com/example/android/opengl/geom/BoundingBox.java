@@ -1,51 +1,39 @@
 package com.example.android.opengl.geom;
 
 /**
- * Knows how to evaluate the bounding box of a {@Link Mesh}
+ * Encapsulates an orthogonal 3d bounding box. You build it incrementally by giving
+ * it new vertices it should encompass. Plus a few convenience methods like asking for its
+ * centre, or combining it with another bounding box.
  */
 public class BoundingBox {
 
-    private final float HUGE = Float.MAX_VALUE;
-    private final float TINY = Float.MIN_VALUE;
     private XYZf mMinima;
     private XYZf mMaxima;
-    private XYZf mCentre;
 
-    /**
-     * Constructor - deducing sizes by interrrogating a given {@link com.example.android.opengl.geom.Mesh}
-     *
-     * @param mesh The mesh to interrogate.
-     */
-    public BoundingBox(final Mesh mesh) {
-        mMinima = new XYZf(HUGE, HUGE, HUGE);
-        mMaxima = new XYZf(TINY, TINY, TINY);
-        mCentre = null;
-        for (Triangle triangle : mesh.getTriangles()) {
-            for (XYZf vertex : triangle.vertices()) {
-                mMinima.overwriteX(Math.min(mMinima.X(), vertex.X()));
-                mMinima.overwriteY(Math.min(mMinima.Y(), vertex.Y()));
-                mMinima.overwriteZ(Math.min(mMinima.Z(), vertex.Z()));
-
-                mMaxima.overwriteX(Math.max(mMaxima.X(), vertex.X()));
-                mMaxima.overwriteY(Math.max(mMaxima.Y(), vertex.Y()));
-                mMaxima.overwriteZ(Math.max(mMaxima.Z(), vertex.Z()));
-            }
-        }
-        initCentreFromMinimaAndMaxima();
+    public BoundingBox() {
+        XYZf minima = null;
+        XYZf maxima = null;
+        init(minima, maxima);
     }
 
-    /**
-     * Factory - based on pre-calculated vertices for the minima vertex and the
-     * maxima vertex.
-     *
-     * @return
-     */
-    public static BoundingBox makeFromGivenMinimaAndMaxima(final XYZf minima, final XYZf maxima) {
-        BoundingBox box = new BoundingBox();
-        box.mMinima = minima;
-        box.mMaxima = maxima;
-        box.initCentreFromMinimaAndMaxima();
-        return box;
+    public BoundingBox (XYZf minima, XYZf maxima) {
+        init(minima, maxima);
+    }
+
+    public void addVertex(final XYZf vertex) {
+        // Special case when it is not yet initialised
+        if (mMinima == null) {
+            init(vertex, vertex);
+            return;
+        }
+        // General case
+        mMinima.overwriteX(Math.min(mMinima.X(), vertex.X()));
+        mMinima.overwriteY(Math.min(mMinima.Y(), vertex.Y()));
+        mMinima.overwriteZ(Math.min(mMinima.Z(), vertex.Z()));
+
+        mMaxima.overwriteX(Math.max(mMaxima.X(), vertex.X()));
+        mMinima.overwriteY(Math.min(mMinima.Y(), vertex.Y()));
+        mMinima.overwriteZ(Math.min(mMinima.Z(), vertex.Z()));
     }
 
     public XYZf getMinima() {
@@ -57,7 +45,10 @@ public class BoundingBox {
     }
 
     public final XYZf getCentre() {
-        return mCentre;
+        return new XYZf(
+                0.5f * (mMinima.X() + mMaxima.X()),
+                0.5f * (mMinima.Y() + mMaxima.Y()),
+                0.5f * (mMinima.Z() + mMaxima.Z()));
     }
 
     public final float getLargestDimension() {
@@ -69,7 +60,7 @@ public class BoundingBox {
     }
 
     public BoundingBox combinedWith(final BoundingBox otherBox) {
-        return makeFromGivenMinimaAndMaxima(
+        return new BoundingBox(
                 new XYZf(Math.min(mMinima.X(), otherBox.mMinima.X()),
                         Math.min(mMinima.Y(), otherBox.mMinima.Y()),
                         Math.min(mMinima.Z(), otherBox.mMinima.Z())),
@@ -78,14 +69,8 @@ public class BoundingBox {
                         Math.max(mMaxima.Z(), otherBox.mMaxima.Z())));
     }
 
-    private BoundingBox() {
-        // For use by factory methods only.
-    }
-
-    private void initCentreFromMinimaAndMaxima() {
-        mCentre = new XYZf(
-                0.5f * (mMinima.X() + mMaxima.X()),
-                0.5f * (mMinima.Y() + mMaxima.Y()),
-                0.5f * (mMinima.Z() + mMaxima.Z()));
+    private void init(XYZf minima, XYZf maxima) {
+        mMinima = minima;
+        mMaxima = maxima;
     }
 }

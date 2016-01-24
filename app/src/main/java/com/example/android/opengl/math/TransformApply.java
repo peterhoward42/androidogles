@@ -23,7 +23,7 @@ public class TransformApply {
     public static BoundingBox boundingBox(float[] transform, final BoundingBox box) {
         XYZf minimaVertex = point(transform, box.getMinima());
         XYZf maximaVertex = point(transform, box.getMaxima());
-        return BoundingBox.makeFromGivenMinimaAndMaxima(minimaVertex, maximaVertex);
+        return new BoundingBox(minimaVertex, maximaVertex);
     }
 
     /** Create a transformed variant of a direction vector.

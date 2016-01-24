@@ -11,7 +11,10 @@ import com.example.android.opengl.util.FileOperations;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,46 +24,46 @@ import java.util.Set;
  */
 public class DynamicSceneSTL implements DynamicScene {
 
-    private Map<String, Mesh> mSilos;
-    private BoundingBox mBoundingBox;
+    private Mesh mTheSingleMesh;
+
+    private static final String UNUSED_NAME = "unused_name";
 
     // We provide only a private constructor, to force use of the factory function below.
     private DynamicSceneSTL() {
-        mSilos = new HashMap<String, Mesh>();
-        mBoundingBox = null;
+        mTheSingleMesh = null;
     }
 
     /** Factory method - the only way to make one of these.
      */
-    public static DynamicSceneSTL buildFromAssetFiles(
+    public static DynamicSceneSTL buildFromSTLFile(
             AssetManager assetManager,
             final String assetFileName) {
         DynamicSceneSTL sceneMeshCollectionSTL = new DynamicSceneSTL();
-        Mesh mesh = sceneMeshCollectionSTL.makeMeshFromSTLFile(assetManager, assetFileName);
-        sceneMeshCollectionSTL.mSilos.put("mainSilo", mesh);
-        sceneMeshCollectionSTL.mBoundingBox = new BoundingBox(mesh);
+        sceneMeshCollectionSTL.mTheSingleMesh =
+                sceneMeshCollectionSTL.makeMeshFromSTLFile(assetManager, assetFileName);
         return sceneMeshCollectionSTL;
     }
 
     public Mesh getSilo(String siloName) {
-        return mSilos.get(siloName);
+        // There is only the one mesh, so we ignore the name lookup
+        return mTheSingleMesh;
     }
 
     public Set<String> getSiloNames() {
-        return mSilos.keySet();
+        return new HashSet<String>(Arrays.asList(new String[] { UNUSED_NAME }));
     }
 
     public BoundingBox getBoundingBox() {
-        return mBoundingBox;
+        return mTheSingleMesh.getBoundingBox();
     }
 
     public final float getEffectiveRadius() {
-        float orthogonalComponent =  0.5f * mBoundingBox.getLargestDimension();
+        float orthogonalComponent =  0.5f * getBoundingBox().getLargestDimension();
         return (float)Math.hypot(orthogonalComponent, orthogonalComponent);
     }
 
     public final XYZf getBoundingBoxCentre() {
-        return mBoundingBox.getCentre();
+        return getBoundingBox().getCentre();
     }
 
     public float[] getCurrentObjectToWorldTransform(String siloName) {

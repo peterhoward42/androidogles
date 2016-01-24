@@ -27,8 +27,7 @@ public class TransformApplyTest extends ActivityInstrumentationTestCase2<OpenGLE
     }
 
     public void testBoundingBox() throws Exception {
-        BoundingBox origBox = BoundingBox.makeFromGivenMinimaAndMaxima(
-                new XYZf(0,0,0), new XYZf(1,1,1));
+        BoundingBox origBox = new BoundingBox(new XYZf(0,0,0), new XYZf(1,1,1));
         float[] transform = TransformFactory.translation(3, 0, 0);
         BoundingBox newBox = TransformApply.boundingBox(transform, origBox);
         assertEquals("3.00000 0.00000 0.00000", newBox.getMinima().formatRounded());

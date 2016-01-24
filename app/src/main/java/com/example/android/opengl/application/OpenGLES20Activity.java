@@ -42,13 +42,13 @@ public class OpenGLES20Activity extends Activity {
         DynamicScene dynamicScene;
 
         // We dial in which scene we want to use here.
-        final int choice = WORM_AND_WHEEL_ANIMATED;
+        final int choice = CUBES_PROGRAMMATIC_GENERATED;
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
                 dynamicScene = new DynamicSceneCubes();
                 break;
             case CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
-                dynamicScene = DynamicSceneSTL.buildFromAssetFiles(
+                dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "gutter.txt");
                 break;
             case WORM_AND_WHEEL_ANIMATED:
