@@ -19,7 +19,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 import com.example.android.opengl.vr_content.DynamicScene;
-import com.example.android.opengl.vr_content.OnLooker;
+import com.example.android.opengl.vr_content.Cameraman;
 
 /**
  * A view container where OpenGL ES graphics can be drawn on screen.
@@ -33,14 +33,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public MyGLSurfaceView(
             Context context,
             DynamicScene dynamicScene,
-            OnLooker onLooker) {
+            Cameraman cameraman) {
         super(context);
 
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new MyGLRenderer(context.getAssets(), dynamicScene, onLooker);
+        mRenderer = new MyGLRenderer(context.getAssets(), dynamicScene, cameraman);
         setRenderer(mRenderer);
     }
 }

@@ -6,13 +6,10 @@ import com.example.android.opengl.primitives.Sphere;
 import com.example.android.opengl.primitives.XYZf;
 
 /**
- * An onlooker who is travelling along a linear path (like a road), but who maintains their gaze
- * at a fixed point in space. Their movement wraps back to the start and repeats.
- *
- * The name borrows from the term used to describe motorists travelling along a road who slow down
- * and stare fixedly at an accident.
+ * A {@link Cameraman} who is travelling along a linear path (like a road), but who keeps the
+ * camera pointing always at a fixed point in the scene.
  */
-public class OnLookerRubberNeck implements OnLooker {
+public class CameramanWithLinearPath implements Cameraman {
 
     private final XYZf linearPathStart;
     private final XYZf linearPathEnd;
@@ -22,7 +19,19 @@ public class OnLookerRubberNeck implements OnLooker {
     final XYZf pathVector;
     final float lengthOfPath;
 
-    public OnLookerRubberNeck(
+    public XYZf getLinearPathStart() {
+        return linearPathStart;
+    }
+
+    public XYZf getLinearPathEnd() {
+        return linearPathEnd;
+    }
+
+    public XYZf getLookAtPoint() {
+        return lookAtPoint;
+    }
+
+    public CameramanWithLinearPath(
             final XYZf linearPathStart, final XYZf linearPathEnd,
             final float endToEndPeriod, final XYZf lookAtPoint) {
         this.linearPathStart = linearPathStart;
@@ -34,28 +43,18 @@ public class OnLookerRubberNeck implements OnLooker {
         lengthOfPath = pathVector.resultantLength();
     }
 
-    // We expose this mainly to make unit testing easier by dependency injecting a controlled
-    // time rather than using the current uptime.
-    public XYZf evaluatePosition(final float currentTimeSeconds) {
-        final float timeAlongPath = currentTimeSeconds % endToEndPeriod;
-        final float distanceAlongPath = (timeAlongPath / endToEndPeriod) * lengthOfPath;
-        final XYZf offsetVectorAlongPath = pathVector.vectorScaledToLength(distanceAlongPath);
-        final XYZf position = linearPathStart.plus(offsetVectorAlongPath);
-        return position;
-    }
-
     @Override
-    public Viewpoint getCurrentViewpoint() {
+    public ViewingAxis getCurrentViewpoint() {
         final XYZf position = evaluatePosition((float) (SystemClock.uptimeMillis() / 1000.0));
         final XYZf lineOfSight = lookAtPoint.minus(position);
-        return new Viewpoint(lineOfSight, position);
+        return new ViewingAxis(lineOfSight, position);
     }
 
     /** This is a factory method that creates a
-     * {@link com.example.android.opengl.vr_content.OnLookerRubberNeck}
+     * {@link CameramanWithLinearPath}
      * by inferring a suitable pathway based on the geometry of the scene provided.
      */
-    public static OnLookerRubberNeck makeOnLookerWithDefaultSettings(DynamicScene dynamicScene) {
+    public static CameramanWithLinearPath makeOnLookerWithDefaultSettings(DynamicScene dynamicScene) {
         // Let us traverse the z axis through the middle of the scene's sphere from some way in
         // front into the centre of it. Keeping our look at point at the rear, left, bottom corner.
 
@@ -68,7 +67,18 @@ public class OnLookerRubberNeck implements OnLooker {
         final XYZf lookAtPointOffset = new XYZf(-rad, -rad, -rad);
 
         final XYZf lookAtPoint = sphere.getCentre().plus(lookAtPointOffset);
-        return new OnLookerRubberNeck(
+        return new CameramanWithLinearPath(
                 trackStart, sphere.getCentre(), TRAVERSAL_DURATION, lookAtPoint);
+    }
+
+    /** This method is not intended to be called by clients, and exists only as a way to dependency
+     * inject the time the path should be evaluated at, to make it easy to test.
+     */
+    public XYZf evaluatePosition(final float currentTimeSeconds) {
+        final float timeAlongPath = currentTimeSeconds % endToEndPeriod;
+        final float distanceAlongPath = (timeAlongPath / endToEndPeriod) * lengthOfPath;
+        final XYZf offsetVectorAlongPath = pathVector.vectorScaledToLength(distanceAlongPath);
+        final XYZf position = linearPathStart.plus(offsetVectorAlongPath);
+        return position;
     }
 }

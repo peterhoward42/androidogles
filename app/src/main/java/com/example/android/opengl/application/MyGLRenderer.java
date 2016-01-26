@@ -23,16 +23,15 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import com.example.android.opengl.vr_content.CameraLookAt;
 import com.example.android.opengl.vr_content.DynamicScene;
-import com.example.android.opengl.vr_content.OnLooker;
+import com.example.android.opengl.vr_content.Cameraman;
+import com.example.android.opengl.vr_content.RendererForMeshCollection;
 import com.example.android.opengl.vr_content.SceneLighting;
 import com.example.android.opengl.vr_content.ScenePerspective;
-import com.example.android.opengl.vr_content.TransformPipelines;
-import com.example.android.opengl.vr_content.TrianglesRenderer;
+import com.example.android.opengl.vr_content.TransformPipeLineForModel;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
-import com.example.android.opengl.vr_content.Viewpoint;
+import com.example.android.opengl.vr_content.ViewingAxis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,21 +49,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
 
-    private TrianglesRenderer mTrianglesRenderer;
+    private RendererForMeshCollection mRendererForMeshCollection;
 
     private AssetManager mAssetManager;
     private DynamicScene mDynamicScene;
-    private OnLooker mOnLooker;
+    private Cameraman mCameraman;
     private SceneLighting mSceneLighting;
     private ScenePerspective mScenePerspective;
     private float mScreenAspect;
 
     public MyGLRenderer(
-            AssetManager assetManager, DynamicScene dynamicScene, OnLooker onLooker) {
+            AssetManager assetManager, DynamicScene dynamicScene, Cameraman cameraman) {
         super();
         mAssetManager = assetManager;
         mDynamicScene = dynamicScene;
-        mOnLooker = onLooker;
+        mCameraman = cameraman;
         mSceneLighting = new SceneLighting();
         mScenePerspective = new ScenePerspective();
     }
@@ -82,7 +81,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // The real-time rendering of frames later on, takes a transform matrix for
         // each silo, and the application of these transforms to the scene object
         // coordinates is delegated by the lower level renderer onto the hardware.
-        mTrianglesRenderer = new TrianglesRenderer(mAssetManager, mDynamicScene);
+        mRendererForMeshCollection = new RendererForMeshCollection(mAssetManager, mDynamicScene);
     }
 
     @Override
@@ -93,9 +92,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Build the transform lookup table for the triangles renderer
-        Map<String, TransformPipelines> siloTransformPipelines =
+        Map<String, TransformPipeLineForModel> siloTransformPipelines =
                 buildSiloTransformPipelines();
-        mTrianglesRenderer.draw(siloTransformPipelines, mSceneLighting.getDirectionTowardsLight());
+        mRendererForMeshCollection.draw(siloTransformPipelines, mSceneLighting.getDirectionTowardsLight());
     }
 
     @Override
@@ -108,19 +107,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
      * correctly. It is called for every frame refresh - and must therefor consider speed of
      * execution.
      */
-    private Map<String, TransformPipelines> buildSiloTransformPipelines() {
+    private Map<String, TransformPipeLineForModel> buildSiloTransformPipelines() {
         // For each silo we generate a model-view-projection transform by combining three
         // transforms: ObjectToWorld, WorldToCamera, and Projection. Only the first of which
         // differs per silo. Then we add an auxiliary transform for transforming direction vectors
         // from object to world space.
 
-        final Viewpoint viewpoint = mOnLooker.getCurrentViewpoint();
-        float[] worldToCameraTransform = CameraLookAt.worldToCameraTransform(viewpoint);
+        final ViewingAxis viewingAxis = mCameraman.getCurrentViewpoint();
+        float[] worldToCameraTransform = viewingAxis.worldToCameraTransform();
         float[] projectionTransform = mScenePerspective.calculateProjectionTransform(
-                viewpoint, mDynamicScene.getCurrentEffectiveSphere(), mScreenAspect);
+                viewingAxis, mDynamicScene.getCurrentEffectiveSphere(), mScreenAspect);
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
-        Map<String, TransformPipelines> mapToReturn = new HashMap<String, TransformPipelines>();
+        Map<String, TransformPipeLineForModel> mapToReturn = new HashMap<String, TransformPipeLineForModel>();
         for (String siloName : mDynamicScene.getSiloNames()) {
             float[] objectToWorldForVertices =
                     mDynamicScene.getCurrentObjectToWorldTransform(siloName);
@@ -128,9 +127,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     TransformFactory.directionTransformFromVertexTransform(objectToWorldForVertices);
             float[] modelViewProjection = MatrixCombiner.combineThree(
                     projectionTransform, worldToCameraTransform, objectToWorldForVertices);
-            TransformPipelines transformPipelines =
-                    new TransformPipelines(modelViewProjection, objectToWorldForDirections);
-            mapToReturn.put(siloName, transformPipelines);
+            TransformPipeLineForModel transformPipeLineForModel =
+                    new TransformPipeLineForModel(modelViewProjection, objectToWorldForDirections);
+            mapToReturn.put(siloName, transformPipeLineForModel);
         }
         return mapToReturn;
     }

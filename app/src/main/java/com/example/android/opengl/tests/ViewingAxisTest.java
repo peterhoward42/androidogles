@@ -4,13 +4,20 @@ import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.primitives.XYZf;
-import com.example.android.opengl.vr_content.CameraLookAt;
-import com.example.android.opengl.vr_content.Viewpoint;
+import com.example.android.opengl.vr_content.ViewingAxis;
 
 /**
- * Created by phoward on 26/01/2016.
+ * Created by phoward on 12/01/2016.
  */
-public class CameraLookAtTest extends InstrumentationTestCase {
+public class ViewingAxisTest extends InstrumentationTestCase {
+
+    public void testGetASamplePointInDirectLineOfSight() throws Exception {
+        final XYZf lineOfSightVector = new XYZf(100, 0, 0);
+        final XYZf viewersPosition = new XYZf(1,2,3);
+        final ViewingAxis viewingAxis = new ViewingAxis(lineOfSightVector, viewersPosition);
+        final XYZf samplePointInDirectLineOfSight = viewingAxis.getASamplePointInDirectLineOfSight();
+        assertEquals("2.00000 2.00000 3.00000", samplePointInDirectLineOfSight.formatRounded());
+    }
 
     public void testWorldToCameraTransform() throws Exception {
         // The camera is situated at 1,1,1 and is looking in the direction of the
@@ -20,8 +27,8 @@ public class CameraLookAtTest extends InstrumentationTestCase {
         // produce the camera-relative point of 0,0-1
         final XYZf lineOfSightVector = new XYZf(100, 0, 0);
         final XYZf viewersPosition = new XYZf(1,1,1);
-        final Viewpoint viewpoint = new Viewpoint(lineOfSightVector, viewersPosition);
-        final float[] t = CameraLookAt.worldToCameraTransform(viewpoint);
+        final ViewingAxis viewingAxis = new ViewingAxis(lineOfSightVector, viewersPosition);
+        final float[] t = viewingAxis.worldToCameraTransform();
         final XYZf worldPoint = new XYZf(2,1,1);
         final XYZf cameraPoint = TransformApply.point(t, worldPoint);
         assertEquals("0.00000 0.00000 -1.00000", cameraPoint.formatRounded());

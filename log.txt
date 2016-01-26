@@ -70,10 +70,12 @@ o  More complex model
             o  Add unit tests as can
                 *  XYZf scaledToLength
                 *  Viewpoint  getasamplepointinlineofsight
-                o  CameraLookAt static method
-                o  OnLooker
-                o  RubberNecker factory
-                o  RubberNecker o  positionattime etc
+                *  CameraLookAt static method
+                *  OnLooker
+                *  RubberNecker factory
+                *  RubberNecker o  positionattime etc
+                *  names for onlooker, rubberxxx, viewingAxis etc, 
+                   camera look at
             o  Regression tests
             o  Enrich behaviour to that required
             o  Ditch now redundant code

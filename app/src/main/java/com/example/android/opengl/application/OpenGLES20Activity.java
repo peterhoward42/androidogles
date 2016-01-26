@@ -23,8 +23,8 @@ import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
-import com.example.android.opengl.vr_content.OnLooker;
-import com.example.android.opengl.vr_content.OnLookerRubberNeck;
+import com.example.android.opengl.vr_content.Cameraman;
+import com.example.android.opengl.vr_content.CameramanWithLinearPath;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -57,9 +57,9 @@ public class OpenGLES20Activity extends Activity {
                 dynamicScene = null;
         }
 
-        OnLooker onLooker = OnLookerRubberNeck.makeOnLookerWithDefaultSettings(dynamicScene);
+        Cameraman cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
 
-        mGLView = new MyGLSurfaceView(this, dynamicScene, onLooker);
+        mGLView = new MyGLSurfaceView(this, dynamicScene, cameraman);
         setContentView(mGLView);
     }
 

@@ -13,8 +13,8 @@ public class ScenePerspective {
     private static final float FIELD_OF_VIEW_DEGREES = 90.0f;
 
     public float[] calculateProjectionTransform(
-            final Viewpoint viewpoint, final Sphere sceneSphere, float screenAspect) {
-        final float far = calculateFarPlane(viewpoint, sceneSphere, screenAspect);
+            final ViewingAxis viewingAxis, final Sphere sceneSphere, float screenAspect) {
+        final float far = calculateFarPlane(viewingAxis, sceneSphere, screenAspect);
         final float near = calculateNearPlane(far, sceneSphere);
         return TransformFactory.perspective(FIELD_OF_VIEW_DEGREES, screenAspect, near, far);
     }
@@ -23,15 +23,15 @@ public class ScenePerspective {
      * farthest extent of the scene contents - as implied by the scene's sphere.
      */
     private float calculateFarPlane(
-            final Viewpoint viewpoint, final Sphere sceneSphere, float screenAspect) {
+            final ViewingAxis viewingAxis, final Sphere sceneSphere, float screenAspect) {
         final XYZf offsetFromSphereCentreToFarPlane =
-                viewpoint.getLineOfSightVector().vectorScaledToLength(sceneSphere.getRadius());
+                viewingAxis.getLineOfSightVector().vectorScaledToLength(sceneSphere.getRadius());
         final XYZf pointOnFarPlane = sceneSphere.getCentre().plus(offsetFromSphereCentreToFarPlane);
         final XYZf vectorFromCameraToFarPlaneSamplePoint =
-                pointOnFarPlane.minus(viewpoint.getViewersPosition());
+                pointOnFarPlane.minus(viewingAxis.getViewersPosition());
         float perpendicularDistanceFromCameraToFarPlane =
                 vectorFromCameraToFarPlaneSamplePoint.dotProduct(
-                        viewpoint.getLineOfSightVector());
+                        viewingAxis.getLineOfSightVector());
         final float far = perpendicularDistanceFromCameraToFarPlane;
         return far;
     }

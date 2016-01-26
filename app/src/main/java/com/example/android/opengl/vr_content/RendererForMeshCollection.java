@@ -34,14 +34,14 @@ import com.example.android.opengl.application.MyGLRenderer;
 import com.example.android.opengl.primitives.XYZf;
 
 /**
- * Capable of rendering into OpenGL-ES, collections of world-space triangles using a single
- * shader program. You provide the triangles in named silos, and these names are used to
- * access differing transform matrices for each silo. Uses OpenGL's drawArrays() function call
- * under the hood.
+ * A low-level OpenGL-ES renderer capable of rendering a {@link DynamicScene} that you
+ * provide to the constructor. After construction, you call the draw method to repeatedly re draw
+ * the frame - passing in a separate {@link TransformPipeLineForModel} for each named
+ * {@link Mesh} in the scene.
  */
-public class TrianglesRenderer {
+public class RendererForMeshCollection {
 
-    private static final String TAG = "TrianglesRenderer";
+    private static final String TAG = "RendererForMeshCollection";
     private static final int POSITION_COMPONENT_COUNT = 3;
     private static final int NORMAL_COMPONENT_COUNT = 3;
 
@@ -64,7 +64,7 @@ public class TrianglesRenderer {
      * @Param sceneModels The sets of triangles you wish to be repeatedly transformed then
      * rendered.
      */
-    public TrianglesRenderer(AssetManager assetManager, DynamicScene dynamicScene) {
+    public RendererForMeshCollection(AssetManager assetManager, DynamicScene dynamicScene) {
         // Convert the world scene model representation into the packed form required later for
         // the draw() method.
         mVertexBuffers = new HashMap<String, FloatBuffer>();
@@ -96,7 +96,7 @@ public class TrianglesRenderer {
         MyGLRenderer.checkGlError("Building GLES20 program");
     }
 
-    public void draw(Map<String, TransformPipelines> siloTransformPipelines,
+    public void draw(Map<String, TransformPipeLineForModel> siloTransformPipelines,
                      final XYZf towardsLight) {
         GLES20.glUseProgram(mProgram);
         GLES20.glFrontFace(GLES20.GL_CCW);
@@ -135,11 +135,11 @@ public class TrianglesRenderer {
             GLES20.glVertexAttribPointer(normalHandle, NORMAL_COMPONENT_COUNT, GLES20.GL_FLOAT, false,
                     VERTEX_ARRAY_STRIDE_IN_BYTES, vertexBuffer);
 
-            TransformPipelines transformPipelines = siloTransformPipelines.get(siloName);
-            GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, transformPipelines.getMvpForVertices(), 0);
+            TransformPipeLineForModel transformPipeLineForModel = siloTransformPipelines.get(siloName);
+            GLES20.glUniformMatrix4fv(mvpTransformHandle, 1, false, transformPipeLineForModel.getMvpForVertices(), 0);
 
             GLES20.glUniformMatrix3fv(modelToWorldDirectionTransformHandle, 1, false,
-                    transformPipelines.getModelToWorldForDirections(), 0);
+                    transformPipeLineForModel.getModelToWorldForDirections(), 0);
             MyGLRenderer.checkGlError("End of silo-specific loop in GLES20 draw() call.");
 
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mNumberOfVerticesInSilo.get(siloName));
