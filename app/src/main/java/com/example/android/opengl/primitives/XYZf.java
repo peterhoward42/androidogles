@@ -85,6 +85,11 @@ public class XYZf {
         );
     }
 
+    public XYZf vectorScaledToLength(final float lengthRequired) {
+        final float scaleRequired = lengthRequired / resultantLength();
+        return new XYZf(X() * scaleRequired, Y() * scaleRequired, Z() * scaleRequired);
+    }
+
     public float dotProduct(final XYZf other) {
         float dot = (this.xyz[0] * other.xyz[0] + this.xyz[1] * other.xyz[1] + this.xyz[2] * other.xyz[2]);
         return dot;

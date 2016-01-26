@@ -7,6 +7,8 @@ import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.mesh.MeshFactoryFromSTLBinary;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
+import com.example.android.opengl.primitives.Sphere;
+import com.example.android.opengl.primitives.XYZf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +57,13 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
         return SCENE_RADIUS_FACTOR * mSilos.get(KEY_FOR_WHEEL).getBoundingBox().getLargestDimension();
     }
 
+    public Sphere getCurrentEffectiveSphere() {
+        final float radius =
+                SCENE_RADIUS_FACTOR *
+                        mSilos.get(KEY_FOR_WHEEL).getBoundingBox().getLargestDimension();
+        return new Sphere(new XYZf(0, 0, 0), radius);
+    }
+
     public float[] getCurrentObjectToWorldTransform(String siloName) {
         double wormAnimatedRotation = WORM_SPEED_OF_ROTATION * SystemClock.uptimeMillis() / 1000.0f;
         double wheelAnimatedRotation = WHEEL_SETUP_ADJUSTMENT_ANGLE + GEAR_RATIO * -wormAnimatedRotation;
@@ -69,17 +78,16 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
             // Translate it out to the edge of the wheel so the teeth mesh
             float[] t3 = TransformFactory.translation(0, AXES_SEPARATION, 0);
             return MatrixCombiner.combineThree(t3, t2, t1);
-        }
-        else {
+        } else {
             Mesh wheel = mSilos.get(KEY_FOR_WHEEL);
             // Place it at the world centre to make rotations easier
             float[] t1 = TransformFactory.inverted(
                     TransformFactory.translation(wheel.getBoundingBox().getCentre()));
             // Align its axes the way we want them
-            float[] t2 = TransformFactory.translation(0,0,0); // no op
+            float[] t2 = TransformFactory.translation(0, 0, 0); // no op
             // Animate the wheel's rotation.
             float[] t3 = TransformFactory.rotationAboutX(
-                    (float)Math.toDegrees(wheelAnimatedRotation));
+                    (float) Math.toDegrees(wheelAnimatedRotation));
             return MatrixCombiner.combineThree(t3, t2, t1);
         }
     }

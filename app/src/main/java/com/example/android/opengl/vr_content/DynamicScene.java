@@ -1,6 +1,7 @@
 package com.example.android.opengl.vr_content;
 
 import com.example.android.opengl.mesh.Mesh;
+import com.example.android.opengl.primitives.Sphere;
 
 import java.util.Set;
 
@@ -14,5 +15,5 @@ public interface DynamicScene {
     public Set<String> getSiloNames();
     public Mesh getSilo(String siloName);
     public float[] getCurrentObjectToWorldTransform(String siloName);
-    public float getEffectiveRadius();
+    public Sphere getCurrentEffectiveSphere();
 }

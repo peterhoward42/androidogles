@@ -23,7 +23,8 @@ import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
-import com.example.android.opengl.vr_content.SceneOptics;
+import com.example.android.opengl.vr_content.OnLooker;
+import com.example.android.opengl.vr_content.OnLookerRubberNeck;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -37,8 +38,6 @@ public class OpenGLES20Activity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create a GLSurfaceView instance and set it
-        // as the ContentView for this Activity
         DynamicScene dynamicScene;
 
         // We dial in which scene we want to use here.
@@ -58,10 +57,9 @@ public class OpenGLES20Activity extends Activity {
                 dynamicScene = null;
         }
 
-        mGLView = new MyGLSurfaceView(
-                this,
-                dynamicScene,
-                new SceneOptics(dynamicScene.getEffectiveRadius()));
+        OnLooker onLooker = OnLookerRubberNeck.makeOnLookerWithDefaultSettings(dynamicScene);
+
+        mGLView = new MyGLSurfaceView(this, dynamicScene, onLooker);
         setContentView(mGLView);
     }
 

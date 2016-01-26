@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import com.example.android.opengl.mesh.BoundingBox;
 import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.mesh.MeshFactoryFromSTLAscii;
+import com.example.android.opengl.primitives.Sphere;
 import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformFactory;
 import com.example.android.opengl.util.FileOperations;
@@ -54,9 +55,10 @@ public class DynamicSceneSTL implements DynamicScene {
         return mTheSingleMesh.getBoundingBox();
     }
 
-    public final float getEffectiveRadius() {
-        float orthogonalComponent =  0.5f * getBoundingBox().getLargestDimension();
-        return (float)Math.hypot(orthogonalComponent, orthogonalComponent);
+    public Sphere getCurrentEffectiveSphere() {
+        final float orthogonalComponent = 0.5f * getBoundingBox().getLargestDimension();
+        final float radius = (float) Math.hypot(orthogonalComponent, orthogonalComponent);
+        return new Sphere(new XYZf(0, 0, 0), radius);
     }
 
     public final XYZf getBoundingBoxCentre() {

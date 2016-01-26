@@ -1,12 +1,14 @@
 package com.example.android.opengl.vr_content;
 
 /**
- * Created by phoward on 11/01/2016.
+ * A trivial container for the two model to world transforms you need. I.e. one
+ * for vertices and for direction vectors.
  */
 public class TransformPipelines {
 
     private float[] mvpForVertices;
     private float[] modelToWorldForDirections;
+
     public TransformPipelines(final float[] mvpForVertices, final float[] modelToWorldForDirections) {
         this.mvpForVertices = mvpForVertices;
         this.modelToWorldForDirections = modelToWorldForDirections;

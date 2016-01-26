@@ -6,6 +6,8 @@ import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.mesh.MeshFactorySimpleCubes;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
+import com.example.android.opengl.primitives.Sphere;
+import com.example.android.opengl.primitives.XYZf;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,11 +39,11 @@ public class DynamicSceneCubes implements DynamicScene {
         return mSilos.keySet();
     }
 
-    public float getEffectiveRadius() {
+    public Sphere getCurrentEffectiveSphere() {
         // The worst case bounding box to include the satellite cube is 120mm across flats.
         // I.e. with a half-width of 60. And the worst case diagonal then by Pythagorus is the root
         // of the sum of this squared.
-        return 85.0f;
+        return new Sphere(new XYZf(0,0,0), 85.0f);
     }
 
     public float[] getCurrentObjectToWorldTransform(String siloName) {

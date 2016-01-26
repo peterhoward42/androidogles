@@ -9,25 +9,27 @@ import com.example.android.opengl.math.TransformFactory;
  * Responsible for the optical presentation of the scene. Ie. camera position, properties and
  * lighting etc.
  */
-public class SceneOptics {
+public class SceneOpticsDeprecated {
 
     private CameraLookAt mCameraLookAt;
 
+    // Hard-coded lighting direction
     private final XYZf towardsLightDirection = new XYZf(15f, 8f, 10f).normalised();
+
     private final float mCameraOrbitalHeight;
     private final float mNear;
     private final float mFar;
 
-    public SceneOptics(final float sceneEffectiveRadius) {
+    public SceneOpticsDeprecated(final float sceneSphericalRadiusApprox) {
         // Use hard coded camera look at point for now - ie the origin.
         mCameraLookAt = new CameraLookAt(new XYZf(0f, 0f, 0f));
         // Set the camera orbital height as a function of the scene's effective radius
-        mCameraOrbitalHeight = 2.5f * sceneEffectiveRadius; // empirically satisfactory
-        mNear = mCameraOrbitalHeight - sceneEffectiveRadius;
-        mFar = mCameraOrbitalHeight + sceneEffectiveRadius;
+        mCameraOrbitalHeight = 2.5f * sceneSphericalRadiusApprox; // empirically satisfactory
+        mNear = mCameraOrbitalHeight - sceneSphericalRadiusApprox;
+        mFar = mCameraOrbitalHeight + sceneSphericalRadiusApprox;
     }
 
-    public float[] calculateWorldToCameraTransform() {
+    public float[] calculateCurrentWorldToCameraTransform() {
         return mCameraLookAt.worldToCameraTransform(getCurrentCameraPosition());
     }
 

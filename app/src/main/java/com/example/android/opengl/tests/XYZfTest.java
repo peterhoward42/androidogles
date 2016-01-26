@@ -37,6 +37,15 @@ public class XYZfTest extends InstrumentationTestCase {
         assertEquals("0.57735 0.57735 0.57735", a.normalised().formatRounded());
     }
 
+    public void testVectorScaledToLength() throws Exception {
+        final XYZf before = new XYZf(2, 2, 2);
+        final float lengthRequired = 10;
+        final XYZf scaledToLength = before.vectorScaledToLength(lengthRequired);
+        assertEquals(String.format(
+                "%.2f", lengthRequired),
+                String.format("%.2f", scaledToLength.resultantLength()));
+    }
+
     public void testDotProduct() throws Exception {
         XYZf a = new XYZf(1.0f, 0, 0).normalised();
         XYZf b = new XYZf(1.0f, 1.0f, 0).normalised();
