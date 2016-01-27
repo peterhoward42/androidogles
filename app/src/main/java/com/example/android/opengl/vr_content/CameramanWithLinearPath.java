@@ -54,7 +54,7 @@ public class CameramanWithLinearPath implements Cameraman {
      * {@link CameramanWithLinearPath}
      * by inferring a suitable pathway based on the geometry of the scene provided.
      */
-    public static CameramanWithLinearPath makeOnLookerWithDefaultSettings(DynamicScene dynamicScene) {
+    public static CameramanWithLinearPath makeWithDefaultSettings(DynamicScene dynamicScene) {
         // Let us traverse the z axis through the middle of the scene's sphere from some way in
         // front into the centre of it. Keeping our look at point at the rear, left, bottom corner.
 

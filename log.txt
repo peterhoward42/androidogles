@@ -23,14 +23,21 @@ Android GL Play Around
 *  Ditch blade stl for ip sake
 *  More complex model
 *  Fix Artefacts with cuter near and far setting
-o  When project nice, tweak animation and position params for gears
-    o  Separation
-        o  Home in on ideal view to iterate on
-    o  Ratio
-    o  Fix init adjustment
+*  When project nice, tweak animation and position params for gears (will do)
+o  Cuter content from grabcad that tests complexity
+    o  landing gear - blows android memory
+        o  note before start rendering frames - it is standard java, at mesh
+           building stage.
+        o  how many triangles? = 1,970,216,992 (roughly 1.9e9)
+        o  could consider not reading all tri at once, and streaming them to
+           vertex buffer builder - but don't know if will get alloc failure
+           there.
+    o  try gradually working thru file sizes using synthesised scene binary
+        o  programmatic scene of cubes?
 
-o  Show part of self?
-o  Look at roadmap and risks again, take stock
+
+o  Show part of camera frame / self
+o  Performance limits
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

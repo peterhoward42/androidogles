@@ -28,7 +28,9 @@ public class CameramanForWormAndWheel implements Cameraman {
 
     @Override
     public ViewingAxis getCurrentViewpoint() {
-        final XYZf position = evaluatePosition((float) (SystemClock.uptimeMillis() / 1000.0));
+        //final float timeToEvaluateAt = (float) (SystemClock.uptimeMillis() / 1000.0);
+        final float timeToEvaluateAt = endToEndPeriod * 0.70f;
+        final XYZf position = evaluatePosition(timeToEvaluateAt);
         final XYZf lineOfSight = lookAtPoint.minus(position);
         return new ViewingAxis(lineOfSight, position);
     }

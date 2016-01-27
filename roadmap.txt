@@ -11,7 +11,6 @@ Roadmap for Open GL Experiments
 *  Have different bits of the model use different location transforms
 *  Make just some parts of the model move
 *  Have prim adding library to build model
-o  Have some color variation
-o  Add some lighting
-o  Deploy more than one program to render scene eg transparency
+*  Have some color variation
+*  Add some lighting
 o  Investigate performance limits for frame rate and busting memory

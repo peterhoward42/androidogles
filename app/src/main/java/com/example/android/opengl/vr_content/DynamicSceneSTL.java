@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import com.example.android.opengl.mesh.BoundingBox;
 import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.mesh.MeshFactoryFromSTLAscii;
+import com.example.android.opengl.mesh.MeshFactoryFromSTLBinary;
 import com.example.android.opengl.primitives.Sphere;
 import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformFactory;
@@ -31,15 +32,16 @@ public class DynamicSceneSTL implements DynamicScene {
         mTheSingleMesh = null;
     }
 
-    /** Factory method - the only way to make one of these.
+    /**
+     * Factory method - the only way to make one of these.
      */
     public static DynamicSceneSTL buildFromSTLFile(
             AssetManager assetManager,
             final String assetFileName) {
-        DynamicSceneSTL sceneMeshCollectionSTL = new DynamicSceneSTL();
-        sceneMeshCollectionSTL.mTheSingleMesh =
-                sceneMeshCollectionSTL.makeMeshFromSTLFile(assetManager, assetFileName);
-        return sceneMeshCollectionSTL;
+        DynamicSceneSTL dynamicSceneSTL = new DynamicSceneSTL();
+        dynamicSceneSTL.mTheSingleMesh =
+                dynamicSceneSTL.makeMeshFromSTLFile(assetManager, assetFileName);
+        return dynamicSceneSTL;
     }
 
     public Mesh getSilo(String siloName) {
@@ -48,7 +50,7 @@ public class DynamicSceneSTL implements DynamicScene {
     }
 
     public Set<String> getSiloNames() {
-        return new HashSet<String>(Arrays.asList(new String[] { UNUSED_NAME }));
+        return new HashSet<String>(Arrays.asList(new String[]{UNUSED_NAME}));
     }
 
     public BoundingBox getBoundingBox() {
@@ -72,8 +74,20 @@ public class DynamicSceneSTL implements DynamicScene {
     }
 
     private Mesh makeMeshFromSTLFile(AssetManager assetManager, final String assetFileName) {
-        String fileContents = getSTLContentFromAsset(assetManager, assetFileName);
-        Mesh mesh = new MeshFactoryFromSTLAscii(fileContents).makeMesh();
+        Mesh mesh = null;
+        if (assetFileName.endsWith(".txt")) {
+            String fileContents = getSTLContentFromAsset(assetManager, assetFileName);
+            mesh = new MeshFactoryFromSTLAscii(fileContents).makeMesh();
+        } else if (assetFileName.endsWith(".stl")) {
+            try {
+                InputStream inputStream = assetManager.open(assetFileName);
+                MeshFactoryFromSTLBinary factory = new MeshFactoryFromSTLBinary(inputStream);
+                mesh = factory.makeMesh();
+                inputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
         return mesh;
     }
 

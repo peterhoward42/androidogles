@@ -28,7 +28,7 @@ public class CameramanWithLinearPathTest extends InstrumentationTestCase {
     public void testMakeOnLookerWithDefaultSettings() throws Exception {
         DynamicScene dynamicScene = new DynamicSceneCubes();
         CameramanWithLinearPath onLooker =
-                CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
+                CameramanWithLinearPath.makeWithDefaultSettings(dynamicScene);
         assertEquals("0.00000 0.00000 255.00000", onLooker.getLinearPathStart().formatRounded());
         assertEquals("0.00000 0.00000 0.00000", onLooker.getLinearPathEnd().formatRounded());
         assertEquals("-85.00000 -85.00000 -85.00000", onLooker.getLookAtPoint().formatRounded());

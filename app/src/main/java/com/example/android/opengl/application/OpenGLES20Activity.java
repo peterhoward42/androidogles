@@ -20,6 +20,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
+import com.example.android.opengl.vr_content.CameramanStatic;
 import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
@@ -32,8 +33,9 @@ public class OpenGLES20Activity extends Activity {
     private GLSurfaceView mGLView;
 
     private final int CUBES_PROGRAMMATIC_GENERATED = 1;
-    private final int CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE = 2;
+    private final int GUTTER_AS_SINGLE_MODEL_FROM_STL_FILE = 2;
     private final int WORM_AND_WHEEL_ANIMATED = 3;
+    private final int LANDING_GEAR = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,21 +45,26 @@ public class OpenGLES20Activity extends Activity {
         Cameraman cameraman;
 
         // CHOOSE SCENE HERE
-        final int choice = WORM_AND_WHEEL_ANIMATED;
+        final int choice = LANDING_GEAR;
 
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
                 dynamicScene = new DynamicSceneCubes();
-                cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
+                cameraman = new CameramanStatic(dynamicScene.getCurrentEffectiveSphere());
                 break;
-            case CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
+            case GUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "gutter.txt");
-                cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
+                cameraman = CameramanWithLinearPath.makeWithDefaultSettings(dynamicScene);
                 break;
             case WORM_AND_WHEEL_ANIMATED:
                 dynamicScene = new DynamicSceneWormAndWheel(getApplicationContext().getAssets());
                 cameraman = new CameramanForWormAndWheel();
+                break;
+            case LANDING_GEAR:
+                dynamicScene = DynamicSceneSTL.buildFromSTLFile(
+                        getApplicationContext().getAssets(), "landing-gear.stl");
+                cameraman = new CameramanStatic(dynamicScene.getCurrentEffectiveSphere());
                 break;
             default:
                 dynamicScene = null;

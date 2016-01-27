@@ -30,10 +30,12 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
     private final String STL_FILENAME_WHEEL = "worm-wheel.stl";
 
     private final double WORM_SPEED_OF_ROTATION = 2.0f; // radians/s
-    private final double GEAR_RATIO = 1.0 / 64;
-    private final float SCENE_RADIUS_FACTOR = 0.75f;
+    private final double GEAR_RATIO = 1.0 / 32;
     private final double WHEEL_SETUP_ADJUSTMENT_ANGLE = Math.toRadians(-.5); // radians
-    private final float AXES_SEPARATION = 85;
+    private final float AXES_SEPARATION = 88    ;
+
+
+    private final float SCENE_APPROX_SPHERE_RADIUS = 0.75f;
 
     public DynamicSceneWormAndWheel(
             AssetManager assetManager) {
@@ -54,12 +56,12 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
     }
 
     public float getEffectiveRadius() {
-        return SCENE_RADIUS_FACTOR * mSilos.get(KEY_FOR_WHEEL).getBoundingBox().getLargestDimension();
+        return SCENE_APPROX_SPHERE_RADIUS * mSilos.get(KEY_FOR_WHEEL).getBoundingBox().getLargestDimension();
     }
 
     public Sphere getCurrentEffectiveSphere() {
         final float radius =
-                SCENE_RADIUS_FACTOR *
+                SCENE_APPROX_SPHERE_RADIUS *
                         mSilos.get(KEY_FOR_WHEEL).getBoundingBox().getLargestDimension();
         return new Sphere(new XYZf(0, 0, 0), radius);
     }
