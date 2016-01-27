@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
+import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
 import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
@@ -39,25 +40,29 @@ public class OpenGLES20Activity extends Activity {
         super.onCreate(savedInstanceState);
 
         DynamicScene dynamicScene;
+        Cameraman cameraman;
 
-        // We dial in which scene we want to use here.
+        // CHOOSE SCENE HERE
         final int choice = WORM_AND_WHEEL_ANIMATED;
+
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
                 dynamicScene = new DynamicSceneCubes();
+                cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
                 break;
             case CUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "gutter.txt");
+                cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
                 break;
             case WORM_AND_WHEEL_ANIMATED:
                 dynamicScene = new DynamicSceneWormAndWheel(getApplicationContext().getAssets());
+                cameraman = new CameramanForWormAndWheel();
                 break;
             default:
                 dynamicScene = null;
+                cameraman = null;
         }
-
-        Cameraman cameraman = CameramanWithLinearPath.makeOnLookerWithDefaultSettings(dynamicScene);
 
         mGLView = new MyGLSurfaceView(this, dynamicScene, cameraman);
         setContentView(mGLView);

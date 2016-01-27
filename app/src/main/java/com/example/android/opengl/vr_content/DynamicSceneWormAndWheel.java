@@ -29,11 +29,11 @@ public class DynamicSceneWormAndWheel implements DynamicScene {
     private final String STL_FILENAME_WORM = "worm-gear.stl";
     private final String STL_FILENAME_WHEEL = "worm-wheel.stl";
 
-    private final double WORM_SPEED_OF_ROTATION = 4.0f; // radians/s
-    private final double GEAR_RATIO = 1.0 / 50.0;
+    private final double WORM_SPEED_OF_ROTATION = 2.0f; // radians/s
+    private final double GEAR_RATIO = 1.0 / 64;
     private final float SCENE_RADIUS_FACTOR = 0.75f;
-    private final double WHEEL_SETUP_ADJUSTMENT_ANGLE = 0.0; // radians
-    private final float AXES_SEPARATION = 85.0f;
+    private final double WHEEL_SETUP_ADJUSTMENT_ANGLE = Math.toRadians(-.5); // radians
+    private final float AXES_SEPARATION = 85;
 
     public DynamicSceneWormAndWheel(
             AssetManager assetManager) {

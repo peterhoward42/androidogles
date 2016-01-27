@@ -39,7 +39,8 @@ public class DynamicSceneSTLTest extends ActivityInstrumentationTestCase2<OpenGL
         AssetManager assetManager = getActivity().getAssets();
         DynamicSceneSTL dynamicSceneSTL = DynamicSceneSTL.buildFromSTLFile(
                 assetManager, "gutter.txt");
-        assertEquals("35.36", String.format("%.2f", dynamicSceneSTL.getCurrentEffectiveSphere()));
+        assertEquals("35.36", String.format("%.2f",
+                dynamicSceneSTL.getCurrentEffectiveSphere().getRadius()));
     }
 
     public void testGetCurrentObjectToWorldTransform() {

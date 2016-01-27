@@ -58,7 +58,7 @@ public class CameramanWithLinearPath implements Cameraman {
         // Let us traverse the z axis through the middle of the scene's sphere from some way in
         // front into the centre of it. Keeping our look at point at the rear, left, bottom corner.
 
-        final float TRAVERSAL_DURATION = 10.0f; // seconds
+        final float TRAVERSAL_DURATION = 30.0f; // seconds
         final Sphere sphere = dynamicScene.getCurrentEffectiveSphere();
         final float rad = sphere.getRadius();
         final XYZf trackStartOffset = new XYZf(0, 0, 3.0f * rad);

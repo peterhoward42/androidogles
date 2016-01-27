@@ -27,7 +27,7 @@ import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.RendererForMeshCollection;
 import com.example.android.opengl.vr_content.SceneLighting;
-import com.example.android.opengl.vr_content.ScenePerspective;
+import com.example.android.opengl.vr_content.ViewProjectionCalculator;
 import com.example.android.opengl.vr_content.TransformPipeLineForModel;
 import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformFactory;
@@ -55,7 +55,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private DynamicScene mDynamicScene;
     private Cameraman mCameraman;
     private SceneLighting mSceneLighting;
-    private ScenePerspective mScenePerspective;
+    private ViewProjectionCalculator mViewProjectionCalculator;
     private float mScreenAspect;
 
     public MyGLRenderer(
@@ -65,7 +65,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         mDynamicScene = dynamicScene;
         mCameraman = cameraman;
         mSceneLighting = new SceneLighting();
-        mScenePerspective = new ScenePerspective();
+        mViewProjectionCalculator = new ViewProjectionCalculator();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         final ViewingAxis viewingAxis = mCameraman.getCurrentViewpoint();
         float[] worldToCameraTransform = viewingAxis.worldToCameraTransform();
-        float[] projectionTransform = mScenePerspective.calculateProjectionTransform(
+        float[] projectionTransform = mViewProjectionCalculator.calculateProjectionTransform(
                 viewingAxis, mDynamicScene.getCurrentEffectiveSphere(), mScreenAspect);
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.
