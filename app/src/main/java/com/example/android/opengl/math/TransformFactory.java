@@ -48,6 +48,13 @@ public class TransformFactory {
         return m;
     }
 
+    public static float[] eulerAngles(
+            final float aboutXDeg, final float aboutYDeg, final float aboutZDeg) {
+        float[] m = new float[16];
+        Matrix.setRotateEulerM(m, 0, aboutXDeg, aboutYDeg, aboutZDeg);
+        return m;
+    }
+
     public static float[] inverted(float[] toInvert) {
         float[] inverted = identity();
         Matrix.invertM(inverted, 0, toInvert, 0);

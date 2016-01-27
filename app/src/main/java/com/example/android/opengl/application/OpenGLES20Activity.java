@@ -26,7 +26,7 @@ import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
 import com.example.android.opengl.vr_content.Cameraman;
-import com.example.android.opengl.vr_content.CameramanWithLinearPath;
+import com.example.android.opengl.vr_content.CameramanOrbiting;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -35,7 +35,8 @@ public class OpenGLES20Activity extends Activity {
     private final int CUBES_PROGRAMMATIC_GENERATED = 1;
     private final int GUTTER_AS_SINGLE_MODEL_FROM_STL_FILE = 2;
     private final int WORM_AND_WHEEL_ANIMATED = 3;
-    private final int LANDING_GEAR = 4;
+    private final int STOP_VALVE = 4;
+    private final int DIFF = 5;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class OpenGLES20Activity extends Activity {
         Cameraman cameraman;
 
         // CHOOSE SCENE HERE
-        final int choice = LANDING_GEAR;
+        final int choice = DIFF;
 
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
@@ -55,16 +56,21 @@ public class OpenGLES20Activity extends Activity {
             case GUTTER_AS_SINGLE_MODEL_FROM_STL_FILE:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "gutter.txt");
-                cameraman = CameramanWithLinearPath.makeWithDefaultSettings(dynamicScene);
+                cameraman = new CameramanOrbiting(dynamicScene.getCurrentEffectiveSphere());
                 break;
             case WORM_AND_WHEEL_ANIMATED:
                 dynamicScene = new DynamicSceneWormAndWheel(getApplicationContext().getAssets());
                 cameraman = new CameramanForWormAndWheel();
                 break;
-            case LANDING_GEAR:
+            case STOP_VALVE:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
-                        getApplicationContext().getAssets(), "landing-gear.stl");
+                        getApplicationContext().getAssets(), "stop-valve.stl");
                 cameraman = new CameramanStatic(dynamicScene.getCurrentEffectiveSphere());
+                break;
+            case DIFF:
+                dynamicScene = DynamicSceneSTL.buildFromSTLFile(
+                        getApplicationContext().getAssets(), "diff.stl");
+                cameraman = new CameramanOrbiting(dynamicScene.getCurrentEffectiveSphere());
                 break;
             default:
                 dynamicScene = null;

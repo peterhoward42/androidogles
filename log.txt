@@ -32,8 +32,13 @@ o  Cuter content from grabcad that tests complexity
         o  could consider not reading all tri at once, and streaming them to
            vertex buffer builder - but don't know if will get alloc failure
            there.
-    o  try gradually working thru file sizes using synthesised scene binary
-        o  programmatic scene of cubes?
+    o  try some other files
+o  Cuter cameraman with animation
+    o  Decide what movement
+    o  Morph linear one orbital and use
+        o  Look right?
+        o  Regression test tests
+    o  Add euler trans test
 
 
 o  Show part of camera frame / self

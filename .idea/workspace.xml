@@ -40,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="OpenGLES20Activity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/application/OpenGLES20Activity.java">
+      <file leaf-file-name="CameramanStatic.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.717608">
-              <caret line="71" column="9" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -52,63 +52,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DynamicSceneWormAndWheel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/DynamicSceneWormAndWheel.java">
+      <file leaf-file-name="CameramanOrbiting.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanOrbiting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="105" column="9" selection-start-line="97" selection-start-column="7" selection-end-line="105" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DynamicSceneSTL.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/DynamicSceneSTL.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="78" column="86" selection-start-line="78" selection-start-column="86" selection-end-line="78" selection-end-column="86" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="XYZf.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/primitives/XYZf.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Triangle.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/primitives/Triangle.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MeshFactoryFromSTLBinary.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/mesh/MeshFactoryFromSTLBinary.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="69" column="5" selection-start-line="69" selection-start-column="5" selection-end-line="69" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CameramanStatic.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.18106312">
+              <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#798#799#0" expanded="true" />
+                <element signature="e#840#841#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransformFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
+              <folding>
+                <element signature="e#689#690#0" expanded="true" />
+                <element signature="e#750#751#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1641,8 +1606,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/geom/MeshFactoryFromSTLBinary.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/geom/MeshFactorySimpleCubes.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformApply.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/geom/Mesh.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/MeshFactoryFromSTLBinaryTest.java" />
@@ -1650,7 +1613,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/geom/XYZf.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/geom/BoundingBox.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/BoundingBoxTest.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformFactory.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/FirstPerson.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/FirstPersonManipulator.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/OnLookerGuide.java" />
@@ -1683,15 +1645,18 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/OnLookRubberNeckTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/CameramanWithLinearPathTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/DynamicSceneSTLTest.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanWithLinearPath.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/ScenePerspective.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/ViewProjection.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/ViewProjectionCalculator.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanForWormAndWheel.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/DynamicSceneWormAndWheel.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/application/OpenGLES20Activity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/DynamicSceneSTL.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanWithLinearPath.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/application/OpenGLES20Activity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/CameramanOrbitingTest.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformFactory.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanOrbiting.java" />
       </list>
     </option>
   </component>
@@ -1805,6 +1770,28 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="opengl" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="androidogles" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="opengl" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="math" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1980,7 +1967,7 @@
       <option name="TESTING_TYPE" value="2" />
       <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
       <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="com.example.android.opengl.tests.CameramanWithLinearPathTest" />
+      <option name="CLASS_NAME" value="com.example.android.opengl.tests.CameramanOrbitingTest" />
       <option name="PACKAGE_NAME" value="" />
       <option name="EXTRA_OPTIONS" value="" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
@@ -2070,14 +2057,14 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.4360341" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36222222" sideWeight="0.58635396" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3" sideWeight="0.5671642" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3" sideWeight="0.56289977" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17857143" sideWeight="0.29174665" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3077778" sideWeight="0.32462686" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3" sideWeight="0.43283582" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3" sideWeight="0.4371002" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17857143" sideWeight="0.37142858" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.22121535" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.21801706" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.48720682" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2106,14 +2093,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/mesh/MeshFactoryFromSTLBinary.java</url>
-          <line>52</line>
-          <properties />
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="44" />
     </breakpoint-manager>
     <watches-manager />
@@ -2229,6 +2208,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="59" selection-start-line="33" selection-start-column="59" selection-end-line="33" selection-end-column="59" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2268,17 +2248,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="63" column="27" selection-start-line="63" selection-start-column="27" selection-end-line="63" selection-end-column="27" />
-          <folding>
-            <element signature="e#689#690#0" expanded="false" />
-            <element signature="e#750#751#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/primitives/Sphere.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3469388">
@@ -2311,8 +2280,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="45" column="50" selection-start-line="44" selection-start-column="38" selection-end-line="45" selection-end-column="50" />
           <folding>
-            <element signature="e#1151#1152#0" expanded="true" />
-            <element signature="e#1189#1190#0" expanded="true" />
+            <element signature="e#1151#1152#0" expanded="false" />
+            <element signature="e#1189#1190#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2368,6 +2337,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8521739">
           <caret line="38" column="42" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
+          <folding>
+            <element signature="e#873#874#0" expanded="false" />
+            <element signature="e#911#912#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2416,29 +2389,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/CameramanWithLinearPathTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/application/MyGLRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="117" column="64" selection-start-line="117" selection-start-column="64" selection-end-line="117" selection-end-column="64" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanWithLinearPath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2707641">
-          <caret line="54" column="61" selection-start-line="54" selection-start-column="61" selection-end-line="54" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2465,16 +2420,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="105" column="9" selection-start-line="97" selection-start-column="7" selection-end-line="105" selection-end-column="9" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2505,17 +2450,58 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/mesh/MeshFactoryFromSTLBinary.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="69" column="5" selection-start-line="69" selection-start-column="5" selection-end-line="69" selection-end-column="5" />
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/application/OpenGLES20Activity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.717608">
-          <caret line="71" column="9" selection-start-line="71" selection-start-column="9" selection-end-line="71" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="90" selection-start-line="58" selection-start-column="90" selection-end-line="58" selection-end-column="90" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/tests/CameramanOrbitingTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.50830567">
+          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanStatic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/math/TransformFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
+          <folding>
+            <element signature="e#689#690#0" expanded="true" />
+            <element signature="e#750#751#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/android/opengl/vr_content/CameramanOrbiting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18106312">
+          <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#798#799#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
           </folding>
         </state>
       </provider>

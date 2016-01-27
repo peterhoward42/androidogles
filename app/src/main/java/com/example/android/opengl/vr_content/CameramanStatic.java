@@ -7,7 +7,7 @@ import com.example.android.opengl.primitives.XYZf;
 public class CameramanStatic implements Cameraman {
 
     private Sphere mSphere;
-    private final static float CAM_HEIGHT_FACTOR = 3;
+    private final static float CAM_HEIGHT_FACTOR = 1.25f;
 
     public CameramanStatic(final Sphere timeInvariantSceneSphere) {
         mSphere = timeInvariantSceneSphere;
