@@ -17,6 +17,21 @@ public class XYZfTest extends InstrumentationTestCase {
         assertEquals("0.12345 100.00000 0.12346", normalDiagnosticString);
     }
 
+    public void testhashAfterNumericalRounding() throws Exception {
+        XYZf point = new XYZf(0.123454f, 100f, 0.123456f);
+
+        // Hash produces what we expect
+        String hashString = point.hashAfterNumericalRounding();
+        assertEquals("fibble", hashString);
+
+        // Hash does successfully reconcile very small differences in value
+        final float TINY_DIFFERENCE = (float)1e-9;
+        XYZf equivalentPoint = new XYZf(0.123454f, 100f, 0.123456f + TINY_DIFFERENCE);
+        assertEquals(
+                point.hashAfterNumericalRounding(),
+                equivalentPoint.hashAfterNumericalRounding());
+    }
+
     public void testResultantLength() throws Exception {
         XYZf point = new XYZf(1f, 1f, 1f);
         float length = point.resultantLength();

@@ -29,8 +29,8 @@ public class BoundingBox {
             return;
         }
         // General case
-        mMinima = mMinima.minimizedTo(vertex);
-        mMaxima = mMaxima.maximizedTo(vertex);
+        mMinima = mMinima.clampedComponentWiseToMinima(vertex);
+        mMaxima = mMaxima.clampedComponentWiseToMaxima(vertex);
     }
 
     public XYZf getMinima() {

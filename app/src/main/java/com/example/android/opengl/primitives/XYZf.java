@@ -5,7 +5,7 @@ package com.example.android.opengl.primitives;
  */
 
 /**
- * An XYZ vector.
+ * An XYZ vector with floating point precision.
  */
 public class XYZf {
 
@@ -39,7 +39,7 @@ public class XYZf {
         return xyz[2];
     }
 
-    public XYZf minimizedTo(final XYZf potentialNewMinima) {
+    public XYZf clampedComponentWiseToMinima(final XYZf potentialNewMinima) {
         XYZf q = potentialNewMinima;
         return new XYZf(
                 Math.min(X(), q.X()),
@@ -47,7 +47,7 @@ public class XYZf {
                 Math.min(Z(), q.Z()));
     }
 
-    public XYZf maximizedTo(final XYZf potentialNewMaxima) {
+    public XYZf clampedComponentWiseToMaxima(final XYZf potentialNewMaxima) {
         XYZf q = potentialNewMaxima;
         return new XYZf(
                 Math.max(X(), q.X()),
@@ -130,8 +130,27 @@ public class XYZf {
                 / length);
     }
 
-    public String formatRounded() {
+    /** This method provides a string representation of the three constituent values
+     * after rounding them to 5 decimal places. The emphasis is on formatting - i.e. the intent
+     * being either for a human being to look at the result.
+     * @return The string produced.
+     */
+    public final String formatRounded() {
         return String.format("%.5f %.5f %.5f", xyz[0]
+                , xyz[1]
+                , xyz[2]
+        );
+    }
+
+    /** This method provides a string representation of the three constituent values, after
+     * they have been rounded to 5 decimal places. The emphasis is on using the result as a hashing
+     * value - that resolves two objects that differ only due to calculation rounding differences
+     * and similar - into the same hash code.
+     * @return
+     */
+    public final String hashAfterNumericalRounding() {
+        // Avoid wasted space characters.
+        return String.format("%.5f%.5f%.5f", xyz[0]
                 , xyz[1]
                 , xyz[2]
         );

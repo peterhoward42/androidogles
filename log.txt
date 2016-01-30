@@ -24,27 +24,49 @@ Android GL Play Around
 *  More complex model
 *  Fix Artefacts with cuter near and far setting
 *  When project nice, tweak animation and position params for gears (will do)
-o  Cuter content from grabcad that tests complexity
-    o  landing gear - blows android memory
-        o  note before start rendering frames - it is standard java, at mesh
-           building stage.
-        o  how many triangles? = 1,970,216,992 (roughly 1.9e9)
-        o  could consider not reading all tri at once, and streaming them to
-           vertex buffer builder - but don't know if will get alloc failure
-           there.
-    o  try some other files
-o  Cuter cameraman with animation
-    o  Decide what movement
-    o  Morph linear one orbital and use
-        o  Look right?
-        o  Regression test tests
-    o  Add euler trans test
+*  Cuter content from grabcad that tests complexity
+o  Interpolated normals
+    *  Picture to be clear what want to do
+    *  Design
+    o  Do
+        *  Decide tactics
+        o  Define utilities needed
+            *  RoundingHashForXYZf
+            *  RoundingHashForMeshVertex
+            o  Unit test hashes
+                o  XYZf (coded)
+                o  MeshVertex
+            o  Vector deviation thresholder and unit test
+        o  Add this func to existing Mesh class for build purposes and
+           unit test build and pass. But don't consume it in render.
+        o  Switch to consuming it in render.
+        o  If all works - give triangle store to garbage collector.
+o  We could now go back to using draw lists and not duplicate vertices,
+   although vertices would have to be treated as unique if their normals
+   differed.
 
 
 o  Show part of camera frame / self
 o  Performance limits
 
 -----------------------------------------------------------------------------
+Interpolating gradient
+-----------------------------------------------------------------------------
+    o  First rationalise winding order like now, and capture facet normal.
+    o  Then for each vertex of each triangle, find all others triangles that
+       share that vertex which pass a tangent continuity threshold test.
+       Then ascribe to the first vertex, a normal that is the mean of all of
+       the thus captured facet normals.
+-----------------------------------------------------------------------------
+Design
+-----------------------------------------------------------------------------
+    o  Triangle remains useful during construction, but better to get most
+       software feeding of smarter mesh that defines triangles in terms
+       of array of MeshVertex, whic encapsulates a XYZf for the position, but
+       also another for the vertex normal. Noting that the same position will
+       then sometimes exist > once to cater for differing normals.
+-----------------------------------------------------------------------------
+----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
@@ -53,6 +75,4 @@ o  Performance limits
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
------------------------------------------------------------------------------
------------------------------------------------------------------------------
------------------------------------------------------------------------------
+----------------------------------------------------------------------------
