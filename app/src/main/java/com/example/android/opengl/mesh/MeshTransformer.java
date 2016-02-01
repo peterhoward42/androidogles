@@ -7,10 +7,10 @@ import com.example.android.opengl.primitives.Triangle;
  */
 public class MeshTransformer {
 
-    public static Mesh transformedCopy(final float[] transform, final Mesh toTransform) {
+    public static Mesh transformedCopy(final float[] transform, final Mesh meshToTransform) {
         Mesh meshToReturn = new Mesh();
-        for (Triangle triangle: toTransform.getTriangles()) {
-            meshToReturn.addTriangle(TriangleManipulator.makeTransformedTriangle(transform, triangle));
+        for (MeshTriangle meshTriangle: meshToTransform.getTriangles()) {
+            meshToReturn.addMeshTriangle(meshTriangle.transformed(transform));
         }
         return meshToReturn;
     }

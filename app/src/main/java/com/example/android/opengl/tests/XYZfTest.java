@@ -22,7 +22,7 @@ public class XYZfTest extends InstrumentationTestCase {
 
         // Hash produces what we expect
         String hashString = point.hashAfterNumericalRounding();
-        assertEquals("fibble", hashString);
+        assertEquals("0.12345100.000000.12346", hashString);
 
         // Hash does successfully reconcile very small differences in value
         final float TINY_DIFFERENCE = (float)1e-9;

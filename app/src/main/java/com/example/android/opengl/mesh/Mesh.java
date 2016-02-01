@@ -7,32 +7,44 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * A mesh comprising a collection of {@link Triangle}.
+ * A mesh comprising a collection of {@link MeshTriangle}.
  * With meta data about aggregate properties like bounding box.
  */
 public class Mesh {
 
-    private Collection<Triangle> triangles;
+    private Collection<MeshTriangle> meshTriangles;
     private BoundingBox mBoundingBox;
 
     public Mesh() {
-        triangles = new ArrayList<Triangle>();
+        meshTriangles = new ArrayList<MeshTriangle>();
         mBoundingBox = new BoundingBox();
     }
 
-    public void addTriangle(final Triangle newTriangle) {
-        triangles.add(newTriangle);
-        updateBoundingBoxWithThisTriangle(newTriangle);
+    /**
+     * Add a primitive triangle to this mesh. All three of the individual vertex normals on the
+     MeshTriangle that is is created are set to the same value as the surface normal of the
+     incoming primitive triangle.
+     */
+    public void addPrimitiveTriangle(final Triangle primitiveTriangle) {
+        meshTriangles.add(new MeshTriangle(primitiveTriangle));
+        updateBoundingBoxWithThisTriangle(primitiveTriangle);
+    }
+
+    /** Add a mesh triangle to this mesh - preserving the individual vertex normals from the
+     * incoming one.
+     */
+    public void addMeshTriangle(final MeshTriangle meshTriangle) {
+        meshTriangles.add(meshTriangle);
     }
 
     public void appendAllTrianglesFromMesh(final Mesh meshToAdd) {
-        for (Triangle triangle: meshToAdd.getTriangles()) {
-            addTriangle(triangle);
+        for (MeshTriangle meshTriangle: meshToAdd.getTriangles()) {
+            addPrimitiveTriangle(meshTriangle.getPrimitiveTriangle());
         }
     }
 
-    public final Collection<Triangle> getTriangles() {
-        return triangles;
+    public final Collection<MeshTriangle> getTriangles() {
+        return meshTriangles;
     }
 
     public final BoundingBox getBoundingBox() {
@@ -40,7 +52,7 @@ public class Mesh {
     }
 
     public final int getNumberOfTriangles() {
-        return triangles.size();
+        return meshTriangles.size();
     }
 
     private void updateBoundingBoxWithThisTriangle(final Triangle triangle) {

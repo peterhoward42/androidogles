@@ -68,7 +68,7 @@ public class MeshFactoryFromSTLAscii {
                     mThreeVertices.remove(0),
                     mThreeVertices.remove(0));
             triangle = reconcileTriangleToCurrentFacetNormal(triangle);
-            mMesh.addTriangle(triangle);
+            mMesh.addPrimitiveTriangle(triangle);
         }
     }
 

@@ -46,12 +46,12 @@ public class MeshFactorySimpleCubes {
     private Mesh makeReferenceMesh() {
         // We use the right facing (+X facing) face as our reference model.
         Mesh twoTriangles = new Mesh();
-        twoTriangles.addTriangle(new Triangle(
+        twoTriangles.addPrimitiveTriangle(new Triangle(
                 new XYZf(+mHalfWidth, -mHalfWidth, -mHalfWidth),
                 new XYZf(+mHalfWidth, +mHalfWidth, +mHalfWidth),
                 new XYZf(+mHalfWidth, -mHalfWidth, +mHalfWidth)));
 
-        twoTriangles.addTriangle(new Triangle(
+        twoTriangles.addPrimitiveTriangle(new Triangle(
                 new XYZf(+mHalfWidth, +mHalfWidth, +mHalfWidth),
                 new XYZf(+mHalfWidth, -mHalfWidth, -mHalfWidth),
                 new XYZf(+mHalfWidth, +mHalfWidth, -mHalfWidth)));

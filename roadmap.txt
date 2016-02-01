@@ -3,7 +3,7 @@ Roadmap for Open GL Experiments
 
 *  Get shaders from assets
 *  Convert to using uniqued vertices list with sequence list
-*  Dependency inject data for > 1 co-planar triangle
+*  Dependency inject data for > 1 co-planar primitiveTriangle
 *  Isolate renderer
 *  Use a static camera transform
 *  Have the camera transform change with time and add triangles out of plane

@@ -9,7 +9,7 @@ Android GL Play Around
 *  Tag the current commit as the official baseline
 *  Make roadmap of ideas
 *  Shaders from assets, retest, and commit
-*  Dependency inject data for > 1 co-planar triangle
+*  Dependency inject data for > 1 co-planar primitiveTriangle
 *  Have the camera transform change with time and add triangles out of plane
 *  Have different bits of the model use different location transforms
 *  Digress redesign for lighting
@@ -29,22 +29,12 @@ o  Interpolated normals
     *  Picture to be clear what want to do
     *  Design
     o  Do
-        *  Decide tactics
-        o  Define utilities needed
-            *  RoundingHashForXYZf
-            *  RoundingHashForMeshVertex
-            o  Unit test hashes
-                o  XYZf (coded)
-                o  MeshVertex
-            o  Vector deviation thresholder and unit test
-        o  Add this func to existing Mesh class for build purposes and
-           unit test build and pass. But don't consume it in render.
-        o  Switch to consuming it in render.
-        o  If all works - give triangle store to garbage collector.
-o  We could now go back to using draw lists and not duplicate vertices,
-   although vertices would have to be treated as unique if their normals
-   differed.
-
+        *  Big refactor
+        *  Get to compile benignly
+        o  Unit and regression test.
+        o  Once working - provide way to stimulate smoothing
+        o  Consider decline to expose read apis unless smoothing has been
+           done.
 
 o  Show part of camera frame / self
 o  Performance limits
@@ -53,18 +43,32 @@ o  Performance limits
 Interpolating gradient
 -----------------------------------------------------------------------------
     o  First rationalise winding order like now, and capture facet normal.
-    o  Then for each vertex of each triangle, find all others triangles that
+    o  Then for each vertex of each primitiveTriangle, find all others triangles that
        share that vertex which pass a tangent continuity threshold test.
        Then ascribe to the first vertex, a normal that is the mean of all of
        the thus captured facet normals.
 -----------------------------------------------------------------------------
 Design
 -----------------------------------------------------------------------------
-    o  Triangle remains useful during construction, but better to get most
-       software feeding of smarter mesh that defines triangles in terms
-       of array of MeshVertex, whic encapsulates a XYZf for the position, but
-       also another for the vertex normal. Noting that the same position will
-       then sometimes exist > once to cater for differing normals.
+    o  Triangle should stay the same, including raw vertex coords and
+       facet normal. Never throw info away.
+    o  Smoothed normals is only a propery of a mesh.
+    o  So mesh responsibility is:
+        o  To model a collection of triangles
+        o  For each thus modelled, to provide access to the original
+           primitiveTriangle
+        o  For each thus modelled to provide a smoothed vertex normal
+           when there is one.
+        o  But how address the vertices?
+            o  Using their hashing function
+            o  So normal for a vertex is stored against its hash
+
+        o  Read api
+            o  Current lets you iterate over original triangles,
+               all we need in addition is for iteration to include also,
+               the corresponding smoothed normals when present
+
+        o  State protection measures
 -----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
