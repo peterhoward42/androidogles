@@ -9,7 +9,7 @@ import com.example.android.opengl.primitives.Sphere;
 import com.example.android.opengl.primitives.XYZf;
 
 /**
- * A {@link Cameraman} who is orbiting the scene about the Y axis, with gradually changing
+ * A {@link Cameraman} who is orbiting the scene about the Y axis, with a constant, hard coded
  * latitude. With the camera pointing always at the centre of the scene.
  */
 public class CameramanOrbiting implements Cameraman {

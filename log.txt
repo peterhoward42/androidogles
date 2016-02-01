@@ -31,8 +31,11 @@ o  Interpolated normals
     o  Do
         *  Big refactor
         *  Get to compile benignly
-        o  Unit and regression test.
+        *  Unit and system regression test.
         o  Once working - provide way to stimulate smoothing
+            o  Put in Smoothing 
+            o  Really working?
+            o  Unit test for trivial case
         o  Consider decline to expose read apis unless smoothing has been
            done.
 
