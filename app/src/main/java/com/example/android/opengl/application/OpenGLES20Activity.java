@@ -46,7 +46,7 @@ public class OpenGLES20Activity extends Activity {
         Cameraman cameraman;
 
         // CHOOSE SCENE HERE
-        final int choice = DIFF;
+        final int choice = CUBES_PROGRAMMATIC_GENERATED;
 
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:

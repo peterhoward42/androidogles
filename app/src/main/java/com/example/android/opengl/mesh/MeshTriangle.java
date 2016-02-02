@@ -53,4 +53,8 @@ public class MeshTriangle {
     public final XYZf[] getVertexNormals() {
         return smoothedVertexNormals;
     }
+
+    public void overwriteVertexNormal(final int vertexIndex, final XYZf newNormal) {
+        this.smoothedVertexNormals[vertexIndex] = newNormal;
+    }
 }

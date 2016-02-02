@@ -12,8 +12,8 @@ import java.util.Set;
  */
 public interface DynamicScene {
 
-    public Set<String> getSiloNames();
-    public Mesh getSilo(String siloName);
-    public float[] getCurrentObjectToWorldTransform(String siloName);
-    public Sphere getCurrentEffectiveSphere();
+    Set<String> getSiloNames();
+    Mesh getSilo(String siloName);
+    float[] getCurrentObjectToWorldTransform(String siloName);
+    Sphere getCurrentEffectiveSphere();
 }

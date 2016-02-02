@@ -7,5 +7,5 @@ package com.example.android.opengl.vr_content;
  */
 public interface Cameraman {
 
-    public ViewingAxis getCurrentViewpoint();
+    ViewingAxis getCurrentViewpoint();
 }

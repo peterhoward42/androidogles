@@ -130,9 +130,11 @@ public class XYZf {
                 / length);
     }
 
-    /** This method provides a string representation of the three constituent values
+    /**
+     * This method provides a string representation of the three constituent values
      * after rounding them to 5 decimal places. The emphasis is on formatting - i.e. the intent
      * being either for a human being to look at the result.
+     *
      * @return The string produced.
      */
     public final String formatRounded() {
@@ -142,17 +144,16 @@ public class XYZf {
         );
     }
 
-    /** This method provides a string representation of the three constituent values, after
+    /**
+     * This method provides a string representation of the three constituent values, after
      * they have been rounded to 5 decimal places. The emphasis is on using the result as a hashing
      * value - that resolves two objects that differ only due to calculation rounding differences
      * and similar - into the same hash code.
+     *
      * @return
      */
     public final String hashAfterNumericalRounding() {
-        // Avoid wasted space characters.
-        return String.format("%.5f%.5f%.5f", xyz[0]
-                , xyz[1]
-                , xyz[2]
-        );
+        // share implementation but have separate function to make intentclear.
+        return formatRounded();
     }
 }

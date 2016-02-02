@@ -1,6 +1,5 @@
 package com.example.android.opengl.mesh;
 
-import com.example.android.opengl.primitives.Triangle;
 import com.example.android.opengl.primitives.XYZf;
 
 import java.util.ArrayList;
@@ -14,9 +13,10 @@ import java.util.Set;
  * Capable of examining a {@link Mesh}, to deduce which of the adjacent constituent triangles
  * are probably neighbouring facets on a continuously curved surface, and whose rendering would
  * be improved by tweaking the local vertex normals at those points to represent the underlying
- * curvature. You construct one of these by passing the mesh you want to tweak as a parameter, and
- * this class tweaks it in in-situ. The algorithm assumes that the mesh is of an engineering type
- * geometry rather than being unstructured and irregular. I.e. certain deductions are reasonable.
+ * curvature. You construct one of these Smoothers by passing the mesh you want to tweak as a
+ * parameter, and then calling the doSmoothing() method, which tweaks the mesh in-situ. The
+ * algorithm assumes that the mesh is of a regular engineering-style geometry rather than being
+ * unstructured and irregular, and makes some assumptions based on this quality.
  */
 public class MeshVertexSmoother {
 
@@ -30,15 +30,19 @@ public class MeshVertexSmoother {
      */
 
     private Mesh theMesh;
+    private Map<String, List<XYZf>> hash2Vertices;
+    private Map<String, Set<MeshTriangle>> hash2Triangles;
 
-    // Lookup tables
+    // What is the angle for adjacent surfaces to diverge by, that should switch between
+    // smoothing surface normals across them, as opposed to leaving them alone, because
+    // they are probably SUPPOSED to be angularly distinct?
 
-    Map<String, List<XYZf>> hash2Vertices;
-    Map<String, Set<MeshTriangle>> hash2Triangles;
+    private static final float SMALL_ANGLE_DEGREES = 15.0f;
+    private final static float SUFFICIENTLY_PARALLEL = (float) Math.cos(Math.toRadians
+            (SMALL_ANGLE_DEGREES));
 
     public MeshVertexSmoother(Mesh theMesh) {
         this.theMesh = theMesh;
-
         this.hash2Vertices = new HashMap<String, List<XYZf>>();
         this.hash2Triangles = new HashMap<String, Set<MeshTriangle>>();
     }
@@ -48,7 +52,7 @@ public class MeshVertexSmoother {
         buildLookupTables();
 
         // Now we consider all the vertices that are shared by two or more triangles
-        for (String vertexHash: hash2Triangles.keySet()) {
+        for (String vertexHash : hash2Triangles.keySet()) {
             Set<MeshTriangle> touchingTriangles = hash2Triangles.get(vertexHash);
             if (touchingTriangles.size() < 2)
                 continue;
@@ -59,7 +63,7 @@ public class MeshVertexSmoother {
 
     private void doSmoothingAtVertex(final String vertexHash, Set<MeshTriangle> touchingTriangles) {
         // We know only that we have been given a set of triangles that touch at a vertex
-        // in common. We will extract sucessive batches of triangles from this set to work on, on
+        // in common. We will extract successive batches of triangles from this set to work on, on
         // the basis of them having roughly the same surface normal.
 
         // Until we have exhausted the candidates...
@@ -70,19 +74,20 @@ public class MeshVertexSmoother {
                     touchingTriangles, seedTrianglesNormal);
             // Deplete the candidate set as we go.
             touchingTriangles.removeAll(trianglesToSmooth);
-            // If this set comprises only one triangle, we move on
+            // If the aligned set comprises only one triangle, we move on
             if (trianglesToSmooth.size() == 1)
                 continue;
+            // Calculate and apply the new smoothed normal to the vertices affected.
             final XYZf smoothedNormal = calcAverageOfSurfaceNormals(trianglesToSmooth);
-            for (MeshTriangle triangleToSmooth: trianglesToSmooth) {
+            for (MeshTriangle triangleToSmooth : trianglesToSmooth) {
                 overrideVertexNormal(triangleToSmooth, smoothedNormal, vertexHash);
             }
         }
     }
 
     private XYZf calcAverageOfSurfaceNormals(final Set<MeshTriangle> triangles) {
-        XYZf cumulativeVector = new XYZf(0,0,0);
-        for (MeshTriangle triangle: triangles) {
+        XYZf cumulativeVector = new XYZf(0, 0, 0);
+        for (MeshTriangle triangle : triangles) {
             cumulativeVector = cumulativeVector.plus(triangle.getPrimitiveTriangle().getNormal());
         }
         return cumulativeVector.normalised();
@@ -97,9 +102,9 @@ public class MeshVertexSmoother {
         // iterations per triangle, and no inner loops.
         for (int i = 0; i < 3; i++) {
             String vertexHash = triangleVertices[i].hashAfterNumericalRounding();
-            if (vertexHash == hashOfVertexToAlter) {
+            if (vertexHash.equals(hashOfVertexToAlter)) {
                 // Overwrite the vertex normal.
-                triangle.getVertexNormals()[i] = newNormal;
+                triangle.overwriteVertexNormal(i, newNormal);
                 return; // return statement executing in-loop signals success
             }
         }
@@ -122,17 +127,12 @@ public class MeshVertexSmoother {
     private boolean normalsAreSimilarEnough(final XYZf normalA, final XYZf normalB) {
         // Measure of parallelism is the cosine of the angular difference
         final float measureOfParallelism = normalA.dotProduct(normalB);
-        final float SMALL_ANGLE_DEGREES = 10.0f;
-        final float SUFFICIENTLY_PARALLEL = (float)Math.cos(Math.toRadians(SMALL_ANGLE_DEGREES));
-        if (measureOfParallelism >= SUFFICIENTLY_PARALLEL)
-            return true;
-        else
-            return false;
+        return measureOfParallelism >= SUFFICIENTLY_PARALLEL;
     }
 
     private void buildLookupTables() {
-        for (MeshTriangle triangle: theMesh.getTriangles()) {
-            for (XYZf vertex: triangle.getPrimitiveTriangle().vertices()) {
+        for (MeshTriangle triangle : theMesh.getTriangles()) {
+            for (XYZf vertex : triangle.getPrimitiveTriangle().vertices()) {
                 String hash = vertex.hashAfterNumericalRounding();
                 if (hash2Vertices.containsKey(hash) == false) {
                     hash2Vertices.put(hash, new ArrayList<XYZf>());

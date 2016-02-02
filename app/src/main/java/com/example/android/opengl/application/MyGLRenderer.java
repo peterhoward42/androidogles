@@ -115,7 +115,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         final ViewingAxis viewingAxis = mCameraman.getCurrentViewpoint();
         float[] worldToCameraTransform = viewingAxis.worldToCameraTransform();
-        float[] projectionTransform = mViewProjectionCalculator.calculateProjectionTransform(
+        float[] projectionTransform = ViewProjectionCalculator.calculateProjectionTransform(
                 viewingAxis, mDynamicScene.getCurrentEffectiveSphere(), mScreenAspect);
         // Correctly position each silo in the scene, and combine the three transforms into one
         // for each silo.

@@ -26,18 +26,6 @@ Android GL Play Around
 *  When project nice, tweak animation and position params for gears (will do)
 *  Cuter content from grabcad that tests complexity
 o  Interpolated normals
-    *  Picture to be clear what want to do
-    *  Design
-    o  Do
-        *  Big refactor
-        *  Get to compile benignly
-        *  Unit and system regression test.
-        o  Once working - provide way to stimulate smoothing
-            o  Put in Smoothing 
-            o  Really working?
-            o  Unit test for trivial case
-        o  Consider decline to expose read apis unless smoothing has been
-           done.
 
 o  Show part of camera frame / self
 o  Performance limits

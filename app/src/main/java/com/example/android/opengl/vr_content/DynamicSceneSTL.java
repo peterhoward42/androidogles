@@ -6,6 +6,7 @@ import com.example.android.opengl.mesh.BoundingBox;
 import com.example.android.opengl.mesh.Mesh;
 import com.example.android.opengl.mesh.MeshFactoryFromSTLAscii;
 import com.example.android.opengl.mesh.MeshFactoryFromSTLBinary;
+import com.example.android.opengl.mesh.MeshVertexSmoother;
 import com.example.android.opengl.primitives.Sphere;
 import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.math.TransformFactory;
@@ -88,6 +89,8 @@ public class DynamicSceneSTL implements DynamicScene {
                 throw new RuntimeException(e.getMessage());
             }
         }
+        MeshVertexSmoother smoother = new MeshVertexSmoother(mesh);
+        smoother.doSmoothing();
         return mesh;
     }
 
