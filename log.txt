@@ -25,41 +25,13 @@ Android GL Play Around
 *  Fix Artefacts with cuter near and far setting
 *  When project nice, tweak animation and position params for gears (will do)
 *  Cuter content from grabcad that tests complexity
-o  Interpolated normals
+*  Interpolated normals
 
-o  Show part of camera frame / self
-o  Performance limits
 
 -----------------------------------------------------------------------------
-Interpolating gradient
 -----------------------------------------------------------------------------
-    o  First rationalise winding order like now, and capture facet normal.
-    o  Then for each vertex of each primitiveTriangle, find all others triangles that
-       share that vertex which pass a tangent continuity threshold test.
-       Then ascribe to the first vertex, a normal that is the mean of all of
-       the thus captured facet normals.
 -----------------------------------------------------------------------------
-Design
 -----------------------------------------------------------------------------
-    o  Triangle should stay the same, including raw vertex coords and
-       facet normal. Never throw info away.
-    o  Smoothed normals is only a propery of a mesh.
-    o  So mesh responsibility is:
-        o  To model a collection of triangles
-        o  For each thus modelled, to provide access to the original
-           primitiveTriangle
-        o  For each thus modelled to provide a smoothed vertex normal
-           when there is one.
-        o  But how address the vertices?
-            o  Using their hashing function
-            o  So normal for a vertex is stored against its hash
-
-        o  Read api
-            o  Current lets you iterate over original triangles,
-               all we need in addition is for iteration to include also,
-               the corresponding smoothed normals when present
-
-        o  State protection measures
 -----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 -----------------------------------------------------------------------------

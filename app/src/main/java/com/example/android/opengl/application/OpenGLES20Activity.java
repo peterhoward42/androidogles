@@ -19,14 +19,16 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
+import com.example.android.opengl.client.DynamicPositionSource;
+import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
+import com.example.android.opengl.vr_content.CameramanNetworked;
+import com.example.android.opengl.vr_content.CameramanOrbiting;
 import com.example.android.opengl.vr_content.CameramanStatic;
 import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
-import com.example.android.opengl.vr_content.Cameraman;
-import com.example.android.opengl.vr_content.CameramanOrbiting;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -46,7 +48,7 @@ public class OpenGLES20Activity extends Activity {
         Cameraman cameraman;
 
         // CHOOSE SCENE HERE
-        final int choice = CUBES_PROGRAMMATIC_GENERATED;
+        final int choice = STOP_VALVE;
 
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
@@ -65,7 +67,11 @@ public class OpenGLES20Activity extends Activity {
             case STOP_VALVE:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "stop-valve.stl");
-                cameraman = new CameramanStatic(dynamicScene.getCurrentEffectiveSphere());
+                CameramanNetworked cameramanNetworked = new CameramanNetworked(dynamicScene
+                        .getCurrentEffectiveSphere());
+                cameraman = cameramanNetworked;
+                DynamicPositionSource dynamicPositionSource =
+                        new DynamicPositionSource(cameramanNetworked.injectedPosition);
                 break;
             case DIFF:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(

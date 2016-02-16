@@ -13,4 +13,4 @@ Roadmap for Open GL Experiments
 *  Have prim adding library to build model
 *  Have some color variation
 *  Add some lighting
-o  Investigate performance limits for frame rate and busting memory
+*  Investigate performance limits for frame rate and busting memory
