@@ -19,7 +19,7 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import com.example.android.opengl.client.DynamicPositionSource;
+import com.example.android.opengl.client.NetworkPositionFeeder;
 import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
 import com.example.android.opengl.vr_content.CameramanNetworked;
@@ -70,8 +70,8 @@ public class OpenGLES20Activity extends Activity {
                 CameramanNetworked cameramanNetworked = new CameramanNetworked(dynamicScene
                         .getCurrentEffectiveSphere());
                 cameraman = cameramanNetworked;
-                DynamicPositionSource dynamicPositionSource =
-                        new DynamicPositionSource(cameramanNetworked.injectedPosition);
+                NetworkPositionFeeder networkPositionFeeder =
+                        new NetworkPositionFeeder(cameramanNetworked.injectedPosition);
                 break;
             case DIFF:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
