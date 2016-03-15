@@ -20,6 +20,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 import com.example.android.opengl.client.NetworkPositionFeeder;
+import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
 import com.example.android.opengl.vr_content.CameramanNetworked;
@@ -37,8 +38,12 @@ public class OpenGLES20Activity extends Activity {
     private final int CUBES_PROGRAMMATIC_GENERATED = 1;
     private final int GUTTER_AS_SINGLE_MODEL_FROM_STL_FILE = 2;
     private final int WORM_AND_WHEEL_ANIMATED = 3;
-    private final int STOP_VALVE = 4;
-    private final int DIFF = 5;
+    private final int STOP_VALVE_MOUSE_CTRL = 4;
+    private final int STOP_VALVE_LOCAL = 5;
+    private final int DIFF = 6;
+
+    private NetworkPositionFeeder networkPositionFeeder;
+    private XYZf networkCameraPositionSink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,12 @@ public class OpenGLES20Activity extends Activity {
         DynamicScene dynamicScene;
         Cameraman cameraman;
 
+        // todo the scope of these is a travesty
+        networkPositionFeeder = null;
+        networkCameraPositionSink = null;
+
         // CHOOSE SCENE HERE
-        final int choice = STOP_VALVE;
+        final int choice = STOP_VALVE_MOUSE_CTRL;
 
         switch (choice) {
             case CUBES_PROGRAMMATIC_GENERATED:
@@ -64,14 +73,19 @@ public class OpenGLES20Activity extends Activity {
                 dynamicScene = new DynamicSceneWormAndWheel(getApplicationContext().getAssets());
                 cameraman = new CameramanForWormAndWheel();
                 break;
-            case STOP_VALVE:
+            case STOP_VALVE_MOUSE_CTRL:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
                         getApplicationContext().getAssets(), "stop-valve.stl");
                 CameramanNetworked cameramanNetworked = new CameramanNetworked(dynamicScene
                         .getCurrentEffectiveSphere());
+                networkPositionFeeder = new NetworkPositionFeeder(this);
+                networkCameraPositionSink = cameramanNetworked.injectedPosition;
                 cameraman = cameramanNetworked;
-                NetworkPositionFeeder networkPositionFeeder =
-                        new NetworkPositionFeeder(cameramanNetworked.injectedPosition);
+                break;
+            case STOP_VALVE_LOCAL:
+                dynamicScene = DynamicSceneSTL.buildFromSTLFile(
+                        getApplicationContext().getAssets(), "stop-valve.stl");
+                cameraman = new CameramanOrbiting(dynamicScene.getCurrentEffectiveSphere());
                 break;
             case DIFF:
                 dynamicScene = DynamicSceneSTL.buildFromSTLFile(
@@ -95,6 +109,9 @@ public class OpenGLES20Activity extends Activity {
         // you should consider de-allocating objects that
         // consume significant memory here.
         mGLView.onPause();
+        if (networkPositionFeeder != null) {
+            networkPositionFeeder.pause();
+        }
     }
 
     @Override
@@ -103,6 +120,9 @@ public class OpenGLES20Activity extends Activity {
         // The following call resumes a paused rendering thread.
         // If you de-allocated graphic objects for onPause()
         // this is a good place to re-allocate them.
+        if (networkPositionFeeder != null) {
+            networkPositionFeeder.resume(networkCameraPositionSink);
+        }
         mGLView.onResume();
     }
 }

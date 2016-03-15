@@ -90,7 +90,8 @@ public class DynamicSceneSTL implements DynamicScene {
             }
         }
         MeshVertexSmoother smoother = new MeshVertexSmoother(mesh);
-        smoother.doSmoothing();
+        // Defeat smoothing operation for load speed.
+        // smoother.doSmoothing();
         return mesh;
     }
 

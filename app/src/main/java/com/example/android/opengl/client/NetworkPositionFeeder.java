@@ -1,5 +1,8 @@
 package com.example.android.opengl.client;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -10,39 +13,46 @@ import com.google.common.io.CharStreams;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * A thing capable of continuously polling the application server to fetch the
  * latest mandate for a user's virtual world position, and to post this fetched data
- * into the sink you provide in the constructor. It matches its request rate to the reponse rate
- * provided by the server using backpressure throttling.
+ * into the sink you provide. It matches its request rate to the response rate
+ * provided by the server using back-pressure throttling.
  * It works asynchronously. You start it with
  * the resume() method (which does not block), and can pause it similarly. Whilst it uses
- * AsyncTasks for the comms, it writes to the position sink from the MAIN thread.
+ * AsyncTasks for the comms, it writes to the position sink from the GUI thread - courtesy of
+ * AsyncTask standard behaviour.
  *
  */
 public class NetworkPositionFeeder {
 
-    private final int BACKLOG_THRESHOLD = 3;
+    private final int BACKLOG_THRESHOLD = 1;
     private final String SERVER_URL = "nosuchserver";
 
     private XYZf positionSink;
     private boolean isPaused;
+    private Context context;
 
-    public NetworkPositionFeeder(XYZf positionSink) {
-        this.positionSink = positionSink;
+    public NetworkPositionFeeder(Context context) {
+        this.positionSink = null;
         this.isPaused = true;
+        this.context = context;
     }
 
-    public void resume() {
+    public void resume(XYZf positionSink) {
+        this.positionSink = positionSink;
         isPaused = false;
+        // Get <N> messages in-flight.
         loadUpMessageQueueToBacklogLimit();
         // That's it. The callbacks daisy-chain the adding of new requests as and when
         // the back pressure is relieved.
     }
 
     public void pause() {
+        this.positionSink = null;
         isPaused = true;
     }
 
@@ -53,38 +63,47 @@ public class NetworkPositionFeeder {
     }
 
     private void launchOneRequest() {
-        AsyncTask fetchTask = new FetchTask();
-        fetchTask.execute();
+        FetchTask fetchTask = new FetchTask();
+        fetchTask.execute("foo", "bar");
     }
 
-    /**
-     * Helper class to wrap a URL fetch inside an AsyncTask.
-     */
-    private class FetchTask extends AsyncTask<URL, Integer, Long> {
-        protected Long doInBackground(URL... urls) {
-            Long myLong = 42l;
+    private class FetchTask extends AsyncTask<String, Integer, Long> {
+
+        protected Long doInBackground(String... unusedParams) {
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo == null)
+                throw new RuntimeException("Network info could not be read");
+            if (networkInfo.isConnected() == false)
+                throw new RuntimeException("Network is not connected");
             HttpURLConnection conn = null;
             try {
-                URL serverURL = new URL("http://cadboardsvr.appspot.com/");
+                URL serverURL = new URL("http://cadboardserver.appspot.com/mouseposnquery");
                 conn = (HttpURLConnection) serverURL.openConnection();
                 String fetchedString = CharStreams.toString(
                         new InputStreamReader(conn.getInputStream(), Charsets.UTF_8));
-                Log.i("pos feeder C fetched string", fetchedString);
-            }
-            catch (IOException e) {
-                throw new RuntimeException("comms failed in doinbackgroun", e);
+                Log.i("C fetched string", fetchedString);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("malformed url");
+            } catch (IOException e) {
+                throw new RuntimeException("io  exception");
             }
             finally {
                 conn.disconnect();
             }
-            return myLong;
+            return 42L;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
         }
 
         protected void onPostExecute(Long result) {
             Log.i("onpostexec A", result.toString());
-            // Daisy chain another unless been paused
-            if (isPaused == false)
-                launchOneRequest();
+            // Daisy chain another request unless feeder has been paused by client.
+            if (isPaused == false) {
+                // launchOneRequest();
+            }
         }
     }
 }

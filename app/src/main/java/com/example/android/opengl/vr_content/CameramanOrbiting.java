@@ -2,7 +2,6 @@ package com.example.android.opengl.vr_content;
 
 import android.os.SystemClock;
 
-import com.example.android.opengl.math.MatrixCombiner;
 import com.example.android.opengl.math.TransformApply;
 import com.example.android.opengl.math.TransformFactory;
 import com.example.android.opengl.primitives.Sphere;
@@ -16,7 +15,7 @@ public class CameramanOrbiting implements Cameraman {
 
     private Sphere mSphere;
 
-    private final static float ANGULAR_VELOCITY_EASTINGS = 0.05f; // radians/sec
+    private final static float ANGULAR_VELOCITY_EASTINGS = 0.30f; // radians/sec
     private final static float HEIGHT_FACTOR = 1.1f;
 
     public CameramanOrbiting(final Sphere sceneSphere) {
