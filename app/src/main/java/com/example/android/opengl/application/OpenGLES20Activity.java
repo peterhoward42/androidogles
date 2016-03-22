@@ -19,7 +19,7 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import com.example.android.opengl.client.NetworkPositionFeeder;
+import com.example.android.opengl.client.RemotePointingDeviceService;
 import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
@@ -42,8 +42,8 @@ public class OpenGLES20Activity extends Activity {
     private final int STOP_VALVE_LOCAL = 5;
     private final int DIFF = 6;
 
-    private NetworkPositionFeeder networkPositionFeeder;
     private XYZf networkCameraPositionSink;
+    private RemotePointingDeviceService remotePointingDeviceService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +52,16 @@ public class OpenGLES20Activity extends Activity {
         DynamicScene dynamicScene;
         Cameraman cameraman;
 
-        // todo the scope of these is a travesty
-        networkPositionFeeder = null;
         networkCameraPositionSink = null;
+
+        // Kick off the remote pointing device service. Which will go to sleep immediately, until
+        // we resume() it.
+        remotePointingDeviceService = new RemotePointingDeviceService();
+        new Thread(new Runnable() {
+            public void run() {
+                remotePointingDeviceService.FetchForever();
+            }
+        }).start();
 
         // CHOOSE SCENE HERE
         final int choice = STOP_VALVE_MOUSE_CTRL;
@@ -78,7 +85,6 @@ public class OpenGLES20Activity extends Activity {
                         getApplicationContext().getAssets(), "stop-valve.stl");
                 CameramanNetworked cameramanNetworked = new CameramanNetworked(dynamicScene
                         .getCurrentEffectiveSphere());
-                networkPositionFeeder = new NetworkPositionFeeder(this);
                 networkCameraPositionSink = cameramanNetworked.injectedPosition;
                 cameraman = cameramanNetworked;
                 break;
@@ -104,25 +110,14 @@ public class OpenGLES20Activity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        // The following call pauses the rendering thread.
-        // If your OpenGL application is memory intensive,
-        // you should consider de-allocating objects that
-        // consume significant memory here.
         mGLView.onPause();
-        if (networkPositionFeeder != null) {
-            networkPositionFeeder.pause();
-        }
+        remotePointingDeviceService.Pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // The following call resumes a paused rendering thread.
-        // If you de-allocated graphic objects for onPause()
-        // this is a good place to re-allocate them.
-        if (networkPositionFeeder != null) {
-            networkPositionFeeder.resume(networkCameraPositionSink);
-        }
+        remotePointingDeviceService.Resume();
         mGLView.onResume();
     }
 }
