@@ -56,7 +56,7 @@ public class OpenGLES20Activity extends Activity {
 
         // Kick off the remote pointing device service. Which will go to sleep immediately, until
         // we resume() it.
-        remotePointingDeviceService = new RemotePointingDeviceService();
+        remotePointingDeviceService = new RemotePointingDeviceService(this);
         new Thread(new Runnable() {
             public void run() {
                 remotePointingDeviceService.FetchForever();
@@ -117,7 +117,7 @@ public class OpenGLES20Activity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        remotePointingDeviceService.Resume();
         mGLView.onResume();
+        remotePointingDeviceService.Resume();
     }
 }
