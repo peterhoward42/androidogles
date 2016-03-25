@@ -16,10 +16,13 @@
 package com.example.android.opengl.application;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-import com.example.android.opengl.client.RemotePointingDeviceService;
+import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
+import com.example.android.opengl.client.UrlPoller;
+import com.example.android.opengl.producerconsumer.Throttler;
 import com.example.android.opengl.primitives.XYZf;
 import com.example.android.opengl.vr_content.Cameraman;
 import com.example.android.opengl.vr_content.CameramanForWormAndWheel;
@@ -30,6 +33,10 @@ import com.example.android.opengl.vr_content.DynamicScene;
 import com.example.android.opengl.vr_content.DynamicSceneCubes;
 import com.example.android.opengl.vr_content.DynamicSceneSTL;
 import com.example.android.opengl.vr_content.DynamicSceneWormAndWheel;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class OpenGLES20Activity extends Activity {
 
@@ -43,7 +50,7 @@ public class OpenGLES20Activity extends Activity {
     private final int DIFF = 6;
 
     private XYZf networkCameraPositionSink;
-    private RemotePointingDeviceService remotePointingDeviceService;
+    private UrlPoller urlPoller;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,14 +61,7 @@ public class OpenGLES20Activity extends Activity {
 
         networkCameraPositionSink = null;
 
-        // Kick off the remote pointing device service. Which will go to sleep immediately, until
-        // we resume() it.
-        remotePointingDeviceService = new RemotePointingDeviceService(this);
-        new Thread(new Runnable() {
-            public void run() {
-                remotePointingDeviceService.FetchForever();
-            }
-        }).start();
+        launchRemotePointingDeviceService(); // sucks in mouse movement from network server
 
         // CHOOSE SCENE HERE
         final int choice = STOP_VALVE_MOUSE_CTRL;
@@ -111,13 +111,43 @@ public class OpenGLES20Activity extends Activity {
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
-        remotePointingDeviceService.Pause();
+        urlPoller.Pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mGLView.onResume();
-        remotePointingDeviceService.Resume();
+        urlPoller.Resume();
+    }
+
+    private void launchRemotePointingDeviceService() {
+        LinkedBlockingQueue fetchQueue = new LinkedBlockingQueue<Runnable>();
+
+        final int minThreads = 1; // Maintain this number of threads
+        final int maxThreads = 5; // Allow up to this number of threads
+        final long KeepAliveTime = 5; // seconds
+        final long MinimumIntervalBetweenRequests = 500L; // milli seconds
+
+        final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(minThreads, maxThreads,
+                KeepAliveTime, TimeUnit.SECONDS, fetchQueue);
+
+        NumberOfResourcesInUseGetter inUseGetter = new NumberOfResourcesInUseGetter() {
+            @Override
+            public int Get() {
+                return threadPoolExecutor.getActiveCount();
+            }
+        };
+        Throttler throttler =  new Throttler(inUseGetter, maxThreads, MinimumIntervalBetweenRequests);
+
+        Context context = this;
+        final String remotePointerUrl = "http://cadboardserver.appspot.com/mouseposnquery";
+        urlPoller = new UrlPoller(remotePointerUrl, context, threadPoolExecutor, throttler);
+
+        new Thread(new Runnable() {
+            public void run() {
+                urlPoller.FetchForever();
+            }
+        }).start();
     }
 }
