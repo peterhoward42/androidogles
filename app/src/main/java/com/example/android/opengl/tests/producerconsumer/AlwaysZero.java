@@ -1,4 +1,4 @@
-package com.example.android.opengl.tests.mockresourcegetters;
+package com.example.android.opengl.tests.producerconsumer;
 
 import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
 

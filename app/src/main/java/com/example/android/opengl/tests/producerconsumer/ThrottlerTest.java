@@ -1,12 +1,9 @@
-package com.example.android.opengl.tests;
+package com.example.android.opengl.tests.producerconsumer;
 
 import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
 import com.example.android.opengl.producerconsumer.Throttler;
-import com.example.android.opengl.tests.mockresourcegetters.AlwaysZero;
-import com.example.android.opengl.tests.mockresourcegetters.IncrementsEachTimeYouAsk;
-import com.example.android.opengl.tests.mockresourcegetters.JumpsFromZeroToFiveAfter2Seconds;
 
 /**
  * Created by phoward on 12/01/2016.

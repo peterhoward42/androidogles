@@ -1,4 +1,4 @@
-package com.example.android.opengl.tests;
+package com.example.android.opengl.tests.producerconsumer;
 
 import android.test.InstrumentationTestCase;
 
@@ -6,11 +6,10 @@ import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
 import com.example.android.opengl.producerconsumer.SingleShotProducer;
 import com.example.android.opengl.producerconsumer.ThrottledProducer;
 import com.example.android.opengl.producerconsumer.Throttler;
-import com.example.android.opengl.tests.mockresourcegetters.AlwaysZero;
 
 import java.util.concurrent.Executor;
 
-public class ThrottledProducerTest extends InstrumentationTestCase {
+public class ThrottledProducerPauseAndResumeTest extends InstrumentationTestCase {
 
     // We launch a ThrottledProducer in a separate thread that produces 10 items per second
     // whilst it is in its resumed state. I.e. not paused. We allow it to run for 3 seconds,
