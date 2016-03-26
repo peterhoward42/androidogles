@@ -4,6 +4,9 @@ import android.test.InstrumentationTestCase;
 
 import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
 import com.example.android.opengl.producerconsumer.Throttler;
+import com.example.android.opengl.tests.mockresourcegetters.AlwaysZero;
+import com.example.android.opengl.tests.mockresourcegetters.IncrementsEachTimeYouAsk;
+import com.example.android.opengl.tests.mockresourcegetters.JumpsFromZeroToFiveAfter2Seconds;
 
 /**
  * Created by phoward on 12/01/2016.
@@ -20,12 +23,7 @@ public class ThrottlerTest extends InstrumentationTestCase {
         // between productions, and apply it to a producer that goes very much faster. Then
         // ensure that the number of productions in a given time period is what we expect
         // from the throttling.
-        NumberOfResourcesInUseGetter NilResourceDemand = new NumberOfResourcesInUseGetter() {
-            @Override
-            public int Get() {
-                return 0;
-            }
-        };
+        NumberOfResourcesInUseGetter NilResourceDemand = new AlwaysZero();
         final int UnusedResourceCap = 1; // arbitrary - will not make any difference in this case
         Throttler throttler = new Throttler(NilResourceDemand, UnusedResourceCap, halfSecond);
         // Run our producer for 3 seconds
@@ -46,7 +44,7 @@ public class ThrottlerTest extends InstrumentationTestCase {
         // to require one new resource which is never recovered. Then we ensure our producer
         // despite running for a little while, never produces more than 5 things.
         NumberOfResourcesInUseGetter escalatingResourceCounter = new
-                IncrementsAnswerEachTimeYouAskIt();
+                IncrementsEachTimeYouAsk();
         final int ResourceCap = 5;
         final long ZeroMinimumInterval = 0;
         Throttler throttler = new Throttler(
@@ -74,37 +72,5 @@ public class ThrottlerTest extends InstrumentationTestCase {
                 numberProduced++;
         }
         assertEquals(8, numberProduced);
-    }
-
-    private class IncrementsAnswerEachTimeYouAskIt implements NumberOfResourcesInUseGetter {
-
-        private int NumberOfResourcesCommitted;
-
-        public IncrementsAnswerEachTimeYouAskIt() {
-            this.NumberOfResourcesCommitted = 0;
-        }
-
-        @Override
-        public int Get() {
-            int response = NumberOfResourcesCommitted;
-            NumberOfResourcesCommitted += 1;
-            return response;
-        }
-    }
-
-    private class JumpsFromZeroToFiveAfter2Seconds implements NumberOfResourcesInUseGetter {
-
-        private int NumberOfResourcesCommitted;
-        private long timeToJump;
-
-        public JumpsFromZeroToFiveAfter2Seconds() {
-            this.NumberOfResourcesCommitted = 0;
-            timeToJump = System.currentTimeMillis() + twoSeconds;
-        }
-
-        @Override
-        public int Get() {
-            return (System.currentTimeMillis() >= timeToJump) ? 5: 0;
-        }
     }
 }

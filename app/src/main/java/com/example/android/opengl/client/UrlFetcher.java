@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.example.android.opengl.producerconsumer.SingleShotProducer;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 
@@ -13,7 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class UrlFetcher implements Runnable {
+public class UrlFetcher implements SingleShotProducer {
 
     private Context Context;
     private URL URL;
@@ -28,7 +29,7 @@ public class UrlFetcher implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void Produce() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 Context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.example.android.opengl.producerconsumer.ThrottledProducer;
 import com.example.android.opengl.producerconsumer.Throttler;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 
 /**
  * A thing that will take responsibility for continuously polling a URL, implemented as a thin
@@ -19,13 +19,13 @@ public class UrlPoller {
      * Constructor
      * @param url - The url you want to poll.
      * @param context - Needed to access network services.
-     * @param executorService - The thing to which you want URL fetch ops to be delegated.
+     * @param executor - The thing to which you want URL fetch ops to be delegated.
      * @param throttler - The thing you want to govern the URL fetch polling rate.
      */
-    public UrlPoller(final String url, Context context, ExecutorService executorService,
+    public UrlPoller(final String url, Context context, Executor executor,
                      Throttler throttler) {
         this.throttledProducer = new ThrottledProducer(new UrlFetcher(context, url),
-                executorService, throttler);
+                executor, throttler);
     }
 
     public void FetchForever() {

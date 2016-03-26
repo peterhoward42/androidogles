@@ -1,38 +1,40 @@
 package com.example.android.opengl.producerconsumer;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 
 /**
  * A thing that will take responsibility for continuously doing something (producing), but which
  * you can throttle, pause and resume safely. (For example polling a URL). You must invoke its
  * ProduceForever() method in a dedicated thread. You can pause it safely (and put the thread to
  * sleep) by calling Pause() from another thread. And of course then wake it up again with Resume().
- * The client specifies the throttling strategy and the execution context (for example a
- * ThreadPoolExecutor) by injecting them at construction time.
+ * It is not tied to any particular type of producer; the client injects this. The client also
+ * injects the throttler they want to be applied. The client can also control how the producer
+ * they provide is called - by injecting an execution context - e.g. (but not necessarily) a
+ * ThreadPoolExecutor.
  */
 public class ThrottledProducer {
 
-    private Runnable thingThatCanProduceOneItem;
+    private SingleShotProducer singleShotter;
     private Object SyncLock;
     private Boolean IsPaused;
-    private ExecutorService executorService;
+    private Executor executor;
     private Throttler throttler;
 
     /**
      * Constructor
-     * @param thingThatCanProduceOneItem - This will be called in a throttled loop.
-     * @param executorService - The execution environment to which you want the production
+     * @param singleShotter - This will be called in a throttled loop.
+     * @param executor - The execution environment to which you want the production
      *                        operation to be delegated.
      * @param throttler - The thing you want to govern the production rate.
      */
     public ThrottledProducer(
-            Runnable thingThatCanProduceOneItem,
-            ExecutorService executorService,
+            SingleShotProducer singleShotter,
+            Executor executor,
             Throttler throttler) {
-        this.thingThatCanProduceOneItem = thingThatCanProduceOneItem;
+        this.singleShotter = singleShotter;
         this.SyncLock = new Object();
         this.IsPaused = true;
-        this.executorService = executorService;
+        this.executor = executor;
         this.throttler = throttler;
     }
 
@@ -73,6 +75,11 @@ public class ThrottledProducer {
     }
 
     private void ProduceOneItem() {
-        this.executorService.submit(this.thingThatCanProduceOneItem);
+        this.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                singleShotter.Produce();
+            }
+        });
     }
 }

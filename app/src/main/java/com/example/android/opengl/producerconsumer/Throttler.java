@@ -1,7 +1,5 @@
 package com.example.android.opengl.producerconsumer;
 
-import com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter;
-
 /**
  * A thing that can help any kind of producer or sender to keep within some given maximum
  * production rate criteria. (For example a polling http request sender). You specify a minimum
@@ -13,7 +11,7 @@ public class Throttler {
     public enum ThrottleOrSend {Throttle, Send};
 
     private long MinimumIntervalBetweenTransmissions;
-    private com.example.android.opengl.producerconsumer.NumberOfResourcesInUseGetter NumberOfResourcesInUseGetter;
+    private NumberOfResourcesInUseGetter numberOfResourcesInUseGetter;
     private int ResourcesCap;
     private long MostRecentSend;
 
@@ -33,7 +31,7 @@ public class Throttler {
             NumberOfResourcesInUseGetter numberOfResourcesInUseGetter,
             int resourcesCap,
             long minimumIntervalBetweenTransmissions) {
-        NumberOfResourcesInUseGetter = numberOfResourcesInUseGetter;
+        this.numberOfResourcesInUseGetter = numberOfResourcesInUseGetter;
         ResourcesCap = resourcesCap;
         MinimumIntervalBetweenTransmissions = minimumIntervalBetweenTransmissions;
         MostRecentSend = -1;
@@ -56,6 +54,6 @@ public class Throttler {
     }
 
     private boolean NoMoreResourcesAvailable() {
-        return NumberOfResourcesInUseGetter.Get() >= ResourcesCap;
+        return numberOfResourcesInUseGetter.Get() >= ResourcesCap;
     }
 }
